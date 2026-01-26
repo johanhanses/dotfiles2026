@@ -21,6 +21,7 @@ export BAT_THEME="GitHub"
 export EDITOR="nvim"
 export VISUAL="nvim"
 export BROWSER="firefox"
+export TERMINAL="/Applications/Ghostty.app/Contents/MacOS/ghostty"
 
 export XDG_CONFIG_HOME="$HOME/.config"
 export REPOS="$HOME/Repos"

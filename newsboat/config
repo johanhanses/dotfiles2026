@@ -2,7 +2,7 @@
 max-items 500
 
 # macOS
-browser "open -g -a 'Firefox' %u"
+browser "open -g -a 'Vivaldi' %u"
 
 # Linux/Ubuntu
 # browser "xdg-open %u"
@@ -14,13 +14,13 @@ browser "open -g -a 'Firefox' %u"
 show-read-feeds yes
 feed-sort-order unreadarticlecount-asc
 
-# Colors and formatting
+# Colors - GitHub Light theme
 color background default default
 color listnormal default default
-color listfocus black yellow
-color listnormal_unread default default bold
-color listfocus_unread black yellow bold
-color info black blue bold
+color listfocus white black bold
+color listnormal_unread blue default bold
+color listfocus_unread white black bold
+color info white black bold
 color article default default
 
 # Key bindings
