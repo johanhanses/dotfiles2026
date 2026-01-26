@@ -1,0 +1,44 @@
+font-family = Liga SFMono Nerd Font
+font-size = 13
+font-thicken = true
+
+theme = dark:GitHub Dark Dimmed, light:GitHub Light Default
+
+background-blur-radius = 20
+
+cursor-opacity = 1
+cursor-style = block
+cursor-style-blink = false
+cursor-click-to-move = true
+
+term = xterm-ghostty
+
+desktop-notifications = true
+bold-is-bright = true
+
+custom-shader-animation = false
+macos-non-native-fullscreen = false
+
+macos-option-as-alt = false
+macos-window-shadow = true
+
+clipboard-paste-bracketed-safe = true
+
+wait-after-command = false
+scrollback-limit = 10000000
+link-url = true
+fullscreen = false
+title =
+working-directory = home
+
+window-padding-x = 5
+window-padding-y = 0
+window-padding-balance = false
+window-vsync = true
+window-inherit-working-directory = true
+window-inherit-font-size = true
+
+window-title-font-family = Inter
+window-theme = auto
+window-save-state = default
+window-new-tab-position = current

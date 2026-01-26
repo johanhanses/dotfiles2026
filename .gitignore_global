@@ -1,0 +1,22 @@
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+
+# Thumbnails
+._*
+
+# Files that might appear on external disk
+.Spotlight-V100
+.Trashes
+
+tags
+vendor-tags
+.ssh
+.lvimrc
+.rgignore
+
+# editor crap
+.vscode/
+.idea/
+.fleet/

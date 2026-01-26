@@ -1,0 +1,5 @@
+#!/bin/bash
+tmux split-window -h -l 30%
+tmux select-pane -L
+tmux split-window -v -l 20%
+tmux split-window -h -l 50%
