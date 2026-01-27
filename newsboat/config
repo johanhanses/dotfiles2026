@@ -14,13 +14,13 @@ browser "open -g -a 'Vivaldi' %u"
 show-read-feeds yes
 feed-sort-order unreadarticlecount-asc
 
-# Colors - GitHub Light theme
+# Colors - One Dark theme
 color background default default
 color listnormal default default
-color listfocus white black bold
-color listnormal_unread blue default bold
-color listfocus_unread white black bold
-color info white black bold
+color listfocus black blue bold
+color listnormal_unread cyan default bold
+color listfocus_unread black cyan bold
+color info black blue bold
 color article default default
 
 # Key bindings

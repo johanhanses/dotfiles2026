@@ -1,6 +1,6 @@
 return {
-  "projekt0n/github-nvim-theme",
-  name = "github-theme",
+  "navarasu/onedark.nvim",
+  name = "onedark",
   lazy = false,
   priority = 1000,
   config = function()
@@ -28,20 +28,22 @@ return {
 
     local appearance = get_os_appearance()
 
-    require("github-theme").setup({
-      options = {
-        transparent = false,
-        terminal_colors = true,
-        dim_inactive = false,
+    require("onedark").setup({
+      style = appearance == "dark" and "dark" or "light",
+      transparent = false,
+      term_colors = true,
+      ending_tildes = false,
+      cmp_itemkind_reverse = false,
+      code_style = {
+        comments = "italic",
+        keywords = "none",
+        functions = "none",
+        strings = "none",
+        variables = "none",
       },
     })
 
-    -- Load the appropriate theme based on OS appearance
-    if appearance == "dark" then
-      vim.cmd("colorscheme github_dark_dimmed")
-    else
-      vim.cmd("colorscheme github_light")
-    end
+    require("onedark").load()
 
     -- Auto-refresh on focus (detects OS theme changes)
     vim.api.nvim_create_autocmd("FocusGained", {
@@ -49,11 +51,10 @@ return {
         local new_appearance = get_os_appearance()
         if new_appearance ~= appearance then
           appearance = new_appearance
-          if appearance == "dark" then
-            vim.cmd("colorscheme github_dark_dimmed")
-          else
-            vim.cmd("colorscheme github_light")
-          end
+          require("onedark").setup({
+            style = appearance == "dark" and "dark" or "light",
+          })
+          require("onedark").load()
         end
       end,
     })

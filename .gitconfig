@@ -17,8 +17,8 @@
 [delta]
   line-numbers = true
   navigate = true
-  syntax-theme = GitHub
-  light = true
+  syntax-theme = OneHalfDark
+  light = false
   side-by-side = false
   decorations = true
 [core]

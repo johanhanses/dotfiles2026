@@ -2,11 +2,11 @@ font-family = Liga SFMono Nerd Font
 font-size = 13
 font-thicken = true
 
-theme = dark:GitHub Dark Dimmed, light:GitHub Light Default
+theme = dark:Atom One Dark, light:Atom One Light
 
-# Selection colors for better contrast
-selection-foreground = #ffffff
-selection-background = #0969da
+# Selection colors for better contrast (One Dark palette)
+selection-foreground = #abb2bf
+selection-background = #61afef
 
 background-blur-radius = 20
 

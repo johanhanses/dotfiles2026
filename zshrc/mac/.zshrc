@@ -17,7 +17,7 @@ source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 unset zle_bracketed_paste
 
 # Environment Variables
-export BAT_THEME="GitHub"
+export BAT_THEME="OneHalfDark"
 export EDITOR="nvim"
 export VISUAL="nvim"
 export BROWSER="firefox"
