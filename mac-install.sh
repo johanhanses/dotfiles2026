@@ -20,8 +20,8 @@ ln -sf $DOTFILES/.gitignore_global $HOME/.gitignore_global
 
 # .kube (from private repo)
 if [ -d "$DOTFILES_PRIVATE/.kube" ]; then
-    rm -rf $HOME/.kube
-    ln -sf $DOTFILES_PRIVATE/.kube $HOME/.kube
+  rm -rf $HOME/.kube
+  ln -sf $DOTFILES_PRIVATE/.kube $HOME/.kube
 fi
 
 # btop
@@ -41,5 +41,5 @@ echo ""
 echo "Next steps:"
 echo "  1. Restart your terminal or run: source ~/.zshrc"
 echo "  2. Open nvim - it will auto-install plugins on first run"
-echo "  3. Start tmux and verify the GitHub Light status bar"
+echo "  3. Start tmux and verify the appearance"
 echo "  4. Install xlaude: cargo install xlaude"
