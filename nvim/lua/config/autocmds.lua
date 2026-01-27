@@ -9,12 +9,13 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
--- Disable completions and diagnostics for markdown files
+-- Disable completions, diagnostics, and spell checking for markdown files
 vim.api.nvim_create_autocmd("FileType", {
   pattern = { "markdown", "text" },
   callback = function()
     vim.b.blink_cmp_enabled = false
     vim.b.copilot_enabled = false
     vim.diagnostic.enable(false, { bufnr = 0 })
+    vim.wo.spell = false
   end,
 })
