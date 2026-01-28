@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# Sync tmux theme with macOS appearance
+
+if [[ "$(defaults read -g AppleInterfaceStyle 2>/dev/null)" == "Dark" ]]; then
+    tmux source-file ~/.config/tmux/theme-dark.conf
+else
+    tmux source-file ~/.config/tmux/theme-light.conf
+fi
