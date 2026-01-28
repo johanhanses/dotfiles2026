@@ -36,6 +36,10 @@ ln -sf $DOTFILES/newsboat $HOME/.config/newsboat
 rm -rf $HOME/.config/ghostty
 ln -sf $DOTFILES/ghostty $HOME/.config/ghostty
 
+# matterhorn
+rm -rf $HOME/.config/matterhorn
+ln -sf $DOTFILES/matterhorn $HOME/.config/matterhorn
+
 echo "dotfiles2026 installed!"
 echo ""
 echo "Next steps:"
