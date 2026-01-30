@@ -1,1 +1,1 @@
-[(CI {unCI = Id {unId = "aq66t9mpftr1tezj9odh6xgjhr"}},["/help"])]
+[(CI {unCI = Id {unId = "7zd9hwrgbpdnjgoih8drf93h5e"}},["/online","Hur ser det ut med lucka att spana skala-db/data idag?","Jag har Hugo klockan 10:10 imorgon fredag.",""]),(CI {unCI = Id {unId = "wao3g6xpzfy6inq4y3wft945dr"}},["/online","sorry, 1 minut, idag med :)"]),(CI {unCI = Id {unId = "aq66t9mpftr1tezj9odh6xgjhr"}},["/help"])]
