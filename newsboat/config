@@ -2,7 +2,7 @@
 max-items 500
 
 # macOS
-browser "open -g -a 'Vivaldi' %u"
+browser "open -g -a 'Firefox' %u"
 
 # Linux/Ubuntu
 # browser "xdg-open %u"
