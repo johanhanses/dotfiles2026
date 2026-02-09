@@ -10,10 +10,10 @@ This is a cross-platform dotfiles repository supporting macOS (primary). The rep
 
 - **Platform-specific install scripts**: `mac-install.sh` - creates symlinks to configuration files in user's home directory
 - **ZSH configurations**: Platform-specific zsh configs in `zshrc/mac/`
-- **Neovim configuration**: LazyVim-based setup in `nvim/` directory with One Dark theme
+- **Neovim configuration**: LazyVim-based setup in `nvim/` directory with Night Owl (dark) / Rosé Pine Dawn (light)
 - **Terminal configurations**:
-  - Tmux config with One Dark theme status bar
-  - Ghostty terminal configuration with One Half Dark/Light theme
+  - Tmux config with Night Owl (dark) / Rosé Pine Dawn (light) status bar
+  - Ghostty terminal configuration with Night Owl (dark) / Rosé Pine Dawn (light)
 - **System monitoring**: btop configuration
 - **RSS reader**: newsboat configuration
 
@@ -41,15 +41,15 @@ This is a cross-platform dotfiles repository supporting macOS (primary). The rep
 
 - Configuration files are organized by application in their own directories
 - Neovim uses LazyVim as the base configuration with custom plugins in `lua/plugins/`
-- One Dark/One Half theme is used across all applications (Neovim, tmux, Ghostty, delta, bat)
+- Night Owl (dark) / Rosé Pine Dawn (light) theme is used across Neovim, tmux, and Ghostty
 - Private configurations (like .kube) are expected in a separate `dotfiles-private` repository
 
 ## Theme
 
-All applications use the One Dark/One Half theme:
-- Neovim: `onedark` with `light` / `dark` style (auto-switches based on OS)
-- Ghostty: `OneHalfLight` / `OneHalfDark`
-- tmux: Custom One Dark status bar colors
+Dark mode uses Night Owl, light mode uses Rosé Pine Dawn (auto-switches based on OS):
+- Neovim: `night-owl` (dark) / `rose-pine` Dawn (light) — auto-switches on focus
+- Ghostty: `Night Owl` (dark) / `Rose Pine Dawn` (light)
+- tmux: Night Owl (dark) / Rosé Pine Dawn (light) status bar colors
 - delta (git): `syntax-theme = OneHalfDark`
 - bat: `BAT_THEME="OneHalfDark"`
 - btop: `onedark`

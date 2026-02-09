@@ -35,7 +35,7 @@ require("lazy").setup({
     lazy = false,
     version = false,
   },
-  install = { colorscheme = { "github_dark_dimmed", "habamax" } },
+  install = { colorscheme = { "night-owl", "rose-pine", "habamax" } },
   checker = {
     enabled = true,
     notify = false,
