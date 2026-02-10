@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+# Sync Mattermost Desktop theme with macOS appearance
+
+CONFIG_FILE="$HOME/Repos/github.com/johanhanses/dotfiles-private/mattermost/config"
+
+if [[ ! -f "$CONFIG_FILE" ]]; then
+  echo "Missing config: $CONFIG_FILE"
+  echo "Create it with MATTERMOST_URL and MATTERMOST_TOKEN"
+  exit 1
+fi
+
+source "$CONFIG_FILE"
+
+if [[ -z "$MATTERMOST_URL" || -z "$MATTERMOST_TOKEN" ]]; then
+  echo "MATTERMOST_URL and MATTERMOST_TOKEN must be set in $CONFIG_FILE"
+  exit 1
+fi
+
+DARK_THEME='{"sidebarBg":"#011627","sidebarText":"#d6deeb","sidebarUnreadText":"#d6deeb","sidebarTextHoverBg":"#1d3b53","sidebarTextActiveBorder":"#ff2c83","sidebarTextActiveColor":"#82aaff","sidebarHeaderBg":"#1d3b53","sidebarHeaderTextColor":"#d6deeb","onlineIndicator":"#addb67","awayIndicator":"#ffbc42","dndIndicator":"#f74343","mentionBg":"#d6deeb","mentionColor":"#145dbf","centerChannelBg":"#011627","centerChannelColor":"#d6deeb","newMessageSeparator":"#ff8800","linkColor":"#2389d7","buttonBg":"#166de0","buttonColor":"#011627","errorTextColor":"#fd5960","mentionHighlightBg":"#0b2942","mentionHighlightLink":"#82aaff","codeTheme":"solarized-dark","mentionBj":"#ffffff","sidebarTeamBarBg":"#172f42"}'
+
+LIGHT_THEME='{"sidebarBg":"#faf4ed","sidebarText":"#797593","sidebarUnreadText":"#d7827e","sidebarTextHoverBg":"#f2e9e1","sidebarTextActiveBorder":"#cecacd","sidebarTextActiveColor":"#575279","sidebarHeaderBg":"#faf4ed","sidebarHeaderTextColor":"#797593","onlineIndicator":"#286983","awayIndicator":"#ea9d34","dndIndicator":"#b4637a","mentionBj":"#fffaf3","mentionColor":"#dfdad9","centerChannelBg":"#fffaf3","centerChannelColor":"#575279","newMessageSeparator":"#cecacd","linkColor":"#907aa9","buttonBg":"#286983","buttonColor":"#cecacd","errorTextColor":"#b4637a","mentionHighlightBg":"#faf4ed","mentionHighlightLink":"#d7827e","codeTheme":"solarized-light","mentionBg":"#286983","sidebarTeamBarBg":"#f4ede8"}'
+
+if [[ "$(defaults read -g AppleInterfaceStyle 2>/dev/null)" == "Dark" ]]; then
+  THEME="$DARK_THEME"
+else
+  THEME="$LIGHT_THEME"
+fi
+
+# Get user ID
+USER_ID=$(curl -sf -H "Authorization: Bearer $MATTERMOST_TOKEN" \
+  "$MATTERMOST_URL/api/v4/users/me" | jq -r '.id')
+
+if [[ -z "$USER_ID" || "$USER_ID" == "null" ]]; then
+  echo "Failed to get Mattermost user ID"
+  exit 1
+fi
+
+# Get team IDs
+TEAM_IDS=$(curl -sf -H "Authorization: Bearer $MATTERMOST_TOKEN" \
+  "$MATTERMOST_URL/api/v4/users/$USER_ID/teams" | jq -r '.[].id')
+
+# Build payload: global theme + per-team themes
+PAYLOAD=$(jq -n --arg uid "$USER_ID" --arg theme "$THEME" \
+  '[{"user_id": $uid, "category": "theme", "name": "", "value": $theme}]')
+
+for TEAM_ID in $TEAM_IDS; do
+  PAYLOAD=$(echo "$PAYLOAD" | jq --arg uid "$USER_ID" --arg tid "$TEAM_ID" --arg theme "$THEME" \
+    '. + [{"user_id": $uid, "category": "theme", "name": $tid, "value": $theme}]')
+done
+
+# Update theme via preferences API
+curl -sf -X PUT \
+  -H "Authorization: Bearer $MATTERMOST_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d "$PAYLOAD" \
+  "$MATTERMOST_URL/api/v4/users/$USER_ID/preferences" > /dev/null
