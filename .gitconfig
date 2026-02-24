@@ -17,7 +17,7 @@
 [delta]
   line-numbers = true
   navigate = true
-  syntax-theme = OneHalfDark
+  syntax-theme = gruvbox-dark
   light = false
   side-by-side = false
   decorations = true

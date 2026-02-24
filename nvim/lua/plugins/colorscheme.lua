@@ -1,29 +1,5 @@
 return {
   {
-    "oxfist/night-owl.nvim",
-    name = "night-owl",
-    lazy = true,
-    priority = 1000,
-    opts = {
-      transparent = false,
-      italics = true,
-    },
-  },
-  {
-    "rose-pine/neovim",
-    name = "rose-pine",
-    lazy = true,
-    priority = 1000,
-    opts = {
-      variant = "dawn",
-      dark_variant = "main",
-      styles = {
-        italic = true,
-        transparency = false,
-      },
-    },
-  },
-  {
     "LazyVim/LazyVim",
     opts = function(_, opts)
       -- Check OS theme preference
@@ -49,7 +25,7 @@ return {
       end
 
       local appearance = get_os_appearance()
-      opts.colorscheme = appearance == "dark" and "night-owl" or "rose-pine"
+      opts.colorscheme = appearance == "dark" and "conductor-dark" or "conductor-light"
 
       -- Auto-refresh on focus (detects OS theme changes)
       vim.api.nvim_create_autocmd("FocusGained", {
@@ -57,7 +33,7 @@ return {
           local new_appearance = get_os_appearance()
           if new_appearance ~= appearance then
             appearance = new_appearance
-            vim.cmd.colorscheme(appearance == "dark" and "night-owl" or "rose-pine")
+            vim.cmd.colorscheme(appearance == "dark" and "conductor-dark" or "conductor-light")
           end
         end,
       })

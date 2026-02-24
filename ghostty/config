@@ -4,7 +4,7 @@ font-thicken = true
 font-style = Semibold
 adjust-cell-height = 2
 
-theme = dark:Night Owl, light:Rose Pine Dawn
+theme = dark:conductor-dark,light:conductor-light
 
 background-blur-radius = 20
 

@@ -10,10 +10,10 @@ This is a cross-platform dotfiles repository supporting macOS (primary). The rep
 
 - **Platform-specific install scripts**: `mac-install.sh` - creates symlinks to configuration files in user's home directory
 - **ZSH configurations**: Platform-specific zsh configs in `zshrc/mac/`
-- **Neovim configuration**: LazyVim-based setup in `nvim/` directory with Night Owl (dark) / Rosé Pine Dawn (light)
+- **Neovim configuration**: LazyVim-based setup in `nvim/` directory with Conductor Stone (dark/light)
 - **Terminal configurations**:
-  - Tmux config with Night Owl (dark) / Rosé Pine Dawn (light) status bar
-  - Ghostty terminal configuration with Night Owl (dark) / Rosé Pine Dawn (light)
+  - Tmux config with Conductor Stone (dark/light) status bar
+  - Ghostty terminal configuration with Conductor Stone (dark/light)
 - **System monitoring**: btop configuration
 - **RSS reader**: newsboat configuration
 
@@ -41,16 +41,16 @@ This is a cross-platform dotfiles repository supporting macOS (primary). The rep
 
 - Configuration files are organized by application in their own directories
 - Neovim uses LazyVim as the base configuration with custom plugins in `lua/plugins/`
-- Night Owl (dark) / Rosé Pine Dawn (light) theme is used across Neovim, tmux, and Ghostty
+- Conductor Stone theme (dark/light) is used across Neovim, tmux, and Ghostty — inspired by conductor.build's warm stone palette
 - Private configurations (like .kube) are expected in a separate `dotfiles-private` repository
 
 ## Theme
 
-Dark mode uses Night Owl, light mode uses Rosé Pine Dawn (auto-switches based on OS):
-- Neovim: `night-owl` (dark) / `rose-pine` Dawn (light) — auto-switches on focus
-- Ghostty: `Night Owl` (dark) / `Rose Pine Dawn` (light)
-- tmux: Night Owl (dark) / Rosé Pine Dawn (light) status bar colors
-- delta (git): `syntax-theme = OneHalfDark`
-- bat: `BAT_THEME="OneHalfDark"`
-- btop: `onedark`
-- newsboat: One Dark inspired colors
+Dark mode uses Conductor Stone Dark, light mode uses Conductor Stone Light (auto-switches based on OS). Inspired by the conductor.build warm stone/earth palette with amber accents:
+- Neovim: `conductor-dark` / `conductor-light` — custom colorschemes in `nvim/colors/`, auto-switches on focus
+- Ghostty: `conductor-dark` / `conductor-light` — custom themes in `ghostty/themes/`
+- tmux: Conductor Stone dark/light status bar colors
+- delta (git): `syntax-theme = gruvbox-dark`
+- bat: `BAT_THEME="gruvbox-dark"`
+- btop: `gruvbox_dark`
+- newsboat: Conductor Stone warm colors
