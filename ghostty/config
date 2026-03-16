@@ -6,6 +6,7 @@ adjust-cell-height = 2
 
 theme = dark:conductor-dark,light:conductor-light
 
+background-opacity = 0.9
 background-blur-radius = 20
 
 cursor-opacity = 1
