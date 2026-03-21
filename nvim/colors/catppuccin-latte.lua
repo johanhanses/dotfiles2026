@@ -1,0 +1,326 @@
+vim.o.background = "light"
+vim.g.colors_name = "catppuccin-latte"
+
+local hi = function(group, opts)
+  vim.api.nvim_set_hl(0, group, opts)
+end
+
+-- Catppuccin Latte Palette
+local bg = "#eff1f5"
+local bg1 = "#e6e9ef"
+local bg2 = "#ccd0da"
+local bg3 = "#bcc0cc"
+local bg4 = "#acb0be"
+local fg = "#4c4f69"
+local fg1 = "#5c5f77"
+local muted = "#6c6f85"
+local comment = "#8c8fa1"
+local dim = "#9ca0b0"
+local red = "#d20f39"
+local maroon = "#e64553"
+local green = "#40a02b"
+local yellow = "#df8e1d"
+local peach = "#fe640b"
+local blue = "#1e66f5"
+local lavender = "#7287fd"
+local mauve = "#8839ef"
+local pink = "#ea76cb"
+local teal = "#179299"
+local sky = "#04a5e5"
+local rosewater = "#dc8a78"
+local flamingo = "#dd7878"
+local search_bg = "#e0d8c8"
+local search_cur = "#d5cbb5"
+local diff_add = "#d8f0d8"
+local diff_change = "#f0e8d0"
+local diff_delete = "#f0d8d8"
+
+-- Base UI
+hi("Normal", { fg = fg, bg = bg })
+hi("NormalFloat", { fg = fg, bg = bg1 })
+hi("NormalNC", { fg = fg, bg = bg })
+hi("FloatBorder", { fg = bg4, bg = bg1 })
+hi("FloatTitle", { fg = mauve, bg = bg1, bold = true })
+hi("Cursor", { fg = bg, bg = rosewater })
+hi("lCursor", { fg = bg, bg = rosewater })
+hi("CursorLine", { bg = bg1 })
+hi("CursorColumn", { bg = bg1 })
+hi("ColorColumn", { bg = bg1 })
+hi("LineNr", { fg = dim })
+hi("CursorLineNr", { fg = lavender, bold = true })
+hi("SignColumn", { fg = dim, bg = bg })
+hi("FoldColumn", { fg = dim, bg = bg })
+hi("Folded", { fg = comment, bg = bg2 })
+hi("VertSplit", { fg = bg4 })
+hi("WinSeparator", { fg = bg4 })
+hi("StatusLine", { fg = fg, bg = bg2 })
+hi("StatusLineNC", { fg = comment, bg = bg1 })
+hi("TabLine", { fg = comment, bg = bg1 })
+hi("TabLineFill", { bg = bg1 })
+hi("TabLineSel", { fg = fg, bg = bg, bold = true })
+hi("WinBar", { fg = fg, bg = bg })
+hi("WinBarNC", { fg = comment, bg = bg })
+hi("Title", { fg = mauve, bold = true })
+hi("NonText", { fg = bg4 })
+hi("SpecialKey", { fg = bg4 })
+hi("Whitespace", { fg = bg3 })
+hi("EndOfBuffer", { fg = bg })
+hi("Conceal", { fg = comment })
+hi("MatchParen", { fg = peach, bold = true, underline = true })
+hi("Visual", { bg = bg3 })
+hi("VisualNOS", { bg = bg3 })
+hi("Search", { fg = fg, bg = search_bg })
+hi("IncSearch", { fg = bg, bg = mauve })
+hi("CurSearch", { fg = bg, bg = peach })
+hi("Substitute", { fg = bg, bg = red })
+hi("Pmenu", { fg = fg, bg = bg2 })
+hi("PmenuSel", { fg = bg, bg = mauve })
+hi("PmenuSbar", { bg = bg3 })
+hi("PmenuThumb", { bg = muted })
+hi("WildMenu", { fg = bg, bg = mauve })
+hi("Question", { fg = green })
+hi("QuickFixLine", { bg = bg2 })
+hi("MoreMsg", { fg = green })
+hi("ModeMsg", { fg = fg, bold = true })
+hi("ErrorMsg", { fg = red })
+hi("WarningMsg", { fg = peach })
+hi("Directory", { fg = blue })
+hi("SpellBad", { sp = red, undercurl = true })
+hi("SpellCap", { sp = yellow, undercurl = true })
+hi("SpellLocal", { sp = teal, undercurl = true })
+hi("SpellRare", { sp = mauve, undercurl = true })
+
+-- Syntax
+hi("Comment", { fg = comment, italic = true })
+hi("Constant", { fg = peach })
+hi("String", { fg = green })
+hi("Character", { fg = green })
+hi("Number", { fg = peach })
+hi("Boolean", { fg = peach })
+hi("Float", { fg = peach })
+hi("Identifier", { fg = fg })
+hi("Function", { fg = blue })
+hi("Statement", { fg = mauve })
+hi("Conditional", { fg = mauve })
+hi("Repeat", { fg = mauve })
+hi("Label", { fg = mauve })
+hi("Operator", { fg = muted })
+hi("Keyword", { fg = mauve })
+hi("Exception", { fg = mauve })
+hi("PreProc", { fg = teal })
+hi("Include", { fg = mauve })
+hi("Define", { fg = mauve })
+hi("Macro", { fg = mauve })
+hi("PreCondit", { fg = teal })
+hi("Type", { fg = yellow })
+hi("StorageClass", { fg = yellow })
+hi("Structure", { fg = yellow })
+hi("Typedef", { fg = yellow })
+hi("Special", { fg = teal })
+hi("SpecialChar", { fg = teal })
+hi("Tag", { fg = maroon })
+hi("Delimiter", { fg = muted })
+hi("SpecialComment", { fg = comment, bold = true })
+hi("Debug", { fg = red })
+hi("Underlined", { underline = true })
+hi("Ignore", { fg = dim })
+hi("Error", { fg = red })
+hi("Todo", { fg = yellow, bg = bg2, bold = true })
+
+-- Treesitter
+hi("@variable", { fg = fg })
+hi("@variable.builtin", { fg = red, italic = true })
+hi("@variable.parameter", { fg = fg1 })
+hi("@variable.member", { fg = teal })
+hi("@constant", { fg = peach })
+hi("@constant.builtin", { fg = peach, italic = true })
+hi("@constant.macro", { fg = peach })
+hi("@module", { fg = yellow })
+hi("@string", { fg = green })
+hi("@string.escape", { fg = teal })
+hi("@string.regexp", { fg = teal })
+hi("@string.special", { fg = teal })
+hi("@character", { fg = green })
+hi("@number", { fg = peach })
+hi("@boolean", { fg = peach })
+hi("@float", { fg = peach })
+hi("@function", { fg = blue })
+hi("@function.builtin", { fg = blue, italic = true })
+hi("@function.call", { fg = blue })
+hi("@function.macro", { fg = mauve })
+hi("@method", { fg = blue })
+hi("@method.call", { fg = blue })
+hi("@constructor", { fg = yellow })
+hi("@keyword", { fg = mauve })
+hi("@keyword.function", { fg = mauve })
+hi("@keyword.operator", { fg = mauve })
+hi("@keyword.return", { fg = mauve })
+hi("@keyword.import", { fg = mauve })
+hi("@keyword.conditional", { fg = mauve })
+hi("@keyword.repeat", { fg = mauve })
+hi("@keyword.exception", { fg = mauve })
+hi("@operator", { fg = muted })
+hi("@punctuation.delimiter", { fg = muted })
+hi("@punctuation.bracket", { fg = fg1 })
+hi("@punctuation.special", { fg = teal })
+hi("@type", { fg = yellow })
+hi("@type.builtin", { fg = yellow, italic = true })
+hi("@type.definition", { fg = yellow })
+hi("@type.qualifier", { fg = mauve })
+hi("@property", { fg = teal })
+hi("@attribute", { fg = yellow })
+hi("@tag", { fg = maroon })
+hi("@tag.attribute", { fg = yellow })
+hi("@tag.delimiter", { fg = muted })
+hi("@markup.heading", { fg = mauve, bold = true })
+hi("@markup.strong", { bold = true })
+hi("@markup.italic", { italic = true })
+hi("@markup.strikethrough", { strikethrough = true })
+hi("@markup.link", { fg = blue, underline = true })
+hi("@markup.link.url", { fg = teal, underline = true })
+hi("@markup.raw", { fg = green })
+hi("@markup.list", { fg = muted })
+hi("@comment", { fg = comment, italic = true })
+
+-- LSP Semantic Tokens
+hi("@lsp.type.class", { fg = yellow })
+hi("@lsp.type.decorator", { fg = mauve })
+hi("@lsp.type.enum", { fg = yellow })
+hi("@lsp.type.enumMember", { fg = peach })
+hi("@lsp.type.function", { fg = blue })
+hi("@lsp.type.interface", { fg = yellow })
+hi("@lsp.type.macro", { fg = mauve })
+hi("@lsp.type.method", { fg = blue })
+hi("@lsp.type.namespace", { fg = yellow })
+hi("@lsp.type.parameter", { fg = fg1 })
+hi("@lsp.type.property", { fg = teal })
+hi("@lsp.type.struct", { fg = yellow })
+hi("@lsp.type.type", { fg = yellow })
+hi("@lsp.type.typeParameter", { fg = yellow })
+hi("@lsp.type.variable", { fg = fg })
+
+-- Diagnostics
+hi("DiagnosticError", { fg = red })
+hi("DiagnosticWarn", { fg = peach })
+hi("DiagnosticInfo", { fg = lavender })
+hi("DiagnosticHint", { fg = teal })
+hi("DiagnosticOk", { fg = green })
+hi("DiagnosticUnderlineError", { sp = red, undercurl = true })
+hi("DiagnosticUnderlineWarn", { sp = peach, undercurl = true })
+hi("DiagnosticUnderlineInfo", { sp = lavender, undercurl = true })
+hi("DiagnosticUnderlineHint", { sp = teal, undercurl = true })
+hi("DiagnosticVirtualTextError", { fg = red, bg = diff_delete })
+hi("DiagnosticVirtualTextWarn", { fg = peach, bg = diff_change })
+hi("DiagnosticVirtualTextInfo", { fg = lavender, bg = bg2 })
+hi("DiagnosticVirtualTextHint", { fg = teal, bg = bg2 })
+
+-- Git signs
+hi("GitSignsAdd", { fg = green })
+hi("GitSignsChange", { fg = yellow })
+hi("GitSignsDelete", { fg = red })
+hi("GitSignsAddNr", { fg = green })
+hi("GitSignsChangeNr", { fg = yellow })
+hi("GitSignsDeleteNr", { fg = red })
+hi("GitSignsAddLn", { bg = diff_add })
+hi("GitSignsChangeLn", { bg = diff_change })
+hi("GitSignsDeleteLn", { bg = diff_delete })
+
+-- Diff
+hi("DiffAdd", { bg = diff_add })
+hi("DiffChange", { bg = diff_change })
+hi("DiffDelete", { bg = diff_delete })
+hi("DiffText", { bg = search_cur })
+hi("diffAdded", { fg = green })
+hi("diffRemoved", { fg = red })
+hi("diffChanged", { fg = yellow })
+
+-- Telescope
+hi("TelescopeNormal", { fg = fg, bg = bg1 })
+hi("TelescopeBorder", { fg = bg4, bg = bg1 })
+hi("TelescopeTitle", { fg = mauve, bold = true })
+hi("TelescopePromptNormal", { fg = fg, bg = bg2 })
+hi("TelescopePromptBorder", { fg = bg4, bg = bg2 })
+hi("TelescopePromptTitle", { fg = bg, bg = mauve, bold = true })
+hi("TelescopePromptPrefix", { fg = mauve })
+hi("TelescopeSelection", { bg = bg3 })
+hi("TelescopeSelectionCaret", { fg = mauve })
+hi("TelescopeMatching", { fg = peach, bold = true })
+hi("TelescopeResultsTitle", { fg = mauve })
+hi("TelescopePreviewTitle", { fg = mauve })
+
+-- Snacks
+hi("SnacksPickerInput", { fg = fg, bg = bg2 })
+hi("SnacksPickerInputBorder", { fg = bg4, bg = bg2 })
+hi("SnacksPickerInputTitle", { fg = bg, bg = mauve, bold = true })
+hi("SnacksPickerList", { fg = fg, bg = bg1 })
+hi("SnacksPickerListBorder", { fg = bg4, bg = bg1 })
+hi("SnacksPickerPreview", { fg = fg, bg = bg1 })
+hi("SnacksPickerPreviewBorder", { fg = bg4, bg = bg1 })
+hi("SnacksPickerPreviewTitle", { fg = mauve, bold = true })
+hi("SnacksPickerListCursorLine", { bg = bg3 })
+hi("SnacksPickerMatch", { fg = peach, bold = true })
+hi("SnacksDashboardHeader", { fg = mauve })
+hi("SnacksDashboardIcon", { fg = blue })
+hi("SnacksDashboardKey", { fg = pink })
+hi("SnacksDashboardDesc", { fg = fg1 })
+hi("SnacksDashboardFooter", { fg = comment })
+hi("SnacksNotifierInfo", { fg = lavender })
+hi("SnacksNotifierWarn", { fg = peach })
+hi("SnacksNotifierError", { fg = red })
+hi("SnacksIndent", { fg = bg3 })
+hi("SnacksIndentScope", { fg = bg4 })
+
+-- NeoTree
+hi("NeoTreeNormal", { fg = fg, bg = bg1 })
+hi("NeoTreeNormalNC", { fg = fg, bg = bg1 })
+hi("NeoTreeDirectoryName", { fg = blue })
+hi("NeoTreeDirectoryIcon", { fg = blue })
+hi("NeoTreeRootName", { fg = mauve, bold = true })
+hi("NeoTreeFileName", { fg = fg })
+hi("NeoTreeFileIcon", { fg = fg })
+hi("NeoTreeGitAdded", { fg = green })
+hi("NeoTreeGitModified", { fg = yellow })
+hi("NeoTreeGitDeleted", { fg = red })
+hi("NeoTreeGitConflict", { fg = red, bold = true })
+hi("NeoTreeGitUntracked", { fg = muted })
+hi("NeoTreeIndentMarker", { fg = bg4 })
+hi("NeoTreeWinSeparator", { fg = bg4, bg = bg })
+hi("NeoTreeCursorLine", { bg = bg2 })
+
+-- Flash
+hi("FlashLabel", { fg = bg, bg = mauve, bold = true })
+hi("FlashMatch", { fg = fg, bg = search_bg })
+hi("FlashCurrent", { fg = bg, bg = peach })
+hi("FlashBackdrop", { fg = comment })
+
+-- Lazy
+hi("LazyButton", { fg = fg, bg = bg3 })
+hi("LazyButtonActive", { fg = bg, bg = mauve, bold = true })
+hi("LazyH1", { fg = bg, bg = mauve, bold = true })
+hi("LazySpecial", { fg = mauve })
+hi("LazyProgressDone", { fg = mauve })
+hi("LazyProgressTodo", { fg = bg4 })
+
+-- Mini
+hi("MiniIndentscopeSymbol", { fg = bg4 })
+
+-- Which-key
+hi("WhichKey", { fg = mauve })
+hi("WhichKeyGroup", { fg = blue })
+hi("WhichKeyDesc", { fg = fg1 })
+hi("WhichKeySeparator", { fg = comment })
+hi("WhichKeyValue", { fg = muted })
+
+-- Noice / notify
+hi("NoiceCmdlinePopup", { fg = fg, bg = bg1 })
+hi("NoiceCmdlinePopupBorder", { fg = bg4, bg = bg1 })
+hi("NoiceCmdlineIcon", { fg = mauve })
+hi("NotifyINFOBorder", { fg = blue })
+hi("NotifyINFOTitle", { fg = blue })
+hi("NotifyINFOIcon", { fg = blue })
+hi("NotifyWARNBorder", { fg = peach })
+hi("NotifyWARNTitle", { fg = peach })
+hi("NotifyWARNIcon", { fg = peach })
+hi("NotifyERRORBorder", { fg = red })
+hi("NotifyERRORTitle", { fg = red })
+hi("NotifyERRORIcon", { fg = red })

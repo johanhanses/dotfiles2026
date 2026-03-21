@@ -17,10 +17,10 @@ source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 unset zle_bracketed_paste
 
 # Environment Variables
-export BAT_THEME="gruvbox-dark"
+export BAT_THEME="Catppuccin Macchiato"
 export EDITOR="nvim"
 export VISUAL="nvim"
-export BROWSER="firefox"
+export BROWSER="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 export TERMINAL="/Applications/Ghostty.app/Contents/MacOS/ghostty"
 
 export XDG_CONFIG_HOME="$HOME/.config"

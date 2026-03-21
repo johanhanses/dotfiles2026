@@ -25,7 +25,7 @@ return {
       end
 
       local appearance = get_os_appearance()
-      opts.colorscheme = appearance == "dark" and "conductor-dark" or "conductor-light"
+      opts.colorscheme = appearance == "dark" and "catppuccin-macchiato" or "catppuccin-latte"
 
       -- Auto-refresh on focus (detects OS theme changes)
       vim.api.nvim_create_autocmd("FocusGained", {
@@ -33,7 +33,7 @@ return {
           local new_appearance = get_os_appearance()
           if new_appearance ~= appearance then
             appearance = new_appearance
-            vim.cmd.colorscheme(appearance == "dark" and "conductor-dark" or "conductor-light")
+            vim.cmd.colorscheme(appearance == "dark" and "catppuccin-macchiato" or "catppuccin-latte")
           end
         end,
       })

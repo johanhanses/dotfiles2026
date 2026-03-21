@@ -1,8 +1,10 @@
 {
-  "spinnerTipsEnabled": true,
   "permissions": {
     "allow": [
-      "WebSearch"
+      "WebSearch",
+      "WebFetch(domain:www.conductor.build)",
+      "WebFetch(domain:docs.conductor.build)"
     ]
-  }
+  },
+  "spinnerTipsEnabled": true
 }

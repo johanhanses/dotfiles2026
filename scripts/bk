@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# bk - fuzzy bookmark browser using buku + fzf
+# Usage: bk [search term]
+
+buku --nostdin -p -f 4 "$@" |
+  column -ts$'\t' |
+  fzf --ansi \
+      --preview-window=hidden \
+      --header='enter=open  ctrl-d=delete  ctrl-e=edit  ctrl-a=add new' \
+      --bind='enter:execute-silent(buku --nostdin -o {1})' \
+      --bind='ctrl-d:execute(buku --nostdin -d {1} --tacit)+reload(buku --nostdin -p -f 4 | column -ts$'\''\\t'\'')' \
+      --bind='ctrl-e:execute(buku --nostdin -w {1})' \
+      --bind='ctrl-a:execute(read -p "URL: " url && buku --nostdin -a "$url")+reload(buku --nostdin -p -f 4 | column -ts$'\''\\t'\'')' \
+      --multi \
+      --cycle
