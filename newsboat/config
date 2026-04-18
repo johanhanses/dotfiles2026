@@ -14,13 +14,13 @@ browser "open -g -a 'Google Chrome' %u"
 show-read-feeds yes
 feed-sort-order unreadarticlecount-asc
 
-# Colors - Catppuccin
+# Colors - Tokyo Night
 color background default default
 color listnormal default default
-color listfocus black magenta bold
-color listnormal_unread green default bold
-color listfocus_unread black green bold
-color info black magenta bold
+color listfocus black blue bold
+color listnormal_unread cyan default bold
+color listfocus_unread black cyan bold
+color info black blue bold
 color article default default
 
 # Key bindings
