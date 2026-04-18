@@ -17,7 +17,7 @@
 [delta]
   line-numbers = true
   navigate = true
-  syntax-theme = Catppuccin Macchiato
+  syntax-theme = tokyonight_night
   light = false
   side-by-side = false
   decorations = true

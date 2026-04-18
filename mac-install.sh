@@ -40,10 +40,44 @@ ln -sf $DOTFILES/ghostty $HOME/.config/ghostty
 rm -rf $HOME/.config/matterhorn
 ln -sf $DOTFILES/matterhorn $HOME/.config/matterhorn
 
-echo "dotfiles2026 installed!"
+# aerospace
+mkdir -p $HOME/.config/aerospace
+ln -sf $DOTFILES/aerospace/aerospace.toml $HOME/.config/aerospace/aerospace.toml
+
+# sketchybar
+rm -rf $HOME/.config/sketchybar
+ln -sf $DOTFILES/sketchybar $HOME/.config/sketchybar
+
+# yazi
+rm -rf $HOME/.config/yazi
+ln -sf $DOTFILES/yazi $HOME/.config/yazi
+
+# starship
+ln -sf $DOTFILES/starship.toml $HOME/.config/starship.toml
+
+echo "dotfiles2026 symlinks installed"
+
+if command -v brew >/dev/null 2>&1; then
+  printf "\nRun 'brew bundle --file=%s/Brewfile' to install packages? [y/N] " "$DOTFILES"
+  read -r reply
+  case "$reply" in
+    [yY]|[yY][eE][sS])
+      brew bundle --file="$DOTFILES/Brewfile"
+      ;;
+    *)
+      echo "Skipped brew bundle. Run it later: brew bundle --file=$DOTFILES/Brewfile"
+      ;;
+  esac
+else
+  echo "Homebrew not found. Install it first: https://brew.sh"
+fi
+
 echo ""
 echo "Next steps:"
-echo "  1. Restart your terminal or run: source ~/.zshrc"
-echo "  2. Open nvim - it will auto-install plugins on first run"
-echo "  3. Start tmux and verify the appearance"
-echo "  4. Install xlaude: cargo install xlaude"
+echo "  1. Run ./scripts/macos-defaults.sh to apply macOS system tweaks"
+echo "  2. Unbind Cmd+Space in System Settings > Keyboard Shortcuts > Spotlight"
+echo "  3. Launch Aerospace + Raycast once so they request accessibility permissions"
+echo "  4. Restart your terminal or run: source ~/.zshrc"
+echo "  5. Open nvim - it will auto-install plugins on first run"
+echo "  6. Install xlaude: cargo install xlaude"
+echo "  7. See KEYBINDINGS.md for the full shortcut reference"

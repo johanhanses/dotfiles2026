@@ -2,7 +2,6 @@ return {
   {
     "LazyVim/LazyVim",
     opts = function(_, opts)
-      -- Check OS theme preference
       local function get_os_appearance()
         if vim.fn.has("macunix") == 1 then
           local handle = io.popen("defaults read -g AppleInterfaceStyle 2>/dev/null")
@@ -25,15 +24,14 @@ return {
       end
 
       local appearance = get_os_appearance()
-      opts.colorscheme = appearance == "dark" and "catppuccin-macchiato" or "catppuccin-latte"
+      opts.colorscheme = appearance == "dark" and "tokyonight-night" or "tokyonight-day"
 
-      -- Auto-refresh on focus (detects OS theme changes)
       vim.api.nvim_create_autocmd("FocusGained", {
         callback = function()
           local new_appearance = get_os_appearance()
           if new_appearance ~= appearance then
             appearance = new_appearance
-            vim.cmd.colorscheme(appearance == "dark" and "catppuccin-macchiato" or "catppuccin-latte")
+            vim.cmd.colorscheme(appearance == "dark" and "tokyonight-night" or "tokyonight-day")
           end
         end,
       })

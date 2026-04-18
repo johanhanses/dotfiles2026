@@ -17,7 +17,7 @@ source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 unset zle_bracketed_paste
 
 # Environment Variables
-export BAT_THEME="Catppuccin Macchiato"
+export BAT_THEME="tokyonight_night"
 export EDITOR="nvim"
 export VISUAL="nvim"
 export BROWSER="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
@@ -49,6 +49,36 @@ KUBECONFIG=~/.kube/config
 # Initialize Starship prompt
 eval "$(starship init zsh)"
 
+# zoxide (smarter cd)
+if command -v zoxide >/dev/null 2>&1; then
+  eval "$(zoxide init zsh)"
+fi
+
+# mise (runtime version manager)
+if command -v mise >/dev/null 2>&1; then
+  eval "$(mise activate zsh)"
+fi
+
+# fzf + fd
+if command -v fd >/dev/null 2>&1; then
+  export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
+  export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+  export FZF_ALT_C_COMMAND='fd --type d --hidden --follow --exclude .git'
+fi
+
+# yazi: change shell pwd to last cwd on exit
+function y() {
+  local tmp
+  tmp="$(mktemp -t yazi-cwd.XXXXXX)"
+  yazi "$@" --cwd-file="$tmp"
+  local cwd
+  cwd="$(cat -- "$tmp")"
+  if [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+    builtin cd -- "$cwd"
+  fi
+  rm -f -- "$tmp"
+}
+
 # xlaude worktree helpers
 xcd() { cd "$(xlaude dir "$@")"; }
 xv() { nvim "$(xlaude dir "$@")"; }
@@ -77,7 +107,7 @@ alias sb="cd $SECOND_BRAIN"
 alias config="cd $XDG_CONFIG_HOME"
 
 # Tool aliases
-alias cat="bat"
+alias cat="bat --style=plain"
 alias fast="fast -u --single-line"
 alias speed="curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python3 -"
 
@@ -124,8 +154,8 @@ alias tk="tmux kill-server"
 alias tl="tmux ls"
 alias ta="tmux a"
 
-# zellij alias
-alias z="zellij"
+# zellij alias (z is zoxide; use zj for zellij)
+alias zj="zellij"
 
 # docker aliases
 alias d="docker"

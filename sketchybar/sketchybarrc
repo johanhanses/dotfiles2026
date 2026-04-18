@@ -1,0 +1,107 @@
+#!/usr/bin/env sh
+
+# Tokyo Night palette
+BG="0xff1a1b26"
+BG_DARK="0xff16161e"
+FG="0xffc0caf5"
+FG_DIM="0xff737aa2"
+BLUE="0xff7aa2f7"
+CYAN="0xff7dcfff"
+MAGENTA="0xffbb9af7"
+ORANGE="0xffff9e64"
+YELLOW="0xffe0af68"
+GREEN="0xff9ece6a"
+RED="0xfff7768e"
+
+FONT_FACE="GeistMono Nerd Font"
+ICON_FONT="$FONT_FACE:Bold:14.0"
+LABEL_FONT="$FONT_FACE:Regular:13.0"
+
+PLUGIN_DIR="$CONFIG_DIR/plugins"
+
+sketchybar --bar \
+  position=top \
+  height=32 \
+  blur_radius=20 \
+  color="$BG" \
+  padding_left=8 \
+  padding_right=8 \
+  sticky=on \
+  corner_radius=0 \
+  y_offset=0 \
+  margin=0
+
+sketchybar --default \
+  icon.font="$ICON_FONT" \
+  icon.color="$FG" \
+  icon.padding_left=8 \
+  icon.padding_right=4 \
+  label.font="$LABEL_FONT" \
+  label.color="$FG" \
+  label.padding_left=4 \
+  label.padding_right=8 \
+  background.color="$BG_DARK" \
+  background.corner_radius=6 \
+  background.height=24 \
+  padding_left=4 \
+  padding_right=4
+
+# Aerospace workspaces
+SPACE_ICONS=("1" "2" "3" "4" "5")
+for i in "${!SPACE_ICONS[@]}"
+do
+  sid=$(($i+1))
+  space=(
+    space="$sid"
+    icon="${SPACE_ICONS[i]}"
+    icon.padding_left=10
+    icon.padding_right=10
+    icon.highlight_color="$BG"
+    label.drawing=off
+    background.drawing=off
+    script="$PLUGIN_DIR/aerospace.sh $sid"
+    click_script="aerospace workspace $sid"
+  )
+  sketchybar --add item space.$sid left --set space.$sid "${space[@]}"
+done
+
+sketchybar --add event aerospace_workspace_change
+sketchybar --subscribe space.1 aerospace_workspace_change
+sketchybar --subscribe space.2 aerospace_workspace_change
+sketchybar --subscribe space.3 aerospace_workspace_change
+sketchybar --subscribe space.4 aerospace_workspace_change
+sketchybar --subscribe space.5 aerospace_workspace_change
+
+# Front app
+sketchybar --add item front_app left \
+  --set front_app \
+    icon.drawing=off \
+    label.color="$BLUE" \
+    label.font="$FONT_FACE:Bold:13.0" \
+    script="$PLUGIN_DIR/front_app.sh" \
+  --subscribe front_app front_app_switched
+
+# Clock (right)
+sketchybar --add item clock right \
+  --set clock \
+    update_freq=10 \
+    icon="" \
+    icon.color="$MAGENTA" \
+    script="$PLUGIN_DIR/clock.sh"
+
+# Battery (right)
+sketchybar --add item battery right \
+  --set battery \
+    update_freq=120 \
+    icon.color="$YELLOW" \
+    script="$PLUGIN_DIR/battery.sh" \
+  --subscribe battery system_woke power_source_change
+
+# Volume (right)
+sketchybar --add item volume right \
+  --set volume \
+    icon.color="$GREEN" \
+    script="$PLUGIN_DIR/volume.sh" \
+  --subscribe volume volume_change
+
+sketchybar --update

@@ -4,30 +4,36 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Architecture
 
-This is a cross-platform dotfiles repository supporting macOS (primary). The repository uses a symlink-based installation system.
+This is a cross-platform dotfiles repository supporting macOS (primary). The repository uses a symlink-based installation system backed by a `Brewfile` for package provisioning.
 
 ## Key Components
 
-- **Platform-specific install scripts**: `mac-install.sh` - creates symlinks to configuration files in user's home directory
+- **Platform-specific install scripts**: `mac-install.sh` — creates symlinks to configuration files in user's home directory and runs `brew bundle`
+- **Brewfile**: declares all formulae, casks, and fonts for the macOS setup
+- **macOS defaults**: `scripts/macos-defaults.sh` applies system preferences (Dock, Finder, keyboard, screenshots, menu bar hidden)
 - **ZSH configurations**: Platform-specific zsh configs in `zshrc/mac/`
-- **Neovim configuration**: LazyVim-based setup in `nvim/` directory with Catppuccin Macchiato (dark) / Latte (light)
+- **Neovim configuration**: LazyVim-based setup in `nvim/` directory with Tokyo Night Night (dark) / Day (light) auto-switch
 - **Terminal configurations**:
-  - Tmux config with Catppuccin Macchiato/Latte status bar
-  - Ghostty terminal configuration with Catppuccin Macchiato/Latte
+  - Tmux config with Tokyo Night status bar
+  - Ghostty terminal configuration with Tokyo Night theme, Geist Mono Nerd Font, hidden title bar, split keybinds
+- **Window manager**: `aerospace/` — tiling WM config (Aerospace) with hjkl focus/move/resize, 5 workspaces
+- **Status bar**: `sketchybar/` — SketchyBar with Aerospace workspace indicators, clock, battery, volume
+- **Launcher**: Raycast replaces Spotlight (see `RAYCAST-SETUP.md`)
+- **File manager**: `yazi/` — Yazi with custom keymap (gh/gc/gd/gr jumps) and iterm2 image preview
 - **System monitoring**: btop configuration
 - **RSS reader**: newsboat configuration
+- **Keybindings reference**: `KEYBINDINGS.md` — full shortcut reference across all apps
 
 ## Common Commands
 
 **Installation (run from repository root):**
 ```bash
-# macOS
-./mac-install.sh
+./mac-install.sh              # symlinks + brew bundle
+./scripts/macos-defaults.sh   # macOS system tweaks
 ```
 
 **Development IDE layout (tmux):**
 ```bash
-# Creates a multi-pane tmux layout for development
 ./scripts/ide
 ```
 
@@ -41,16 +47,19 @@ This is a cross-platform dotfiles repository supporting macOS (primary). The rep
 
 - Configuration files are organized by application in their own directories
 - Neovim uses LazyVim as the base configuration with custom plugins in `lua/plugins/`
-- Catppuccin theme (Macchiato dark / Latte light) is used across Neovim, tmux, and Ghostty
+- Tokyo Night theme (Night dark / Day light) is used across Neovim, tmux, Ghostty, btop, SketchyBar, yazi, delta, bat, newsboat
 - Private configurations (like .kube) are expected in a separate `dotfiles-private` repository
 
 ## Theme
 
-Dark mode uses Catppuccin Macchiato, light mode uses Catppuccin Latte (auto-switches based on OS):
-- Neovim: `catppuccin-macchiato` / `catppuccin-latte` — custom colorschemes in `nvim/colors/`, auto-switches on focus
-- Ghostty: `catppuccin-macchiato` / `catppuccin-latte` — custom themes in `ghostty/themes/`
-- tmux: Catppuccin Macchiato/Latte status bar colors
-- delta (git): `syntax-theme = Catppuccin Macchiato`
-- bat: `BAT_THEME="Catppuccin Macchiato"`
-- btop: `catppuccin_macchiato`
-- newsboat: Catppuccin colors
+Dark mode uses Tokyo Night Night, light mode uses Tokyo Night Day (auto-switches based on OS):
+- Neovim: `tokyonight-night` / `tokyonight-day` — custom colorschemes in `nvim/colors/`, auto-switches on focus
+- Ghostty: built-in `tokyonight` theme
+- tmux: Tokyo Night palette (`#1a1b26` bg, `#7aa2f7` accent)
+- SketchyBar: Tokyo Night palette in `sketchybar/sketchybarrc`
+- Yazi: Tokyo Night `yazi/theme.toml`
+- delta (git): `syntax-theme = tokyonight_night`
+- bat: `BAT_THEME="tokyonight_night"`
+- btop: `tokyo-night`
+- starship: Tokyo Night preset (`starship.toml`)
+- newsboat: Tokyo Night colors
