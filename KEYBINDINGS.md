@@ -37,7 +37,7 @@ Aerospace is a tiling window manager. Windows snap into a tree; you navigate wit
 | Keys                    | Action               |
 |-------------------------|----------------------|
 | `Alt+Shift+h/j/k/l`     | Move window in direction |
-| `Alt+Shift+1..5`        | Move window to workspace 1–5 |
+| `Alt+Shift+1..5`        | Move window to workspace 1–5 (pairs with `Alt+1..5` switch) |
 
 ### Resize
 
@@ -50,7 +50,7 @@ Aerospace is a tiling window manager. Windows snap into a tree; you navigate wit
 
 | Keys                | Action                           |
 |---------------------|----------------------------------|
-| `Cmd+1..5`          | Switch to workspace 1–5          |
+| `Alt+1..5`          | Switch to workspace 1–5          |
 | `Alt+o`             | Toggle tiles layout (horizontal/vertical) |
 | `Alt+,`             | Toggle accordion layout          |
 | `Alt+f`             | Fullscreen toggle                |
