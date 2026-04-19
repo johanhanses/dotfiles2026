@@ -1,14 +1,16 @@
 #!/usr/bin/env sh
 
-# Hide wide/low-priority items when the focused monitor is the built-in
-# MacBook display. External monitors get the full bar.
+# On the built-in MacBook display hide system stats (cpu/memory/volume)
+# to keep the bar readable. External monitors show the full set.
 
 FOCUSED=$(aerospace list-monitors --focused 2>/dev/null)
 
 if echo "$FOCUSED" | grep -qi "built-in"; then
-  sketchybar --set weather drawing=off
-  sketchybar --set calendar drawing=off
+  sketchybar --set cpu drawing=off
+  sketchybar --set memory drawing=off
+  sketchybar --set volume drawing=off
 else
-  sketchybar --set weather drawing=on
-  sketchybar --set calendar drawing=on
+  sketchybar --set cpu drawing=on
+  sketchybar --set memory drawing=on
+  sketchybar --set volume drawing=on
 fi
