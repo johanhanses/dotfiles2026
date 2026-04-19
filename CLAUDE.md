@@ -16,8 +16,8 @@ This is a cross-platform dotfiles repository supporting macOS (primary). The rep
 - **Terminal configurations**:
   - Tmux config with Tokyo Night status bar
   - Ghostty terminal configuration with Tokyo Night theme, Geist Mono Nerd Font, hidden title bar, split keybinds
-- **Window manager**: `aerospace/` — tiling WM config (Aerospace) with hjkl focus/move/resize, 5 workspaces
-- **Status bar**: `sketchybar/` — SketchyBar with Aerospace workspace indicators, clock, battery, volume
+- **Window manager**: `aerospace/` — tiling WM config (Aerospace) with hjkl focus/move/resize, 9 workspaces, per-monitor outer.top (4 built-in, 34 external)
+- **Status bar**: `sketchybar/` — SketchyBar with workspace indicators, front-app, music, mail, calendar, weather, tailscale, wifi (icon-only), cpu, memory, volume, battery, clock. CPU/Memory/Volume auto-hide on the built-in display
 - **Launcher**: Raycast replaces Spotlight (see `RAYCAST-SETUP.md`)
 - **File manager**: `yazi/` — Yazi with custom keymap (gh/gc/gd/gr jumps) and iterm2 image preview
 - **System monitoring**: btop configuration

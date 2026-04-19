@@ -20,7 +20,7 @@ For tmux, `<prefix>` means `Ctrl+a` unless rebound.
 
 Aerospace is a tiling window manager. Windows snap into a tree; you navigate with hjkl and switch between 9 workspaces with `Alt+1..9`. Native macOS spaces are disabled (`mru-spaces = false`). macOS full-screen mode no longer creates a space — apps share the current workspace.
 
-**Layouts**: `tiles` (default horizontal/vertical split) and `accordion` (stacked). Toggle with `Alt+/` (tiles) or `Alt+,` (accordion).
+**Layouts**: `tiles` (default horizontal/vertical split) and `accordion` (stacked). Toggle with `Alt+o` (tiles) or `Alt+,` (accordion).
 
 ### Focus
 
@@ -94,28 +94,28 @@ No user keybindings. Click workspace indicators to switch. Contents (left → ri
 - **Workspaces 1–9** — active one highlighted blue
 - **Front app name** — current focused app
 
-Right side. On the built-in MacBook display, **CPU, Memory, and Volume are hidden** to keep the bar readable (reappear on external monitors). **WiFi is icon-only on all displays** — connection state is shown via the icon color:
+Right side (icons left→right, some conditional):
 
 - **Music** — Apple Music track (hidden when not playing)
-- **Mail** — Mail.app unread count (hidden when 0 or Mail.app closed)
+- **Mail** — Mail.app inbox unread (hidden at 0 or when Mail.app is closed; requires Automation permission)
 - **Calendar** — next event today (requires `icalBuddy` + Calendar permission)
 - **Weather** — condition + temp via wttr.in (IP-based location)
-- **Tailscale** — VPN status (green on, red off)
-- **WiFi** — current SSID (or `offline`)
-- **CPU** — usage %, color-coded (yellow ≥50%, red ≥80%)
-- **Memory** — used/total GB, color-coded (yellow ≥65%, red ≥85%)
-- **Volume**, **battery**, **clock** — % or glyph prefix
+- **Tailscale** — VPN status (green=on, red=off, dim=CLI missing)
+- **WiFi** — icon-only; blue=online, dim=offline
+- **CPU** — usage %, color-coded (yellow ≥50%, red ≥80%) — hidden on built-in display
+- **Memory** — used/total GB, color-coded (yellow ≥65%, red ≥85%) — hidden on built-in display
+- **Volume** — %, speaker glyph — hidden on built-in display
+- **Battery** — %, charge glyph (color by level; green while charging)
+- **Clock** — weekday + date + time
+
+**Per-monitor trim**: on the built-in MacBook display, CPU/Memory/Volume are hidden automatically to reduce clutter. External monitors show the full set. Switching is reactive — the trim runs on Aerospace workspace change (which fires on monitor change).
 
 Nerd Font glyphs require Geist Mono Nerd Font to render.
 
-| Shell command         | Action             |
-|-----------------------|--------------------|
-| `sketchybar --reload` | Reload bar config  |
-| `brew services restart sketchybar` | Full restart |
-
-| Shell command        | Action             |
-|----------------------|--------------------|
-| `sketchybar --reload` | Reload bar config |
+| Shell command                      | Action             |
+|------------------------------------|--------------------|
+| `sketchybar --reload`              | Reload bar config  |
+| `brew services restart sketchybar` | Full restart       |
 
 **Config**: `sketchybar/sketchybarrc` + `sketchybar/plugins/*.sh`
 
