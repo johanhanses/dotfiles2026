@@ -20,7 +20,23 @@ For tmux, `<prefix>` means `Ctrl+a` unless rebound.
 
 Aerospace is a tiling window manager. Windows snap into a tree; you navigate with hjkl and switch between 9 workspaces with `Ctrl+1..9`. Native macOS spaces are disabled (`mru-spaces = false`). macOS full-screen mode no longer creates a space — apps share the current workspace.
 
-**Layouts**: `tiles` (default horizontal/vertical split) and `accordion` (stacked). Toggle with `Alt+o` (tiles) or `Alt+,` (accordion).
+### Mental model
+
+Three modifier prefixes, each with a consistent scope:
+
+| Modifier | Scope                          | Rationale                                                |
+|----------|--------------------------------|----------------------------------------------------------|
+| `Alt`    | **Window-level** operations    | Focus / move / resize / layout / fullscreen / service mode. Alt+letter is uncommon in terminal apps, so it's safe for one-hand hotkeys. |
+| `Ctrl`   | **Workspace-level** operations | Switch workspace, move window to workspace, back-and-forth, move workspace to monitor. Ctrl isn't a character-producing modifier on macOS — Nordic-safe with numbers. |
+| `Cmd`    | **App-level** (native macOS)   | Raycast (`Cmd+Space`), Ghostty splits, tab management.   |
+
+`Shift` acts as an **intensifier**:
+
+- `Alt + key` → focus; `Alt+Shift + key` → move
+- `Ctrl + N` → switch to workspace N; `Ctrl+Shift + N` → move window to workspace N
+- `Alt+Ctrl + hjkl` → resize (Alt-window scope, Shift already taken by move, so Ctrl is the third amplifier — deliberate)
+
+**Layouts**: `tiles` (default horizontal/vertical split) and `accordion` (stacked). Toggle with `Alt+o` (tiles) or `Alt+,` (accordion). On Swedish layout, `Alt+o` produces `ø` and `Alt+f` produces `ƒ` when typed in a text field — Aerospace intercepts them globally so you don't lose these actions; the characters just aren't typeable. If you need them, type via a dead-key sequence or paste.
 
 ### Focus
 
@@ -30,14 +46,14 @@ Aerospace is a tiling window manager. Windows snap into a tree; you navigate wit
 | `Alt+j`           | Focus window down    |
 | `Alt+k`           | Focus window up      |
 | `Alt+l`           | Focus window right   |
-| `Alt+Tab`         | Jump to last workspace |
 
 ### Move windows
 
-| Keys                    | Action               |
-|-------------------------|----------------------|
-| `Alt+Shift+h/j/k/l`     | Move window in direction |
-| `Ctrl+Shift+1..9`       | Move window to workspace 1–9 (pairs with `Ctrl+1..9` switch) |
+| Keys                    | Action                                                            |
+|-------------------------|-------------------------------------------------------------------|
+| `Alt+Shift+h/j/k/l`     | Move window in direction                                          |
+| `Ctrl+Shift+1..9`       | Move window to workspace 1–9 (pairs with `Ctrl+1..9` switch)      |
+| `Ctrl+Shift+0`          | Move current workspace to the next monitor                        |
 
 ### Resize
 
@@ -48,13 +64,14 @@ Aerospace is a tiling window manager. Windows snap into a tree; you navigate wit
 
 ### Workspaces & layouts
 
-| Keys                | Action                           |
-|---------------------|----------------------------------|
+| Keys                | Action                                                                                      |
+|---------------------|---------------------------------------------------------------------------------------------|
 | `Ctrl+1..9`         | Switch to workspace 1–9 (Nordic-safe; Ctrl doesn't produce special chars, keeps `Alt+N` free for `@ [ ] \|` etc.) |
-| `Alt+o`             | Toggle tiles layout (horizontal/vertical) |
-| `Alt+,`             | Toggle accordion layout          |
-| `Alt+f`             | Fullscreen toggle                |
-| `Alt+Shift+␣`       | Floating ↔ tiling toggle         |
+| `Ctrl+0`            | Back-and-forth (toggle between current and previous workspace)                              |
+| `Alt+o`             | Toggle tiles layout (horizontal/vertical)                                                   |
+| `Alt+,`             | Toggle accordion layout                                                                     |
+| `Alt+f`             | Fullscreen toggle                                                                           |
+| `Alt+Shift+␣`       | Floating ↔ tiling toggle                                                                    |
 
 ### Service mode (Alt+Shift+Enter)
 
