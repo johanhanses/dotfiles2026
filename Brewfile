@@ -1,4 +1,3 @@
-tap "homebrew/bundle"
 tap "FelixKratz/formulae"
 tap "nikitabobko/tap"
 
@@ -31,10 +30,6 @@ cask "1password"
 cask "obsidian"
 cask "raycast"
 cask "nikitabobko/tap/aerospace"
-cask "arc"
-cask "spotify"
-cask "orbstack"
-cask "zoom"
 cask "hiddenbar"
 cask "tailscale"
 
