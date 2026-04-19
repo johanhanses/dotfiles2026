@@ -160,7 +160,16 @@ sketchybar --add item music right \
     drawing=off \
     script="$PLUGIN_DIR/music.sh"
 
+# Hidden helper item: hides wide items (calendar, weather) when focused
+# monitor is the built-in MacBook display. Re-evaluates on every
+# Aerospace workspace change (also fires on monitor change).
+sketchybar --add item display_watcher center \
+  --set display_watcher \
+    drawing=off \
+    script="$PLUGIN_DIR/display_trim.sh" \
+  --subscribe display_watcher aerospace_workspace_change
+
 sketchybar --update
 
-# Apply initial highlight to the currently focused Aerospace workspace
+# Apply initial highlight + initial display-based trim
 sketchybar --trigger aerospace_workspace_change

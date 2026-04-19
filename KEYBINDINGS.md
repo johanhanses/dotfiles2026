@@ -94,7 +94,7 @@ No user keybindings. Click workspace indicators to switch. Contents (left → ri
 - **Workspaces 1–9** — active one highlighted blue
 - **Front app name** — current focused app
 
-Right side:
+Right side (Calendar + Weather hide automatically on the built-in MacBook display to save space; both reappear on external monitors):
 
 - **Music** — Apple Music track (hidden when not playing)
 - **Mail** — Mail.app unread count (hidden when 0 or Mail.app closed)
