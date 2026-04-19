@@ -23,7 +23,12 @@ inner.horizontal = 8
 inner.vertical = 8
 outer.left = 8
 outer.bottom = 8
-outer.top = 34
+# Per-monitor top gap: built-in MacBook display tucks content right under the
+# notch (macOS's safe area already starts below it); external monitors need
+# room for SketchyBar (32px) plus a couple of px breathing room.
+# Run `aerospace list-monitors` to see your display names if the regex below
+# doesn't match your built-in panel.
+outer.top = [{ monitor.'^Built-in' = 4 }, 34]
 outer.right = 8
 
 [mode.main.binding]
