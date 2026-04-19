@@ -58,6 +58,16 @@ ln -sf $DOTFILES/starship.toml $HOME/.config/starship.toml
 echo "dotfiles2026 symlinks installed"
 
 if command -v brew >/dev/null 2>&1; then
+  # Casks that must be uninstalled if present (opt-outs from earlier install runs).
+  # Extend this list to have the install script remove apps you no longer want.
+  UNWANTED_CASKS="arc spotify orbstack zoom"
+  for c in $UNWANTED_CASKS; do
+    if brew list --cask "$c" >/dev/null 2>&1; then
+      echo "Removing unwanted cask: $c"
+      brew uninstall --cask --zap "$c"
+    fi
+  done
+
   printf "\nRun 'brew bundle --file=%s/Brewfile' to install packages? [y/N] " "$DOTFILES"
   read -r reply
   case "$reply" in
