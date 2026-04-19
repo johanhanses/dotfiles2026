@@ -52,7 +52,6 @@ for i in "${!SPACE_ICONS[@]}"
 do
   sid=$(($i+1))
   space=(
-    space="$sid"
     icon="${SPACE_ICONS[i]}"
     icon.padding_left=10
     icon.padding_right=10
@@ -105,3 +104,6 @@ sketchybar --add item volume right \
   --subscribe volume volume_change
 
 sketchybar --update
+
+# Apply initial highlight to the currently focused Aerospace workspace
+sketchybar --trigger aerospace_workspace_change
