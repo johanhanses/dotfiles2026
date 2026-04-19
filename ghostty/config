@@ -3,7 +3,7 @@ font-size = 14
 font-thicken = true
 adjust-cell-height = 2
 
-theme = tokyonight
+theme = dark:TokyoNight Night,light:TokyoNight Day
 
 background-opacity = 0.92
 background-blur-radius = 20
