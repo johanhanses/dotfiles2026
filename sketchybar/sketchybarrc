@@ -101,6 +101,65 @@ sketchybar --add item volume right \
     script="$PLUGIN_DIR/volume.sh" \
   --subscribe volume volume_change
 
+# Memory
+sketchybar --add item memory right \
+  --set memory \
+    update_freq=10 \
+    icon="" \
+    icon.color="$CYAN" \
+    script="$PLUGIN_DIR/memory.sh"
+
+# CPU
+sketchybar --add item cpu right \
+  --set cpu \
+    update_freq=5 \
+    icon="" \
+    icon.color="$ORANGE" \
+    script="$PLUGIN_DIR/cpu.sh"
+
+# WiFi
+sketchybar --add item wifi right \
+  --set wifi \
+    update_freq=30 \
+    icon="󰖩" \
+    icon.color="$BLUE" \
+    script="$PLUGIN_DIR/wifi.sh"
+
+# Tailscale
+sketchybar --add item tailscale right \
+  --set tailscale \
+    update_freq=60 \
+    icon="󰒘" \
+    script="$PLUGIN_DIR/tailscale.sh"
+
+# Weather (wttr.in, free, no API key — based on IP geolocation)
+sketchybar --add item weather right \
+  --set weather \
+    update_freq=1800 \
+    script="$PLUGIN_DIR/weather.sh"
+
+# Calendar next event (requires icalBuddy + Calendar.app permission)
+sketchybar --add item calendar right \
+  --set calendar \
+    update_freq=120 \
+    icon="" \
+    icon.color="$MAGENTA" \
+    script="$PLUGIN_DIR/calendar.sh"
+
+# Mail badge (reads Mail.app dock badge via lsappinfo — hidden if 0 or Mail.app not running)
+sketchybar --add item mail right \
+  --set mail \
+    update_freq=30 \
+    drawing=off \
+    script="$PLUGIN_DIR/mail.sh"
+
+# Music now-playing (Apple Music — hidden when not playing)
+sketchybar --add item music right \
+  --set music \
+    update_freq=5 \
+    drawing=off \
+    script="$PLUGIN_DIR/music.sh"
+
 sketchybar --update
 
 # Apply initial highlight to the currently focused Aerospace workspace

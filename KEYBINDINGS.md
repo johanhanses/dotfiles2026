@@ -89,7 +89,29 @@ Window management extension is **not used** — Aerospace owns that.
 
 ## Status Bar — SketchyBar
 
-No user keybindings. The bar shows 9 Aerospace workspace indicators (click to switch), front app, clock, battery, volume. Battery and volume display as percentages (`75%`) prefixed with Nerd Font glyphs.
+No user keybindings. Click workspace indicators to switch. Contents (left → right):
+
+- **Workspaces 1–9** — active one highlighted blue
+- **Front app name** — current focused app
+
+Right side:
+
+- **Music** — Apple Music track (hidden when not playing)
+- **Mail** — Mail.app unread count (hidden when 0 or Mail.app closed)
+- **Calendar** — next event today (requires `icalBuddy` + Calendar permission)
+- **Weather** — condition + temp via wttr.in (IP-based location)
+- **Tailscale** — VPN status (green on, red off)
+- **WiFi** — current SSID (or `offline`)
+- **CPU** — usage %, color-coded (yellow ≥50%, red ≥80%)
+- **Memory** — used/total GB, color-coded (yellow ≥65%, red ≥85%)
+- **Volume**, **battery**, **clock** — % or glyph prefix
+
+Nerd Font glyphs require Geist Mono Nerd Font to render.
+
+| Shell command         | Action             |
+|-----------------------|--------------------|
+| `sketchybar --reload` | Reload bar config  |
+| `brew services restart sketchybar` | Full restart |
 
 | Shell command        | Action             |
 |----------------------|--------------------|
