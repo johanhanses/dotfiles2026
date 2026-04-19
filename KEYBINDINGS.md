@@ -18,7 +18,7 @@ For tmux, `<prefix>` means `Ctrl+a` unless rebound.
 
 ## Window Manager — Aerospace
 
-Aerospace is a tiling window manager. Windows snap into a tree; you navigate with hjkl and switch between 9 workspaces with `Alt+1..9`. Native macOS spaces are disabled (`mru-spaces = false`). macOS full-screen mode no longer creates a space — apps share the current workspace.
+Aerospace is a tiling window manager. Windows snap into a tree; you navigate with hjkl and switch between 9 workspaces with `Ctrl+1..9`. Native macOS spaces are disabled (`mru-spaces = false`). macOS full-screen mode no longer creates a space — apps share the current workspace.
 
 **Layouts**: `tiles` (default horizontal/vertical split) and `accordion` (stacked). Toggle with `Alt+o` (tiles) or `Alt+,` (accordion).
 
@@ -37,7 +37,7 @@ Aerospace is a tiling window manager. Windows snap into a tree; you navigate wit
 | Keys                    | Action               |
 |-------------------------|----------------------|
 | `Alt+Shift+h/j/k/l`     | Move window in direction |
-| `Alt+Shift+1..9`        | Move window to workspace 1–9 (pairs with `Alt+1..9` switch) |
+| `Ctrl+Shift+1..9`       | Move window to workspace 1–9 (pairs with `Ctrl+1..9` switch) |
 
 ### Resize
 
@@ -50,7 +50,7 @@ Aerospace is a tiling window manager. Windows snap into a tree; you navigate wit
 
 | Keys                | Action                           |
 |---------------------|----------------------------------|
-| `Alt+1..9`          | Switch to workspace 1–9          |
+| `Ctrl+1..9`         | Switch to workspace 1–9 (Nordic-safe; Ctrl doesn't produce special chars, keeps `Alt+N` free for `@ [ ] \|` etc.) |
 | `Alt+o`             | Toggle tiles layout (horizontal/vertical) |
 | `Alt+,`             | Toggle accordion layout          |
 | `Alt+f`             | Fullscreen toggle                |
