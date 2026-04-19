@@ -37,7 +37,7 @@ Aerospace is a tiling window manager. Windows snap into a tree; you navigate wit
 | Keys                    | Action               |
 |-------------------------|----------------------|
 | `Alt+Shift+h/j/k/l`     | Move window in direction |
-| `Cmd+Shift+1..5`        | Move window to workspace 1–5 |
+| `Alt+Shift+1..5`        | Move window to workspace 1–5 |
 
 ### Resize
 
@@ -51,12 +51,12 @@ Aerospace is a tiling window manager. Windows snap into a tree; you navigate wit
 | Keys                | Action                           |
 |---------------------|----------------------------------|
 | `Cmd+1..5`          | Switch to workspace 1–5          |
-| `Alt+/`             | Toggle tiles layout (horizontal/vertical) |
+| `Alt+o`             | Toggle tiles layout (horizontal/vertical) |
 | `Alt+,`             | Toggle accordion layout          |
 | `Alt+f`             | Fullscreen toggle                |
 | `Alt+Shift+␣`       | Floating ↔ tiling toggle         |
 
-### Service mode (Alt+Shift+;)
+### Service mode (Alt+Shift+Enter)
 
 Enter service mode then press:
 
@@ -107,8 +107,8 @@ Geist Mono Nerd Font, Tokyo Night, hidden title bar, 92% opacity with blur.
 |--------------------|------------------------------|
 | `Cmd+D`            | Split right                  |
 | `Cmd+Shift+D`      | Split down                   |
-| `Cmd+[`            | Focus previous split         |
-| `Cmd+]`            | Focus next split             |
+| `Cmd+Shift+H`      | Focus previous split         |
+| `Cmd+Shift+L`      | Focus next split             |
 | `Cmd+Shift+Enter`  | Toggle split zoom            |
 | `Cmd+W`            | Close surface                |
 | `Cmd+T`            | New tab                      |
