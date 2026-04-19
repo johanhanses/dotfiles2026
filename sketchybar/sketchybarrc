@@ -47,12 +47,11 @@ sketchybar --default \
   padding_right=4
 
 # Aerospace workspaces
-SPACE_ICONS=("1" "2" "3" "4" "5")
+SPACE_ICONS=("1" "2" "3" "4" "5" "6" "7" "8" "9")
 for i in "${!SPACE_ICONS[@]}"
 do
   sid=$(($i+1))
   space=(
-    space="$sid"
     icon="${SPACE_ICONS[i]}"
     icon.padding_left=10
     icon.padding_right=10
@@ -66,11 +65,9 @@ do
 done
 
 sketchybar --add event aerospace_workspace_change
-sketchybar --subscribe space.1 aerospace_workspace_change
-sketchybar --subscribe space.2 aerospace_workspace_change
-sketchybar --subscribe space.3 aerospace_workspace_change
-sketchybar --subscribe space.4 aerospace_workspace_change
-sketchybar --subscribe space.5 aerospace_workspace_change
+for sid in 1 2 3 4 5 6 7 8 9; do
+  sketchybar --subscribe space.$sid aerospace_workspace_change
+done
 
 # Front app
 sketchybar --add item front_app left \
@@ -105,3 +102,6 @@ sketchybar --add item volume right \
   --subscribe volume volume_change
 
 sketchybar --update
+
+# Apply initial highlight to the currently focused Aerospace workspace
+sketchybar --trigger aerospace_workspace_change
