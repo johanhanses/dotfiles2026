@@ -18,7 +18,7 @@ For tmux, `<prefix>` means `Ctrl+a` unless rebound.
 
 ## Window Manager — Aerospace
 
-Aerospace is a tiling window manager. Windows snap into a tree; you navigate with hjkl and switch between 5 workspaces with `Cmd+1..5`. Native macOS spaces are disabled (`mru-spaces = false`). macOS full-screen mode no longer creates a space — apps share the current workspace.
+Aerospace is a tiling window manager. Windows snap into a tree; you navigate with hjkl and switch between 9 workspaces with `Alt+1..9`. Native macOS spaces are disabled (`mru-spaces = false`). macOS full-screen mode no longer creates a space — apps share the current workspace.
 
 **Layouts**: `tiles` (default horizontal/vertical split) and `accordion` (stacked). Toggle with `Alt+/` (tiles) or `Alt+,` (accordion).
 
@@ -37,7 +37,7 @@ Aerospace is a tiling window manager. Windows snap into a tree; you navigate wit
 | Keys                    | Action               |
 |-------------------------|----------------------|
 | `Alt+Shift+h/j/k/l`     | Move window in direction |
-| `Alt+Shift+1..5`        | Move window to workspace 1–5 |
+| `Alt+Shift+1..9`        | Move window to workspace 1–9 (pairs with `Alt+1..9` switch) |
 
 ### Resize
 
@@ -50,7 +50,7 @@ Aerospace is a tiling window manager. Windows snap into a tree; you navigate wit
 
 | Keys                | Action                           |
 |---------------------|----------------------------------|
-| `Cmd+1..5`          | Switch to workspace 1–5          |
+| `Alt+1..9`          | Switch to workspace 1–9          |
 | `Alt+o`             | Toggle tiles layout (horizontal/vertical) |
 | `Alt+,`             | Toggle accordion layout          |
 | `Alt+f`             | Fullscreen toggle                |
@@ -89,7 +89,29 @@ Window management extension is **not used** — Aerospace owns that.
 
 ## Status Bar — SketchyBar
 
-No user keybindings. The bar shows Aerospace workspace indicators (click to switch), front app, clock, battery, volume.
+No user keybindings. Click workspace indicators to switch. Contents (left → right):
+
+- **Workspaces 1–9** — active one highlighted blue
+- **Front app name** — current focused app
+
+Right side:
+
+- **Music** — Apple Music track (hidden when not playing)
+- **Mail** — Mail.app unread count (hidden when 0 or Mail.app closed)
+- **Calendar** — next event today (requires `icalBuddy` + Calendar permission)
+- **Weather** — condition + temp via wttr.in (IP-based location)
+- **Tailscale** — VPN status (green on, red off)
+- **WiFi** — current SSID (or `offline`)
+- **CPU** — usage %, color-coded (yellow ≥50%, red ≥80%)
+- **Memory** — used/total GB, color-coded (yellow ≥65%, red ≥85%)
+- **Volume**, **battery**, **clock** — % or glyph prefix
+
+Nerd Font glyphs require Geist Mono Nerd Font to render.
+
+| Shell command         | Action             |
+|-----------------------|--------------------|
+| `sketchybar --reload` | Reload bar config  |
+| `brew services restart sketchybar` | Full restart |
 
 | Shell command        | Action             |
 |----------------------|--------------------|
