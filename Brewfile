@@ -31,7 +31,7 @@ cask "obsidian"
 cask "raycast"
 cask "nikitabobko/tap/aerospace"
 cask "hiddenbar"
-cask "tailscale"
+cask "tailscale-app"
 
 cask "font-geist-mono-nerd-font"
 cask "font-symbols-only-nerd-font"
