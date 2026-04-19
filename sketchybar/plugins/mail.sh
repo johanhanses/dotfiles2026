@@ -2,17 +2,20 @@
 
 RED="0xfff7768e"
 
-LINE=$(lsappinfo info -app "Mail" 2>/dev/null | grep StatusLabel)
-
-if [ -z "$LINE" ]; then
+# Only read from Mail.app when it's actually running — asking AppleScript
+# otherwise would launch it.
+if ! pgrep -x Mail >/dev/null 2>&1; then
   sketchybar --set "$NAME" drawing=off
   exit 0
 fi
 
-COUNT=$(echo "$LINE" | awk -F'"' '{print $2}')
+COUNT=$(osascript -e 'tell application "Mail" to get unread count of inbox' 2>/dev/null)
 
-if [ -z "$COUNT" ] || [ "$COUNT" = "0" ]; then
-  sketchybar --set "$NAME" drawing=off
-else
-  sketchybar --set "$NAME" drawing=on icon="" icon.color="$RED" label="$COUNT"
-fi
+case "$COUNT" in
+  ""|"0")
+    sketchybar --set "$NAME" drawing=off
+    ;;
+  *)
+    sketchybar --set "$NAME" drawing=on icon="" icon.color="$RED" label="$COUNT"
+    ;;
+esac
