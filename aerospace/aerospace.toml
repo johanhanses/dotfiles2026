@@ -19,17 +19,20 @@ on-focus-changed = ['move-mouse window-lazy-center']
 automatically-unhide-macos-hidden-apps = false
 
 [gaps]
-inner.horizontal = 8
-inner.vertical = 8
-outer.left = 8
-outer.bottom = 8
-# Per-monitor top gap: built-in MacBook display tucks content right under the
-# notch (macOS's safe area already starts below it); external monitors need
-# room for SketchyBar (32px) plus a couple of px breathing room.
-# Run `aerospace list-monitors` to see your display names if the regex below
-# doesn't match your built-in panel.
-outer.top = [{ monitor.'^Built-in' = 4 }, 34]
-outer.right = 8
+# Per-monitor gaps: built-in MacBook keeps tight 8px everywhere (small
+# screen, every pixel counts). External monitors get roomier 24px gaps
+# so tiled windows breathe on the larger canvas.
+# Run `aerospace list-monitors` to see your display names if the regex
+# below doesn't match your built-in panel.
+inner.horizontal = [{ monitor.'^Built-in' = 8 }, 24]
+inner.vertical = [{ monitor.'^Built-in' = 8 }, 24]
+outer.left = [{ monitor.'^Built-in' = 8 }, 24]
+outer.bottom = [{ monitor.'^Built-in' = 8 }, 24]
+outer.right = [{ monitor.'^Built-in' = 8 }, 24]
+# Top gap is per-monitor: 4 on built-in (safe area starts below the
+# notch), 56 on external (32px SketchyBar + 24px breathing room to
+# match the other external gaps).
+outer.top = [{ monitor.'^Built-in' = 4 }, 56]
 
 [mode.main.binding]
 alt-o = 'layout tiles horizontal vertical'
