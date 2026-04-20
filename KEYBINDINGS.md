@@ -128,6 +128,8 @@ Right side (icons left→right, some conditional):
 
 **Per-monitor trim**: on the built-in MacBook display, CPU/Memory/Volume are hidden automatically to reduce clutter. External monitors show the full set. Switching is reactive — the trim runs on Aerospace workspace change (which fires on monitor change).
 
+**Theme-aware**: the bar flips between Tokyo Night Night (dark) and Tokyo Night Day (light) when macOS appearance toggles. A hidden `theme_watcher` polls `AppleInterfaceStyle` every 5 seconds and reloads SketchyBar on change. Palette lives in `sketchybar/plugins/colors.sh`; every plugin sources it, so per-item accent colors flip too.
+
 Nerd Font glyphs require Geist Mono Nerd Font to render.
 
 | Shell command                      | Action             |

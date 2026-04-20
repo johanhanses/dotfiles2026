@@ -1,23 +1,14 @@
 #!/usr/bin/env sh
 
-# Tokyo Night palette
-BG="0xff1a1b26"
-BG_DARK="0xff16161e"
-FG="0xffc0caf5"
-FG_DIM="0xff737aa2"
-BLUE="0xff7aa2f7"
-CYAN="0xff7dcfff"
-MAGENTA="0xffbb9af7"
-ORANGE="0xffff9e64"
-YELLOW="0xffe0af68"
-GREEN="0xff9ece6a"
-RED="0xfff7768e"
+PLUGIN_DIR="$CONFIG_DIR/plugins"
+
+# Theme-aware Tokyo Night palette (Night / Day based on macOS appearance).
+# Sourced so plugins can re-use the same colors.
+. "$PLUGIN_DIR/colors.sh"
 
 FONT_FACE="GeistMono Nerd Font"
 ICON_FONT="$FONT_FACE:Bold:14.0"
 LABEL_FONT="$FONT_FACE:Regular:13.0"
-
-PLUGIN_DIR="$CONFIG_DIR/plugins"
 
 sketchybar --bar \
   position=top \
@@ -177,6 +168,14 @@ sketchybar --add item display_watcher center \
     drawing=off \
     script="$PLUGIN_DIR/display_trim.sh" \
   --subscribe display_watcher aerospace_workspace_change
+
+# Hidden helper item: polls macOS AppleInterfaceStyle and reloads the bar
+# when dark/light flips so the palette matches the OS appearance.
+sketchybar --add item theme_watcher center \
+  --set theme_watcher \
+    drawing=off \
+    update_freq=5 \
+    script="$PLUGIN_DIR/theme_watcher.sh"
 
 sketchybar --update
 

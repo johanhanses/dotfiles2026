@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-RED="0xfff7768e"
+. "$CONFIG_DIR/plugins/colors.sh"
 
 # Only read from Mail.app when it's actually running — asking AppleScript
 # otherwise would launch it.

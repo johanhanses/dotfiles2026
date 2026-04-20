@@ -56,7 +56,7 @@ Dark mode uses Tokyo Night Night, light mode uses Tokyo Night Day (auto-switches
 - Neovim: `tokyonight-night` / `tokyonight-day` — custom colorschemes in `nvim/colors/`, auto-switches on focus
 - Ghostty: built-in `tokyonight` theme
 - tmux: Tokyo Night palette (`#1a1b26` bg, `#7aa2f7` accent)
-- SketchyBar: Tokyo Night palette in `sketchybar/sketchybarrc`
+- SketchyBar: Tokyo Night palette in `sketchybar/plugins/colors.sh`, auto-switches via `plugins/theme_watcher.sh`
 - Yazi: Tokyo Night `yazi/theme.toml`
 - delta (git): `syntax-theme = tokyonight_night`
 - bat: `BAT_THEME="tokyonight_night"`

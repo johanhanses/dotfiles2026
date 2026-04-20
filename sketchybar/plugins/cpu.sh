@@ -1,8 +1,6 @@
 #!/usr/bin/env sh
 
-FG="0xffc0caf5"
-YELLOW="0xffe0af68"
-RED="0xfff7768e"
+. "$CONFIG_DIR/plugins/colors.sh"
 
 CPU=$(top -l 1 -s 0 | awk '/CPU usage/ {print $3}' | tr -d '%')
 CPU_INT=${CPU%.*}
