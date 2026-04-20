@@ -117,7 +117,7 @@ Right side (icons left→right, some conditional):
 - **Mattermost** — Mattermost.app mentions badge (hidden at 0 or when the GUI app is closed; no signal for `matterhorn` TUI users)
 - **Mail** — Mail.app inbox unread (hidden at 0 or when Mail.app is closed; requires Automation permission)
 - **Calendar** — next event today, prefixed with start time in 24h (`14:00  Event title`); requires `icalBuddy` + Calendar permission
-- **Weather** — condition + temp via wttr.in (IP-based location)
+- **Weather** — condition + temp via wttr.in, hard-coded to Falun, Sweden (60.60,15.63). Edit `sketchybar/plugins/weather.sh` if you move.
 - **Tailscale** — VPN status (green=on, red=off, dim=CLI missing)
 - **WiFi** — icon-only; blue=online, dim=offline
 - **CPU** — usage %, color-coded (yellow ≥50%, red ≥80%) — hidden on built-in display
