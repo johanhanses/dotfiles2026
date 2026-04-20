@@ -1,0 +1,14 @@
+; Everforest Light (Medium) overlay for matterhorn
+; Minimal set — extends the built-in `light` theme. Add more attrs as needed.
+
+errorMessageAttr       = fg:#F85552
+currentChannelNameAttr = fg:#3A94C5;b
+unreadChannelAttr      = fg:#35A77C;b
+mentionedChannelAttr   = fg:#F85552;b
+editedMarkingAttr      = fg:#829181
+editedRecentlyMarkingAttr = fg:#DFA000
+dateTransitionAttr     = fg:#DF69BA
+newMessageTransitionAttr = fg:#DF69BA;b
+urlListSelectedAttr    = fg:#FDF6E3;bg:#3A94C5;b
+timeAttr               = fg:#829181
+channelListHeaderAttr  = fg:#3A94C5;b

@@ -1,0 +1,14 @@
+; Tokyo Night Day overlay for matterhorn
+; Minimal set — extends the built-in `light` theme. Add more attrs as needed.
+
+errorMessageAttr       = fg:#f52a65
+currentChannelNameAttr = fg:#2e7de9;b
+unreadChannelAttr      = fg:#007197;b
+mentionedChannelAttr   = fg:#f52a65;b
+editedMarkingAttr      = fg:#68709a
+editedRecentlyMarkingAttr = fg:#8c6c3e
+dateTransitionAttr     = fg:#9854f1
+newMessageTransitionAttr = fg:#9854f1;b
+urlListSelectedAttr    = fg:#e1e2e7;bg:#2e7de9;b
+timeAttr               = fg:#68709a
+channelListHeaderAttr  = fg:#2e7de9;b

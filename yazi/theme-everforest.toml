@@ -1,0 +1,98 @@
+# Everforest theme for yazi — uses dark-hard palette; light-medium users
+# will still see reasonable colours (yazi doesn't auto-switch like nvim).
+
+[manager]
+cwd = { fg = "#7FBBB3" }
+
+hovered         = { reversed = true }
+preview_hovered = { underline = true }
+
+find_keyword  = { fg = "#DBBC7F", italic = true }
+find_position = { fg = "#E69875", bg = "reset", italic = true }
+
+marker_copied   = { fg = "#A7C080", bg = "#A7C080" }
+marker_cut      = { fg = "#E67E80", bg = "#E67E80" }
+marker_marked   = { fg = "#7FBBB3", bg = "#7FBBB3" }
+marker_selected = { fg = "#DBBC7F", bg = "#DBBC7F" }
+
+tab_active   = { fg = "#1E2326", bg = "#7FBBB3" }
+tab_inactive = { fg = "#D3C6AA", bg = "#374145" }
+tab_width    = 1
+
+count_copied   = { fg = "#1E2326", bg = "#A7C080" }
+count_cut      = { fg = "#1E2326", bg = "#E67E80" }
+count_selected = { fg = "#1E2326", bg = "#DBBC7F" }
+
+border_symbol = "│"
+border_style  = { fg = "#7FBBB3" }
+
+[status]
+separator_open  = ""
+separator_close = ""
+separator_style = { fg = "#374145", bg = "#374145" }
+
+mode_normal = { fg = "#1E2326", bg = "#7FBBB3", bold = true }
+mode_select = { fg = "#1E2326", bg = "#A7C080", bold = true }
+mode_unset  = { fg = "#1E2326", bg = "#D699B6", bold = true }
+
+progress_label  = { fg = "#D3C6AA", bold = true }
+progress_normal = { fg = "#7FBBB3", bg = "#374145" }
+progress_error  = { fg = "#E67E80", bg = "#374145" }
+
+permissions_t = { fg = "#7FBBB3" }
+permissions_r = { fg = "#DBBC7F" }
+permissions_w = { fg = "#E67E80" }
+permissions_x = { fg = "#A7C080" }
+permissions_s = { fg = "#7A8478" }
+
+[select]
+border   = { fg = "#7FBBB3" }
+active   = { fg = "#D699B6" }
+inactive = {}
+
+[input]
+border   = { fg = "#7FBBB3" }
+title    = {}
+value    = {}
+selected = { reversed = true }
+
+[completion]
+border   = { fg = "#7FBBB3" }
+active   = { bg = "#374145" }
+inactive = {}
+
+[tasks]
+border  = { fg = "#7FBBB3" }
+title   = {}
+hovered = { underline = true }
+
+[which]
+mask            = { bg = "#272E33" }
+cand            = { fg = "#83C092" }
+rest            = { fg = "#9DA9A0" }
+desc            = { fg = "#E69875" }
+separator       = "  "
+separator_style = { fg = "#7A8478" }
+
+[help]
+on      = { fg = "#E69875" }
+run     = { fg = "#83C092" }
+desc    = {}
+hovered = { bg = "#374145", bold = true }
+footer  = { fg = "#1E2326", bg = "#D3C6AA" }
+
+[filetype]
+rules = [
+  { mime = "image/*", fg = "#DBBC7F" },
+  { mime = "video/*", fg = "#D699B6" },
+  { mime = "audio/*", fg = "#D699B6" },
+  { mime = "application/zip",             fg = "#E67E80" },
+  { mime = "application/gzip",            fg = "#E67E80" },
+  { mime = "application/x-tar",           fg = "#E67E80" },
+  { mime = "application/x-bzip",          fg = "#E67E80" },
+  { mime = "application/x-bzip2",         fg = "#E67E80" },
+  { mime = "application/x-7z-compressed", fg = "#E67E80" },
+  { mime = "application/x-rar",           fg = "#E67E80" },
+  { name = "*",  fg = "#D3C6AA" },
+  { name = "*/", fg = "#7FBBB3" },
+]

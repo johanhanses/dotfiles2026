@@ -17,7 +17,14 @@ source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 unset zle_bracketed_paste
 
 # Environment Variables
-export BAT_THEME="tokyonight_night"
+# BAT_THEME tracks ~/.config/theme-family (theme-switch script updates it).
+# bat ships no Everforest theme — fall back to `ansi` so bat respects
+# Ghostty's current palette for Everforest.
+if [[ "$(cat ~/.config/theme-family 2>/dev/null)" == "everforest" ]]; then
+  export BAT_THEME="ansi"
+else
+  export BAT_THEME="tokyonight_night"
+fi
 export EDITOR="nvim"
 export VISUAL="nvim"
 export BROWSER="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"

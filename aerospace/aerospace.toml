@@ -87,6 +87,10 @@ ctrl-shift-0 = 'move-workspace-to-monitor --wrap-around next'
 alt-f = 'fullscreen'
 alt-shift-space = 'layout floating tiling'
 
+# Theme family toggle (Tokyo Night <-> Everforest). 4-finger chord to
+# avoid accidental triggers; macOS Dark/Light keeps driving within-family.
+cmd-alt-ctrl-t = 'exec-and-forget /bin/sh -c "$HOME/Repos/github.com/johanhanses/dotfiles2026/scripts/theme-switch"'
+
 alt-shift-enter = 'mode service'
 
 [mode.service.binding]

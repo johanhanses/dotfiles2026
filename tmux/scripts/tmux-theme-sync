@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
-# Sync tmux theme with macOS appearance
+# Sync tmux theme with macOS appearance + theme-family state file.
 
+FAMILY=$(cat "$HOME/.config/theme-family" 2>/dev/null || echo tokyonight)
 if [[ "$(defaults read -g AppleInterfaceStyle 2>/dev/null)" == "Dark" ]]; then
-    tmux source-file ~/.config/tmux/theme-dark.conf
+  MODE=dark
 else
-    tmux source-file ~/.config/tmux/theme-light.conf
+  MODE=light
 fi
+
+tmux source-file "$HOME/.config/tmux/theme-$FAMILY-$MODE.conf"

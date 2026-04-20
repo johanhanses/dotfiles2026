@@ -14,6 +14,10 @@ A single-page reference for every shortcut in this dotfiles setup. Each tool's c
 
 For tmux, `<prefix>` means `Ctrl+a` unless rebound.
 
+## Theme
+
+Two theme families: **Tokyo Night** (default) and **Everforest**. Active family is stored in `~/.config/theme-family`. macOS Dark/Light drives the Night/Day or Dark/Light variant inside the active family. Switch with `Ctrl+Cmd+Alt+T` or run `scripts/theme-switch`. Everforest uses Hard contrast for dark and Medium for light (matching what Ghostty and btop ship).
+
 ---
 
 ## Window Manager — Aerospace
@@ -72,6 +76,7 @@ Three modifier prefixes, each with a consistent scope:
 | `Alt+,`             | Toggle accordion layout                                                                     |
 | `Alt+f`             | Fullscreen toggle                                                                           |
 | `Alt+Shift+␣`       | Floating ↔ tiling toggle                                                                    |
+| `Ctrl+Cmd+Alt+T`    | Toggle theme family (Tokyo Night ↔ Everforest). 4-finger chord so it never fires by accident. Runs `scripts/theme-switch` |
 
 ### Service mode (Alt+Shift+Enter)
 

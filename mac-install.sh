@@ -55,6 +55,20 @@ ln -sf $DOTFILES/yazi $HOME/.config/yazi
 # starship
 ln -sf $DOTFILES/starship.toml $HOME/.config/starship.toml
 
+# Theme family state (drives the theme-switch script). Default to
+# tokyonight on fresh install; existing users keep their choice.
+mkdir -p $HOME/.config
+if [ ! -f "$HOME/.config/theme-family" ]; then
+  echo tokyonight > $HOME/.config/theme-family
+fi
+
+# Ensure the per-family symlinks in the repo point somewhere. The
+# theme-switch script re-writes them on every invocation, but an
+# install-from-scratch needs sane defaults so the first shell boots cleanly.
+[ -L "$DOTFILES/starship.toml" ]          || ln -sf starship.toml.tokyonight                      "$DOTFILES/starship.toml"
+[ -L "$DOTFILES/yazi/theme.toml" ]        || ln -sf theme-tokyonight.toml                         "$DOTFILES/yazi/theme.toml"
+[ -L "$DOTFILES/matterhorn/theme.custom.theme" ] || ln -sf theme-tokyonight-dark.custom.theme     "$DOTFILES/matterhorn/theme.custom.theme"
+
 echo "dotfiles2026 symlinks installed"
 
 if command -v brew >/dev/null 2>&1; then

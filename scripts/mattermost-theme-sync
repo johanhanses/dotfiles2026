@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Sync Mattermost Desktop theme with macOS appearance
+# Sync Mattermost Desktop theme with macOS appearance + theme-family.
 
 CONFIG_FILE="$HOME/Repos/github.com/johanhanses/dotfiles-private/mattermost/config"
 
@@ -16,14 +16,27 @@ if [[ -z "$MATTERMOST_URL" || -z "$MATTERMOST_TOKEN" ]]; then
   exit 1
 fi
 
-DARK_THEME='{"sidebarBg":"#24273a","sidebarText":"#a5adcb","sidebarUnreadText":"#cad3f5","sidebarTextHoverBg":"#363a4f","sidebarTextActiveBorder":"#c6a0f6","sidebarTextActiveColor":"#cad3f5","sidebarHeaderBg":"#1e2030","sidebarHeaderTextColor":"#cad3f5","onlineIndicator":"#a6da95","awayIndicator":"#eed49f","dndIndicator":"#ed8796","mentionBg":"#c6a0f6","mentionColor":"#24273a","centerChannelBg":"#24273a","centerChannelColor":"#cad3f5","newMessageSeparator":"#c6a0f6","linkColor":"#8aadf4","buttonBg":"#c6a0f6","buttonColor":"#24273a","errorTextColor":"#ed8796","mentionHighlightBg":"#363a4f","mentionHighlightLink":"#8aadf4","codeTheme":"solarized-dark","mentionBj":"#ffffff","sidebarTeamBarBg":"#1e2030"}'
+FAMILY=$(cat "$HOME/.config/theme-family" 2>/dev/null || echo tokyonight)
 
-LIGHT_THEME='{"sidebarBg":"#eff1f5","sidebarText":"#6c6f85","sidebarUnreadText":"#4c4f69","sidebarTextHoverBg":"#e6e9ef","sidebarTextActiveBorder":"#8839ef","sidebarTextActiveColor":"#4c4f69","sidebarHeaderBg":"#e6e9ef","sidebarHeaderTextColor":"#4c4f69","onlineIndicator":"#40a02b","awayIndicator":"#df8e1d","dndIndicator":"#d20f39","mentionBg":"#8839ef","mentionColor":"#eff1f5","centerChannelBg":"#eff1f5","centerChannelColor":"#4c4f69","newMessageSeparator":"#8839ef","linkColor":"#1e66f5","buttonBg":"#8839ef","buttonColor":"#eff1f5","errorTextColor":"#d20f39","mentionHighlightBg":"#e6e9ef","mentionHighlightLink":"#1e66f5","codeTheme":"solarized-light","mentionBj":"#ffffff","sidebarTeamBarBg":"#e6e9ef"}'
+# Four palettes keyed by family × macOS appearance.
+TN_DARK='{"sidebarBg":"#1a1b26","sidebarText":"#a9b1d6","sidebarUnreadText":"#c0caf5","sidebarTextHoverBg":"#292e42","sidebarTextActiveBorder":"#bb9af7","sidebarTextActiveColor":"#c0caf5","sidebarHeaderBg":"#16161e","sidebarHeaderTextColor":"#c0caf5","onlineIndicator":"#9ece6a","awayIndicator":"#e0af68","dndIndicator":"#f7768e","mentionBg":"#bb9af7","mentionColor":"#1a1b26","centerChannelBg":"#1a1b26","centerChannelColor":"#c0caf5","newMessageSeparator":"#bb9af7","linkColor":"#7aa2f7","buttonBg":"#7aa2f7","buttonColor":"#1a1b26","errorTextColor":"#f7768e","mentionHighlightBg":"#292e42","mentionHighlightLink":"#7aa2f7","codeTheme":"solarized-dark","mentionBj":"#ffffff","sidebarTeamBarBg":"#16161e"}'
+
+TN_LIGHT='{"sidebarBg":"#e1e2e7","sidebarText":"#4c505e","sidebarUnreadText":"#3760bf","sidebarTextHoverBg":"#d0d5e3","sidebarTextActiveBorder":"#9854f1","sidebarTextActiveColor":"#3760bf","sidebarHeaderBg":"#d0d5e3","sidebarHeaderTextColor":"#3760bf","onlineIndicator":"#587539","awayIndicator":"#8c6c3e","dndIndicator":"#f52a65","mentionBg":"#9854f1","mentionColor":"#e1e2e7","centerChannelBg":"#e1e2e7","centerChannelColor":"#3760bf","newMessageSeparator":"#9854f1","linkColor":"#2e7de9","buttonBg":"#2e7de9","buttonColor":"#e1e2e7","errorTextColor":"#f52a65","mentionHighlightBg":"#d0d5e3","mentionHighlightLink":"#2e7de9","codeTheme":"solarized-light","mentionBj":"#ffffff","sidebarTeamBarBg":"#d0d5e3"}'
+
+EF_DARK='{"sidebarBg":"#1E2326","sidebarText":"#9DA9A0","sidebarUnreadText":"#D3C6AA","sidebarTextHoverBg":"#374145","sidebarTextActiveBorder":"#D699B6","sidebarTextActiveColor":"#D3C6AA","sidebarHeaderBg":"#272E33","sidebarHeaderTextColor":"#D3C6AA","onlineIndicator":"#A7C080","awayIndicator":"#DBBC7F","dndIndicator":"#E67E80","mentionBg":"#D699B6","mentionColor":"#1E2326","centerChannelBg":"#1E2326","centerChannelColor":"#D3C6AA","newMessageSeparator":"#D699B6","linkColor":"#7FBBB3","buttonBg":"#7FBBB3","buttonColor":"#1E2326","errorTextColor":"#E67E80","mentionHighlightBg":"#374145","mentionHighlightLink":"#7FBBB3","codeTheme":"solarized-dark","mentionBj":"#ffffff","sidebarTeamBarBg":"#272E33"}'
+
+EF_LIGHT='{"sidebarBg":"#FDF6E3","sidebarText":"#829181","sidebarUnreadText":"#5C6A72","sidebarTextHoverBg":"#E6E2CC","sidebarTextActiveBorder":"#DF69BA","sidebarTextActiveColor":"#5C6A72","sidebarHeaderBg":"#F4F0D9","sidebarHeaderTextColor":"#5C6A72","onlineIndicator":"#8DA101","awayIndicator":"#DFA000","dndIndicator":"#F85552","mentionBg":"#DF69BA","mentionColor":"#FDF6E3","centerChannelBg":"#FDF6E3","centerChannelColor":"#5C6A72","newMessageSeparator":"#DF69BA","linkColor":"#3A94C5","buttonBg":"#3A94C5","buttonColor":"#FDF6E3","errorTextColor":"#F85552","mentionHighlightBg":"#E6E2CC","mentionHighlightLink":"#3A94C5","codeTheme":"solarized-light","mentionBj":"#ffffff","sidebarTeamBarBg":"#F4F0D9"}'
 
 if [[ "$(defaults read -g AppleInterfaceStyle 2>/dev/null)" == "Dark" ]]; then
-  THEME="$DARK_THEME"
+  case "$FAMILY" in
+    everforest) THEME="$EF_DARK" ;;
+    *)          THEME="$TN_DARK" ;;
+  esac
 else
-  THEME="$LIGHT_THEME"
+  case "$FAMILY" in
+    everforest) THEME="$EF_LIGHT" ;;
+    *)          THEME="$TN_LIGHT" ;;
+  esac
 fi
 
 # Get user ID

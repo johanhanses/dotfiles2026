@@ -23,15 +23,40 @@ return {
         return "light"
       end
 
+      local function get_theme_family()
+        local handle = io.open(vim.fn.expand("~/.config/theme-family"), "r")
+        if not handle then
+          return "tokyonight"
+        end
+        local family = handle:read("*l") or "tokyonight"
+        handle:close()
+        family = family:gsub("%s+", "")
+        if family == "everforest" then
+          return "everforest"
+        end
+        return "tokyonight"
+      end
+
+      local function colorscheme_for(family, appearance)
+        if family == "everforest" then
+          return appearance == "dark" and "everforest-dark" or "everforest-light"
+        end
+        -- tokyonight uses "night" and "day" as its variant names
+        return appearance == "dark" and "tokyonight-night" or "tokyonight-day"
+      end
+
       local appearance = get_os_appearance()
-      opts.colorscheme = appearance == "dark" and "tokyonight-night" or "tokyonight-day"
+      local family = get_theme_family()
+      opts.colorscheme = colorscheme_for(family, appearance)
 
       vim.api.nvim_create_autocmd("FocusGained", {
         callback = function()
           local new_appearance = get_os_appearance()
-          if new_appearance ~= appearance then
+          local new_family = get_theme_family()
+          if new_appearance ~= appearance or new_family ~= family then
             appearance = new_appearance
-            vim.cmd.colorscheme(appearance == "dark" and "tokyonight-night" or "tokyonight-day")
+            family = new_family
+            vim.cmd.colorscheme(colorscheme_for(family, appearance))
           end
         end,
       })

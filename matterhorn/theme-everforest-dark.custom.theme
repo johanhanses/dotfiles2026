@@ -1,0 +1,14 @@
+; Everforest Dark (Hard) overlay for matterhorn
+; Minimal set — extends the built-in `dark` theme. Add more attrs as needed.
+
+errorMessageAttr       = fg:#E67E80
+currentChannelNameAttr = fg:#7FBBB3;b
+unreadChannelAttr      = fg:#83C092;b
+mentionedChannelAttr   = fg:#E67E80;b
+editedMarkingAttr      = fg:#859289
+editedRecentlyMarkingAttr = fg:#DBBC7F
+dateTransitionAttr     = fg:#D699B6
+newMessageTransitionAttr = fg:#D699B6;b
+urlListSelectedAttr    = fg:#1E2326;bg:#7FBBB3;b
+timeAttr               = fg:#859289
+channelListHeaderAttr  = fg:#7FBBB3;b
