@@ -16,6 +16,15 @@ case "$COUNT" in
     sketchybar --set "$NAME" drawing=off
     ;;
   *)
-    sketchybar --set "$NAME" drawing=on icon="" icon.color="$RED" label="$COUNT"
+    # Red pill with envelope glyph + unread count. Icon and label both in
+    # the theme's BG color so they contrast hard against the red background.
+    sketchybar --set "$NAME" \
+      drawing=on \
+      icon="" \
+      icon.color="$BG" \
+      label="$COUNT" \
+      label.color="$BG" \
+      background.drawing=on \
+      background.color="$RED"
     ;;
 esac
