@@ -1,8 +1,6 @@
 #!/usr/bin/env sh
 
-BLUE="0xff7aa2f7"
-BG_DARK="0xff16161e"
-FG="0xffc0caf5"
+. "$CONFIG_DIR/plugins/colors.sh"
 
 sid="$1"
 focused="$(aerospace list-workspaces --focused 2>/dev/null)"

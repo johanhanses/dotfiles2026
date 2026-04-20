@@ -1,10 +1,9 @@
 #!/usr/bin/env sh
 
-FG="0xffc0caf5"
-DIM="0xff737aa2"
+. "$CONFIG_DIR/plugins/colors.sh"
 
 if ! command -v icalBuddy >/dev/null 2>&1; then
-  sketchybar --set "$NAME" icon="" icon.color="$DIM" label="install icalBuddy"
+  sketchybar --set "$NAME" icon="" icon.color="$FG_DIM" label="install icalBuddy"
   exit 0
 fi
 
@@ -15,7 +14,7 @@ fi
 OUTPUT=$(icalBuddy -nc -npn -eep "notes,url,location" -ea -n -li 1 -b "" -tf '%H:%M' -df '%Y-%m-%d' eventsToday 2>/dev/null)
 
 if [ -z "$OUTPUT" ]; then
-  sketchybar --set "$NAME" icon="" icon.color="$DIM" label="no events"
+  sketchybar --set "$NAME" icon="" icon.color="$FG_DIM" label="no events"
   exit 0
 fi
 

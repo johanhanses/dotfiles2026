@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-MAGENTA="0xffbb9af7"
+. "$CONFIG_DIR/plugins/colors.sh"
 
 STATE=$(osascript -e 'tell application "Music" to if it is running then get player state as string' 2>/dev/null)
 

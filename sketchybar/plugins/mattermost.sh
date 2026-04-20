@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-BLUE="0xff7aa2f7"
+. "$CONFIG_DIR/plugins/colors.sh"
 
 # Only inspect the app when it's running — lsappinfo would otherwise
 # launch it.

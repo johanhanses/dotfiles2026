@@ -1,9 +1,6 @@
 #!/usr/bin/env sh
 
-GREEN="0xff9ece6a"
-YELLOW="0xffe0af68"
-ORANGE="0xffff9e64"
-RED="0xfff7768e"
+. "$CONFIG_DIR/plugins/colors.sh"
 
 PERCENTAGE="$(pmset -g batt | grep -Eo '\d+%' | cut -d% -f1)"
 CHARGING="$(pmset -g batt | grep 'AC Power')"

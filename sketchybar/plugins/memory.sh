@@ -1,8 +1,6 @@
 #!/usr/bin/env sh
 
-FG="0xffc0caf5"
-YELLOW="0xffe0af68"
-RED="0xfff7768e"
+. "$CONFIG_DIR/plugins/colors.sh"
 
 PAGE_SIZE=$(vm_stat | awk '/page size/ {print $8}')
 [ -z "$PAGE_SIZE" ] && PAGE_SIZE=16384

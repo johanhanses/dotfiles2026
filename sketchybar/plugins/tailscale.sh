@@ -1,8 +1,6 @@
 #!/usr/bin/env sh
 
-GREEN="0xff9ece6a"
-RED="0xfff7768e"
-DIM="0xff737aa2"
+. "$CONFIG_DIR/plugins/colors.sh"
 
 # SketchyBar runs under launchd with a limited PATH (/usr/bin:/bin:...),
 # so even if `tailscale` is on the user's shell PATH, `command -v` may
