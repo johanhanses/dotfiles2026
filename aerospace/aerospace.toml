@@ -29,9 +29,10 @@ inner.vertical = [{ monitor.'^Built-in' = 8 }, 24]
 outer.left = [{ monitor.'^Built-in' = 8 }, 24]
 outer.bottom = [{ monitor.'^Built-in' = 8 }, 24]
 outer.right = [{ monitor.'^Built-in' = 8 }, 24]
-# Top gap is already per-monitor: 4 on built-in (safe area starts below
-# notch), 34 on external (32px SketchyBar + 2px breathing room).
-outer.top = [{ monitor.'^Built-in' = 4 }, 34]
+# Top gap per-monitor: 4 on built-in (safe area starts below the notch),
+# 56 on external (32px SketchyBar + 24px breathing to match the other
+# external gaps).
+outer.top = [{ monitor.'^Built-in' = 4 }, 56]
 
 [mode.main.binding]
 alt-o = 'layout tiles horizontal vertical'
