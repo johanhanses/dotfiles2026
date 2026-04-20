@@ -153,12 +153,21 @@ sketchybar --add item mail right \
     background.height=22 \
     script="$PLUGIN_DIR/mail.sh"
 
-# Mattermost mentions (reads Mattermost.app dock badge via lsappinfo — hidden
-# if 0 or the app isn't running; only works with the GUI app, not matterhorn)
+# Mattermost mentions — queries Mattermost's REST API using the
+# credentials in dotfiles-private/mattermost/config (same creds the
+# mattermost-theme-sync script uses). Shows total mention_count across
+# all teams. Hidden when 0 or when credentials are missing.
 sketchybar --add item mattermost right \
   --set mattermost \
     update_freq=30 \
     drawing=off \
+    icon="" \
+    icon.font="$FONT_FACE:Bold:14.0" \
+    icon.padding_left=10 \
+    icon.padding_right=6 \
+    label.padding_right=10 \
+    background.corner_radius=10 \
+    background.height=22 \
     script="$PLUGIN_DIR/mattermost.sh"
 
 # Music now-playing (Apple Music — hidden when not playing)
