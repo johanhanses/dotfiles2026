@@ -52,6 +52,10 @@ This is a cross-platform dotfiles repository supporting macOS (primary). The rep
 
 ## Theme
 
+Two theme families are supported: **Tokyo Night** (default) and **Everforest**. Toggle with `Ctrl+Cmd+Alt+T` via Aerospace, or run `scripts/theme-switch [tokyonight|everforest]`. The active family is stored in `~/.config/theme-family`. macOS Dark/Light still drives the Night/Day or Dark/Light variant **within** whichever family is active — four visible combinations, one toggle.
+
+**Everforest contrast**: Hard for dark, Medium for light (matches what Ghostty + btop ship).
+
 Dark mode uses Tokyo Night Night, light mode uses Tokyo Night Day (auto-switches based on OS):
 - Neovim: `tokyonight-night` / `tokyonight-day` — custom colorschemes in `nvim/colors/`, auto-switches on focus
 - Ghostty: built-in `tokyonight` theme
