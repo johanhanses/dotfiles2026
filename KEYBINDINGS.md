@@ -114,6 +114,7 @@ No user keybindings. Click workspace indicators to switch. Contents (left → ri
 Right side (icons left→right, some conditional):
 
 - **Music** — Apple Music track (hidden when not playing)
+- **Mattermost** — Mattermost.app mentions badge (hidden at 0 or when the GUI app is closed; no signal for `matterhorn` TUI users)
 - **Mail** — Mail.app inbox unread (hidden at 0 or when Mail.app is closed; requires Automation permission)
 - **Calendar** — next event today (requires `icalBuddy` + Calendar permission)
 - **Weather** — condition + temp via wttr.in (IP-based location)
