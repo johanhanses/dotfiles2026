@@ -16,19 +16,10 @@ source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 unset zle_bracketed_paste
 
-# Environment Variables
-# BAT_THEME tracks ~/.config/theme-family (theme-switch script updates it).
-# bat ships no Everforest theme — fall back to `ansi` so bat respects
-# Ghostty's current palette for Everforest.
-if [[ "$(cat ~/.config/theme-family 2>/dev/null)" == "everforest" ]]; then
-  export BAT_THEME="ansi"
-else
-  export BAT_THEME="tokyonight_night"
-fi
+export BAT_THEME="ansi"
 export EDITOR="nvim"
 export VISUAL="nvim"
 export BROWSER="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-export TERMINAL="/Applications/Ghostty.app/Contents/MacOS/ghostty"
 
 export XDG_CONFIG_HOME="$HOME/.config"
 export REPOS="$HOME/Repos"
@@ -53,13 +44,12 @@ export AWS_PROFILE=saml
 
 KUBECONFIG=~/.kube/config
 
-# Initialize Starship prompt
-eval "$(starship init zsh)"
-
-# zoxide (smarter cd)
-if command -v zoxide >/dev/null 2>&1; then
-  eval "$(zoxide init zsh)"
-fi
+# Minimal prompt: last path component + git branch + %
+autoload -Uz vcs_info
+precmd() { vcs_info }
+zstyle ':vcs_info:git:*' formats ' (%b)'
+setopt PROMPT_SUBST
+PROMPT='%F{blue}%1~%f%F{red}${vcs_info_msg_0_}%f %# '
 
 # mise (runtime version manager)
 if command -v mise >/dev/null 2>&1; then
@@ -72,19 +62,6 @@ if command -v fd >/dev/null 2>&1; then
   export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
   export FZF_ALT_C_COMMAND='fd --type d --hidden --follow --exclude .git'
 fi
-
-# yazi: change shell pwd to last cwd on exit
-function y() {
-  local tmp
-  tmp="$(mktemp -t yazi-cwd.XXXXXX)"
-  yazi "$@" --cwd-file="$tmp"
-  local cwd
-  cwd="$(cat -- "$tmp")"
-  if [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
-    builtin cd -- "$cwd"
-  fi
-  rm -f -- "$tmp"
-}
 
 # xlaude worktree helpers
 xcd() { cd "$(xlaude dir "$@")"; }
@@ -161,7 +138,6 @@ alias tk="tmux kill-server"
 alias tl="tmux ls"
 alias ta="tmux a"
 
-# zellij alias (z is zoxide; use zj for zellij)
 alias zj="zellij"
 
 # docker aliases

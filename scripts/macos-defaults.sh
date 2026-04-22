@@ -38,9 +38,6 @@ defaults write com.apple.screencapture location -string "$HOME/Pictures/Screensh
 defaults write com.apple.screencapture type -string "png"
 defaults write com.apple.screencapture disable-shadow -bool true
 
-# Menu bar (SketchyBar replaces it)
-defaults write NSGlobalDomain _HIHideMenuBar -bool true
-
 # Save dialogs expanded by default
 defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
 defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -bool true
