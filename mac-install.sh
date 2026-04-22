@@ -32,53 +32,36 @@ ln -sf $DOTFILES/btop $HOME/.config/btop
 rm -rf $HOME/.config/newsboat
 ln -sf $DOTFILES/newsboat $HOME/.config/newsboat
 
-# ghostty
-rm -rf $HOME/.config/ghostty
-ln -sf $DOTFILES/ghostty $HOME/.config/ghostty
-
 # matterhorn
 rm -rf $HOME/.config/matterhorn
 ln -sf $DOTFILES/matterhorn $HOME/.config/matterhorn
 
-# aerospace
-mkdir -p $HOME/.config/aerospace
-ln -sf $DOTFILES/aerospace/aerospace.toml $HOME/.config/aerospace/aerospace.toml
-
-# sketchybar
-rm -rf $HOME/.config/sketchybar
-ln -sf $DOTFILES/sketchybar $HOME/.config/sketchybar
-
-# yazi
-rm -rf $HOME/.config/yazi
-ln -sf $DOTFILES/yazi $HOME/.config/yazi
-
-# starship
-ln -sf $DOTFILES/starship.toml $HOME/.config/starship.toml
-
-# Theme family state (drives the theme-switch script). Default to
-# tokyonight on fresh install; existing users keep their choice.
-mkdir -p $HOME/.config
-if [ ! -f "$HOME/.config/theme-family" ]; then
-  echo tokyonight > $HOME/.config/theme-family
-fi
-
-# Ensure the per-family symlinks in the repo point somewhere. The
-# theme-switch script re-writes them on every invocation, but an
-# install-from-scratch needs sane defaults so the first shell boots cleanly.
-[ -L "$DOTFILES/starship.toml" ]          || ln -sf starship.toml.tokyonight                      "$DOTFILES/starship.toml"
-[ -L "$DOTFILES/yazi/theme.toml" ]        || ln -sf theme-tokyonight.toml                         "$DOTFILES/yazi/theme.toml"
-[ -L "$DOTFILES/matterhorn/theme.custom.theme" ] || ln -sf theme-tokyonight-dark.custom.theme     "$DOTFILES/matterhorn/theme.custom.theme"
-
 echo "dotfiles2026 symlinks installed"
 
 if command -v brew >/dev/null 2>&1; then
-  # Casks that must be uninstalled if present (opt-outs from earlier install runs).
-  # Extend this list to have the install script remove apps you no longer want.
-  UNWANTED_CASKS="arc spotify orbstack zoom"
+  UNWANTED_CASKS="ghostty aerospace raycast hiddenbar firefox@nightly ungoogled-chromium vivaldi arc spotify orbstack zoom"
   for c in $UNWANTED_CASKS; do
     if brew list --cask "$c" >/dev/null 2>&1; then
-      echo "Removing unwanted cask: $c"
+      echo "Removing cask: $c"
       brew uninstall --cask --zap "$c"
+    fi
+  done
+
+  for f in sketchybar starship yazi zoxide ical-buddy ffmpegthumbnailer poppler; do
+    if brew list "$f" >/dev/null 2>&1; then
+      brew services stop "$f" 2>/dev/null || true
+      echo "Removing formula: $f"
+      brew uninstall --ignore-dependencies "$f"
+    fi
+  done
+
+  rm -rf $HOME/.config/aerospace $HOME/.config/sketchybar $HOME/.config/ghostty $HOME/.config/yazi
+  rm -f  $HOME/.config/starship.toml $HOME/.config/theme-family
+
+  for app in Moom.app Cyberduck.app Chromium.app; do
+    if [ -d "/Applications/$app" ]; then
+      echo "Trashing /Applications/$app"
+      osascript -e "tell application \"Finder\" to delete POSIX file \"/Applications/$app\"" >/dev/null 2>&1 || true
     fi
   done
 
@@ -99,9 +82,6 @@ fi
 echo ""
 echo "Next steps:"
 echo "  1. Run ./scripts/macos-defaults.sh to apply macOS system tweaks"
-echo "  2. Unbind Cmd+Space in System Settings > Keyboard Shortcuts > Spotlight"
-echo "  3. Launch Aerospace + Raycast once so they request accessibility permissions"
-echo "  4. Restart your terminal or run: source ~/.zshrc"
-echo "  5. Open nvim - it will auto-install plugins on first run"
-echo "  6. Install xlaude: cargo install xlaude"
-echo "  7. See KEYBINDINGS.md for the full shortcut reference"
+echo "  2. Re-bind Cmd+Space to Spotlight in System Settings > Keyboard Shortcuts"
+echo "  3. Restart your terminal or run: source ~/.zshrc"
+echo "  4. Open nvim - it will auto-install plugins on first run"
