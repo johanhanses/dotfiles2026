@@ -44,12 +44,13 @@ export AWS_PROFILE=saml
 
 KUBECONFIG=~/.kube/config
 
-# Minimal prompt: last path component + git branch + %
+# Prompt: apple logo + folder + full path + git branch (bold green); $ on next line
+# Requires a Nerd Font in Terminal.app (e.g. MesloLGS Nerd Font, GeistMono Nerd Font)
 autoload -Uz vcs_info
 precmd() { vcs_info }
 zstyle ':vcs_info:git:*' formats ' (%b)'
 setopt PROMPT_SUBST
-PROMPT='%F{blue}%1~%f%F{red}${vcs_info_msg_0_}%f %# '
+PROMPT=$'%B%F{green}\uF8FF  \uF07B  %~${vcs_info_msg_0_}%f%b\n$ '
 
 # mise (runtime version manager)
 if command -v mise >/dev/null 2>&1; then
