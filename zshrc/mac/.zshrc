@@ -53,7 +53,7 @@ autoload -Uz vcs_info
 precmd() { vcs_info }
 zstyle ':vcs_info:git:*' formats ' (%b)'
 setopt PROMPT_SUBST
-PROMPT=$'%B%F{green}\uF8FF  \uF07B  %~${vcs_info_msg_0_}%f%b\n$ '
+PROMPT=$'%B%F{green}\uF179  \uF07B  %~${vcs_info_msg_0_}%f%b\n$ '
 
 # mise (runtime version manager)
 if command -v mise >/dev/null 2>&1; then
