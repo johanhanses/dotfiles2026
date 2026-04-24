@@ -19,6 +19,19 @@ return {
       if #to_install > 0 then
         require("nvim-treesitter").install(to_install)
       end
+
+      vim.api.nvim_create_autocmd("FileType", {
+        group = vim.api.nvim_create_augroup("treesitter-start", { clear = true }),
+        callback = function(event)
+          pcall(vim.treesitter.start, event.buf)
+        end,
+      })
+
+      for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+        if vim.api.nvim_buf_is_loaded(buf) and vim.bo[buf].filetype ~= "" then
+          pcall(vim.treesitter.start, buf)
+        end
+      end
     end,
   },
 }
