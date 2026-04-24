@@ -1,15 +1,27 @@
--- Keymaps are automatically loaded on the VeryLazy event
--- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
+local map = vim.keymap.set
 
-vim.g.mapleader = " "
+map("n", "<Esc>", "<cmd>nohlsearch<CR>")
 
--- Clear search highlights
-vim.keymap.set("n", "<leader>nh", ":nohl<CR>", { desc = "Clear search highlights" })
+map({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
+map({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 
--- Move selected lines down
-vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "Move selected lines down" })
--- Move selected lines up
-vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { desc = "Move selected lines up" })
+map("v", "J", ":m '>+1<CR>gv=gv", { silent = true })
+map("v", "K", ":m '<-2<CR>gv=gv", { silent = true })
 
--- Swedish keyboard: end of line
-vim.keymap.set("n", "ö", "$", { desc = "Jump to end of line" })
+map("v", "<", "<gv")
+map("v", ">", ">gv")
+
+map({ "n", "v" }, "ö", "$")
+
+map("n", "<C-Up>", "<cmd>resize +2<CR>")
+map("n", "<C-Down>", "<cmd>resize -2<CR>")
+map("n", "<C-Left>", "<cmd>vertical resize -2<CR>")
+map("n", "<C-Right>", "<cmd>vertical resize +2<CR>")
+
+map("n", "[b", "<cmd>bprevious<CR>")
+map("n", "]b", "<cmd>bnext<CR>")
+map("n", "<leader>bd", "<cmd>bdelete<CR>", { desc = "Delete buffer" })
+
+map("n", "<leader>w", "<cmd>w<CR>", { desc = "Save" })
+map("n", "<leader>q", "<cmd>q<CR>", { desc = "Quit" })
+map("n", "<leader>l", "<cmd>Lazy<CR>", { desc = "Lazy" })
