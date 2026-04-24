@@ -16,6 +16,7 @@ brew "mise"
 brew "zsh-autosuggestions"
 brew "zsh-syntax-highlighting"
 
+cask "ghostty"
 cask "1password"
 cask "badgeify"
 cask "claude"

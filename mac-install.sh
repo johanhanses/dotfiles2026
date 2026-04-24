@@ -24,6 +24,10 @@ if [ -d "$DOTFILES_PRIVATE/.kube" ]; then
   ln -sf $DOTFILES_PRIVATE/.kube $HOME/.kube
 fi
 
+# Ghostty
+rm -rf $HOME/.config/ghostty
+ln -sf $DOTFILES/ghostty $HOME/.config/ghostty
+
 # btop
 rm -rf $HOME/.config/btop
 ln -sf $DOTFILES/btop $HOME/.config/btop
@@ -39,7 +43,7 @@ ln -sf $DOTFILES/matterhorn $HOME/.config/matterhorn
 echo "dotfiles2026 symlinks installed"
 
 if command -v brew >/dev/null 2>&1; then
-  UNWANTED_CASKS="ghostty aerospace raycast hiddenbar firefox@nightly ungoogled-chromium vivaldi arc spotify orbstack zoom"
+  UNWANTED_CASKS="aerospace raycast hiddenbar firefox@nightly ungoogled-chromium vivaldi arc spotify orbstack zoom"
   for c in $UNWANTED_CASKS; do
     if brew list --cask "$c" >/dev/null 2>&1; then
       echo "Removing cask: $c"
@@ -55,7 +59,7 @@ if command -v brew >/dev/null 2>&1; then
     fi
   done
 
-  rm -rf $HOME/.config/aerospace $HOME/.config/sketchybar $HOME/.config/ghostty $HOME/.config/yazi
+  rm -rf $HOME/.config/aerospace $HOME/.config/sketchybar $HOME/.config/yazi
   rm -f  $HOME/.config/starship.toml $HOME/.config/theme-family
 
   for app in Moom.app Cyberduck.app Chromium.app; do
