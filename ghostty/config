@@ -1,0 +1,43 @@
+font-family = GeistMono Nerd Font
+font-size = 14
+font-thicken = true
+adjust-cell-height = 2
+
+theme = light:GhosttyLight,dark:GhosttyDark
+
+cursor-style = block
+cursor-style-blink = true
+cursor-click-to-move = true
+
+term = xterm-ghostty
+
+desktop-notifications = true
+bold-is-bright = true
+
+macos-option-as-alt = false
+macos-window-shadow = true
+
+clipboard-paste-bracketed-safe = true
+
+scrollback-limit = 10000000
+link-url = true
+confirm-close-surface = false
+working-directory = home
+
+window-padding-x = 12
+window-padding-y = 12
+window-padding-balance = false
+window-vsync = true
+window-inherit-working-directory = true
+window-inherit-font-size = true
+window-decoration = false
+window-theme = auto
+window-save-state = default
+window-new-tab-position = current
+
+keybind = cmd+d=new_split:right
+keybind = cmd+shift+d=new_split:down
+keybind = cmd+shift+h=goto_split:previous
+keybind = cmd+shift+l=goto_split:next
+keybind = cmd+w=close_surface
+keybind = cmd+shift+enter=toggle_split_zoom
