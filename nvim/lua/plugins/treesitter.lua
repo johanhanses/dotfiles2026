@@ -3,7 +3,7 @@ return {
     "nvim-treesitter/nvim-treesitter",
     branch = "main",
     build = ":TSUpdate",
-    event = { "BufReadPost", "BufNewFile" },
+    lazy = false,
     config = function()
       local parsers = {
         "bash", "css", "html", "javascript", "json", "jsonc",
@@ -23,9 +23,21 @@ return {
       vim.api.nvim_create_autocmd("FileType", {
         group = vim.api.nvim_create_augroup("treesitter-start", { clear = true }),
         callback = function(event)
-          pcall(vim.treesitter.start, event.buf)
+          if pcall(vim.treesitter.start, event.buf) then
+            vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+          end
         end,
       })
+
+      for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+        if vim.api.nvim_buf_is_loaded(buf) and vim.bo[buf].filetype ~= "" then
+          if pcall(vim.treesitter.start, buf) then
+            vim.api.nvim_buf_call(buf, function()
+              vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+            end)
+          end
+        end
+      end
     end,
   },
 }
