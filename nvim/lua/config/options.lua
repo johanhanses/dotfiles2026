@@ -5,7 +5,7 @@ opt.completeopt = "menu,menuone,noselect"
 opt.confirm = true
 opt.cursorline = true
 opt.expandtab = true
-opt.fillchars = { eob = " ", fold = " ", foldopen = "", foldclose = "" }
+opt.fillchars = { eob = " ", fold = " " }
 opt.foldlevel = 99
 opt.foldlevelstart = 99
 opt.foldmethod = "expr"
