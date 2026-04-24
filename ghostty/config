@@ -9,7 +9,7 @@ cursor-style = block
 cursor-style-blink = true
 cursor-click-to-move = true
 
-term = xterm-ghostty
+term = xterm-256color
 
 desktop-notifications = false
 bell-features = no-system,no-audio,no-attention,no-title,no-border
