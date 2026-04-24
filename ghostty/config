@@ -3,7 +3,7 @@ font-size = 14
 font-thicken = true
 adjust-cell-height = 2
 
-theme = light:GhosttyLight,dark:GhosttyDark
+theme = light:Builtin Light,dark:Builtin Dark
 
 cursor-style = block
 cursor-style-blink = true
@@ -30,7 +30,6 @@ window-padding-balance = false
 window-vsync = true
 window-inherit-working-directory = true
 window-inherit-font-size = true
-window-decoration = false
 window-theme = auto
 window-save-state = default
 window-new-tab-position = current
