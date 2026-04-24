@@ -50,6 +50,7 @@ KUBECONFIG=~/.kube/config
 # Prompt: apple logo + folder + full path + git branch (bold green); $ on next line
 # Requires a Nerd Font in Terminal.app (e.g. MesloLGS Nerd Font, GeistMono Nerd Font)
 autoload -Uz vcs_info
+update_terminal_cwd() {}
 precmd() { vcs_info; printf '\e[2 q'; print -Pn '\e]2;%1~\a' }
 zstyle ':vcs_info:git:*' formats ' (%b)'
 setopt PROMPT_SUBST
