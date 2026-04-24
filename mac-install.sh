@@ -74,6 +74,11 @@ if command -v brew >/dev/null 2>&1; then
   case "$reply" in
     [yY]|[yY][eE][sS])
       brew bundle --file="$DOTFILES/Brewfile"
+
+      if ! command -v tree-sitter >/dev/null 2>&1; then
+        echo "Installing tree-sitter CLI (needed by nvim-treesitter)..."
+        npm install -g tree-sitter-cli
+      fi
       ;;
     *)
       echo "Skipped brew bundle. Run it later: brew bundle --file=$DOTFILES/Brewfile"
