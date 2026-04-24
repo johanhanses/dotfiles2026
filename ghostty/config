@@ -30,7 +30,6 @@ window-padding-balance = false
 window-vsync = true
 window-inherit-working-directory = true
 window-inherit-font-size = true
-window-decoration = false
 window-theme = auto
 window-save-state = default
 window-new-tab-position = current
