@@ -11,7 +11,8 @@ cursor-click-to-move = true
 
 term = xterm-ghostty
 
-desktop-notifications = true
+desktop-notifications = false
+bell-features = no-system,no-audio,no-attention,no-title,no-border
 bold-is-bright = true
 
 macos-option-as-alt = false
