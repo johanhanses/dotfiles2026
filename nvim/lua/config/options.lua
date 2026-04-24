@@ -5,7 +5,11 @@ opt.completeopt = "menu,menuone,noselect"
 opt.confirm = true
 opt.cursorline = true
 opt.expandtab = true
-opt.fillchars = { eob = " " }
+opt.fillchars = { eob = " ", fold = " ", foldopen = "", foldclose = "" }
+opt.foldlevel = 99
+opt.foldlevelstart = 99
+opt.foldmethod = "expr"
+opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 opt.ignorecase = true
 opt.inccommand = "nosplit"
 opt.laststatus = 3
