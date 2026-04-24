@@ -1,31 +1,19 @@
 return {
-  {
-    "williamboman/mason.nvim",
-    cmd = "Mason",
-    opts = {},
-  },
+  { "neovim/nvim-lspconfig" },
+  { "williamboman/mason.nvim", cmd = "Mason", opts = {} },
   {
     "williamboman/mason-lspconfig.nvim",
     dependencies = { "mason.nvim", "neovim/nvim-lspconfig" },
-    opts = {
-      ensure_installed = { "ts_ls", "tailwindcss", "eslint", "jsonls", "lua_ls" },
-    },
-  },
-  {
-    "neovim/nvim-lspconfig",
     event = { "BufReadPost", "BufNewFile" },
-    dependencies = { "mason.nvim", "mason-lspconfig.nvim" },
     config = function()
-      local lspconfig = require("lspconfig")
-      local capabilities = require("cmp_nvim_lsp").default_capabilities()
-
-      local servers = { "ts_ls", "tailwindcss", "eslint", "jsonls" }
-      for _, server in ipairs(servers) do
-        lspconfig[server].setup({ capabilities = capabilities })
+      local has_cmp, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
+      if has_cmp then
+        vim.lsp.config("*", {
+          capabilities = cmp_nvim_lsp.default_capabilities(),
+        })
       end
 
-      lspconfig.lua_ls.setup({
-        capabilities = capabilities,
+      vim.lsp.config("lua_ls", {
         settings = {
           Lua = {
             workspace = { checkThirdParty = false },
@@ -34,13 +22,29 @@ return {
         },
       })
 
-      vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Go to definition" })
-      vim.keymap.set("n", "gr", vim.lsp.buf.references, { desc = "References" })
-      vim.keymap.set("n", "K", vim.lsp.buf.hover, { desc = "Hover" })
-      vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, { desc = "Code action" })
-      vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename, { desc = "Rename" })
-      vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Prev diagnostic" })
-      vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Next diagnostic" })
+      require("mason-lspconfig").setup({
+        ensure_installed = { "ts_ls", "tailwindcss", "eslint", "jsonls", "lua_ls" },
+        handlers = {
+          function(server_name)
+            vim.lsp.enable(server_name)
+          end,
+        },
+      })
+
+      vim.api.nvim_create_autocmd("LspAttach", {
+        callback = function(event)
+          local map = function(keys, func, desc)
+            vim.keymap.set("n", keys, func, { buffer = event.buf, desc = desc })
+          end
+          map("gd", vim.lsp.buf.definition, "Go to definition")
+          map("gr", vim.lsp.buf.references, "References")
+          map("K", vim.lsp.buf.hover, "Hover")
+          map("<leader>ca", vim.lsp.buf.code_action, "Code action")
+          map("<leader>cr", vim.lsp.buf.rename, "Rename")
+          map("[d", vim.diagnostic.goto_prev, "Prev diagnostic")
+          map("]d", vim.diagnostic.goto_next, "Next diagnostic")
+        end,
+      })
     end,
   },
 }
