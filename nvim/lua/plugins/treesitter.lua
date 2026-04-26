@@ -26,13 +26,19 @@ return {
       vim.treesitter.language.register("markdown", "mdx")
 
       local function start_treesitter(buf)
+        if not vim.api.nvim_buf_is_valid(buf) then return end
         local ft = vim.bo[buf].filetype
-        if ft == "" then return end
+        if ft == "" then
+          vim.filetype.match({ buf = buf })
+          ft = vim.bo[buf].filetype
+          if ft == "" then return end
+        end
+        if vim.treesitter.highlighter.active[buf] then return end
         local lang = vim.treesitter.language.get_lang(ft) or ft
         pcall(vim.treesitter.start, buf, lang)
       end
 
-      vim.api.nvim_create_autocmd("FileType", {
+      vim.api.nvim_create_autocmd({ "FileType", "BufEnter", "BufReadPost" }, {
         group = vim.api.nvim_create_augroup("treesitter-start", { clear = true }),
         callback = function(event)
           start_treesitter(event.buf)
