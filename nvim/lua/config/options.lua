@@ -39,5 +39,3 @@ opt.wildmode = "longest:full,full"
 opt.wrap = true
 
 vim.lsp.inlay_hint.enable(false, {})
-
-vim.cmd.colorscheme("catppuccin")
