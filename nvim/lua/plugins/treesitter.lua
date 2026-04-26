@@ -30,27 +30,21 @@ return {
         if vim.treesitter.highlighter.active[buf] then return end
         local ft = vim.bo[buf].filetype
         if ft == "" then
-          vim.filetype.match({ buf = buf })
-          ft = vim.bo[buf].filetype
-          if ft == "" then return end
+          ft = vim.filetype.match({ buf = buf }) or ""
+          if ft ~= "" then
+            vim.bo[buf].filetype = ft
+          else
+            return
+          end
         end
         local lang = vim.treesitter.language.get_lang(ft) or ft
         pcall(vim.treesitter.start, buf, lang)
       end
 
-      vim.api.nvim_create_autocmd({ "FileType", "BufReadPost" }, {
+      vim.api.nvim_create_autocmd({ "FileType", "BufEnter", "BufReadPost" }, {
         group = vim.api.nvim_create_augroup("treesitter-start", { clear = true }),
         callback = function(event)
           start_treesitter(event.buf)
-        end,
-      })
-
-      vim.api.nvim_create_autocmd("BufEnter", {
-        group = vim.api.nvim_create_augroup("treesitter-start-deferred", { clear = true }),
-        callback = function(event)
-          vim.defer_fn(function()
-            start_treesitter(event.buf)
-          end, 50)
         end,
       })
 
