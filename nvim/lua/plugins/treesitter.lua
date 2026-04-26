@@ -27,13 +27,16 @@ return {
 
       local function start_treesitter(buf)
         if not vim.api.nvim_buf_is_valid(buf) then return end
+        if vim.treesitter.highlighter.active[buf] then return end
         local ft = vim.bo[buf].filetype
         if ft == "" then
-          vim.filetype.match({ buf = buf })
-          ft = vim.bo[buf].filetype
-          if ft == "" then return end
+          ft = vim.filetype.match({ buf = buf }) or ""
+          if ft ~= "" then
+            vim.bo[buf].filetype = ft
+          else
+            return
+          end
         end
-        if vim.treesitter.highlighter.active[buf] then return end
         local lang = vim.treesitter.language.get_lang(ft) or ft
         pcall(vim.treesitter.start, buf, lang)
       end
