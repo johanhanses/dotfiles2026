@@ -20,16 +20,28 @@ return {
         require("nvim-treesitter").install(to_install)
       end
 
+      vim.treesitter.language.register("tsx", "typescriptreact")
+      vim.treesitter.language.register("jsx", "javascriptreact")
+      vim.treesitter.language.register("bash", "sh")
+      vim.treesitter.language.register("markdown", "mdx")
+
+      local function start_treesitter(buf)
+        local ft = vim.bo[buf].filetype
+        if ft == "" then return end
+        local lang = vim.treesitter.language.get_lang(ft) or ft
+        pcall(vim.treesitter.start, buf, lang)
+      end
+
       vim.api.nvim_create_autocmd("FileType", {
         group = vim.api.nvim_create_augroup("treesitter-start", { clear = true }),
         callback = function(event)
-          pcall(vim.treesitter.start, event.buf)
+          start_treesitter(event.buf)
         end,
       })
 
       for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-        if vim.api.nvim_buf_is_loaded(buf) and vim.bo[buf].filetype ~= "" then
-          pcall(vim.treesitter.start, buf)
+        if vim.api.nvim_buf_is_loaded(buf) then
+          start_treesitter(buf)
         end
       end
     end,
