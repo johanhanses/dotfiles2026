@@ -6,7 +6,7 @@ return {
     lazy = false,
     config = function()
       local parsers = {
-        "bash", "css", "html", "javascript", "json", "jsonc",
+        "bash", "css", "html", "javascript", "json",
         "lua", "markdown", "markdown_inline", "tsx", "typescript",
         "vim", "vimdoc", "yaml",
       }
@@ -24,6 +24,7 @@ return {
       vim.treesitter.language.register("jsx", "javascriptreact")
       vim.treesitter.language.register("bash", "sh")
       vim.treesitter.language.register("markdown", "mdx")
+      vim.treesitter.language.register("json", "jsonc")
 
       local function start_treesitter(buf)
         if not vim.api.nvim_buf_is_valid(buf) then return end
