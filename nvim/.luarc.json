@@ -1,0 +1,10 @@
+{
+  "runtime.version": "LuaJIT",
+  "workspace.checkThirdParty": false,
+  "workspace.library": [
+    "$VIMRUNTIME/lua",
+    "$VIMRUNTIME/lua/vim/lsp",
+    "${3rd}/luv/library"
+  ],
+  "diagnostics.globals": ["vim"]
+}
