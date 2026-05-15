@@ -20,7 +20,11 @@ bindkey -e
 
 unset zle_bracketed_paste
 
-export BAT_THEME="ansi"
+if [[ "$(defaults read -g AppleInterfaceStyle 2>/dev/null)" == "Dark" ]]; then
+  export BAT_THEME="OneHalfDark"
+else
+  export BAT_THEME="OneHalfLight"
+fi
 export EDITOR="nvim"
 export VISUAL="nvim"
 export BROWSER="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"

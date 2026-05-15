@@ -14,14 +14,17 @@ browser "open -g -a 'Google Chrome' %u"
 show-read-feeds yes
 feed-sort-order unreadarticlecount-asc
 
-# Colors - Tokyo Night
-color background default default
-color listnormal default default
-color listfocus black blue bold
-color listnormal_unread cyan default bold
-color listfocus_unread black cyan bold
-color info black blue bold
-color article default default
+# Colors — Atom One (via terminal ANSI palette; auto-follows Ghostty light/dark)
+color background       default default
+color listnormal       default default
+color listnormal_unread default default bold
+color listfocus        default blue    bold
+color listfocus_unread default cyan    bold
+color info             default blue    bold
+color article          default default
+color title            blue    default bold
+color hint-key         yellow  default bold
+color hint-description default default
 
 # Key bindings
 bind-key j down

@@ -17,10 +17,9 @@
 [delta]
   line-numbers = true
   navigate = true
-  syntax-theme = tokyonight_night
-  light = false
   side-by-side = false
   decorations = true
+  # syntax-theme + light flag come from ~/themes.gitconfig, rewritten by scripts/theme-sync
 [core]
   excludesfile = ~/.gitignore_global
   pager = delta

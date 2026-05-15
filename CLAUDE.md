@@ -38,14 +38,16 @@ Only these directories ship configs:
 ## Themes
 
 - **Ghostty**: `Atom One Light` / `Atom One Dark`, auto-switches via `window-theme = auto`
-- **btop**: `tokyo-night` (unchanged — separate palette by design)
 - **Neovim**: Atom One via `olimorris/onedarkpro.nvim`; light/dark follows macOS via `f-person/auto-dark-mode.nvim` (~3s polling)
-- **bat**: `ansi`
 - **tmux**: Atom One Dark/Light theme files in `tmux/themes/`, sourced at startup by `if-shell` on `AppleInterfaceStyle`; re-sourced on toggle by `scripts/theme-sync`
+- **btop**: Atom One Dark/Light theme files in `btop/themes/`; `color_theme` line in `btop.conf` rewritten by `scripts/theme-sync`
+- **bat**: `OneHalfDark` / `OneHalfLight` (closest built-in to Atom One); `BAT_THEME` exported per-shell in `.zshrc` based on `AppleInterfaceStyle` at shell init
+- **git-delta**: `OneHalfDark` / `OneHalfLight`; settings come from `~/themes.gitconfig` (included by `.gitconfig`) which `scripts/theme-sync` rewrites
+- **newsboat**: 16-color ANSI, follows the terminal palette with no extra wiring
 - **Mattermost Desktop**: palette set by `scripts/theme-sync` via the prefs REST API (reads `MATTERMOST_URL`/`MATTERMOST_TOKEN` from `dotfiles-private/mattermost/config`)
 - **Matterhorn TUI**: unchanged — has its own theme overlays under `matterhorn/`, not auto-switched
 
-Light/Dark switching is handled by a native macOS Spotlight workflow shortcut (outside this repo). The shortcut toggles `AppleInterfaceStyle` and then runs `scripts/theme-sync` so tmux + Mattermost catch up (Ghostty and Neovim handle themselves).
+Light/Dark switching is handled by a native macOS Spotlight workflow shortcut (outside this repo). The shortcut toggles `AppleInterfaceStyle` and then runs `scripts/theme-sync` so tmux + btop + git-delta + Mattermost catch up. Ghostty and Neovim handle themselves; bat picks up the new theme on next shell. `<prefix>+r` in tmux also runs `theme-sync` as a manual catch-up.
 
 ## Notes
 

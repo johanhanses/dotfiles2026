@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
-# Sync tmux + Mattermost Desktop theme with macOS appearance.
-# Invoked by the user's macOS Spotlight workflow shortcut after toggling appearance.
+# Sync tmux + btop + git-delta + Mattermost Desktop theme with macOS appearance.
+# Invoked by the user's macOS Spotlight workflow shortcut and by `tmux <prefix>+r`.
 # Ghostty auto-switches on its own (window-theme = auto). Nvim handles itself via auto-dark-mode.nvim.
+# bat reads BAT_THEME from .zshrc per-shell (set at shell init based on appearance).
+# Newsboat uses 16-color ANSI, so it follows the terminal palette with no action needed.
 
 set -euo pipefail
 
@@ -14,6 +16,31 @@ if pgrep -x tmux >/dev/null; then
   else
     tmux source-file "$HOME/.config/tmux/themes/atom-one-light.tmux"
   fi
+fi
+
+# --- btop: rewrite color_theme line in btop.conf ---
+BTOP_CONF="$HOME/.config/btop/btop.conf"
+if [[ -f "$BTOP_CONF" ]]; then
+  if is_dark; then
+    /usr/bin/sed -i '' 's/^color_theme = .*/color_theme = "atom-one-dark"/' "$BTOP_CONF"
+  else
+    /usr/bin/sed -i '' 's/^color_theme = .*/color_theme = "atom-one-light"/' "$BTOP_CONF"
+  fi
+fi
+
+# --- git-delta: rewrite ~/themes.gitconfig (included by ~/.gitconfig) ---
+if is_dark; then
+  cat > "$HOME/themes.gitconfig" <<'EOF'
+[delta]
+    syntax-theme = OneHalfDark
+    light = false
+EOF
+else
+  cat > "$HOME/themes.gitconfig" <<'EOF'
+[delta]
+    syntax-theme = OneHalfLight
+    light = true
+EOF
 fi
 
 # --- Mattermost Desktop via REST ---
