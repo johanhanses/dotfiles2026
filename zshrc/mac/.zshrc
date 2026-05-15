@@ -90,7 +90,16 @@ task() {
   xlaude open "$name"
 }
 alias tasks='xlaude list'
-alias tdash='xlaude dashboard'
+# `tdash` — xlaude v0.7's dashboard uses `tmux attach-session` for Enter, which
+# tmux refuses when $TMUX is set. Unsetting $TMUX lets the inner attach take
+# over the current terminal; the outer tmux is restored on detach (Ctrl+Q).
+tdash() {
+  if [[ -n "$TMUX" ]]; then
+    env -u TMUX xlaude dashboard
+  else
+    xlaude dashboard
+  fi
+}
 tcd() {
   local target
   target=$(xlaude dir "${1:?usage: tcd <name>}") || return 1

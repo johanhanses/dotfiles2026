@@ -108,6 +108,8 @@ tdash                # interactive TUI; pick which one to focus
 
 Two-pane layout: project list on the left, session details on the right. The status footer always shows the current bindings; this table is just for reference.
 
+> **Nested-tmux gotcha**: xlaude v0.7's `Enter` action calls `tmux attach-session`, which tmux refuses inside an existing session — you see a flash (the "sessions should be nested with care" warning) and nothing happens. The `tdash` shell function in `.zshrc` works around this by invoking xlaude with `$TMUX` unset (`env -u TMUX xlaude dashboard`) so the inner `tmux attach` can take over the current terminal. When you detach (`Ctrl+Q`), you return to your outer tmux session. If you call `xlaude dashboard` directly instead of `tdash`, you'll hit the original bug.
+
 | Key       | Action                                                       |
 |-----------|--------------------------------------------------------------|
 | `↑` / `↓` | Navigate projects / sessions                                 |
