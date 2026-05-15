@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+# Sync tmux + Mattermost Desktop theme with macOS appearance.
+# Invoked by the user's macOS Spotlight workflow shortcut after toggling appearance.
+# Ghostty auto-switches on its own (window-theme = auto). Nvim handles itself via auto-dark-mode.nvim.
+
+set -euo pipefail
+
+is_dark() { [[ "$(defaults read -g AppleInterfaceStyle 2>/dev/null)" == "Dark" ]]; }
+
+# --- tmux: re-source the matching theme in every running tmux server ---
+if pgrep -x tmux >/dev/null; then
+  if is_dark; then
+    tmux source-file "$HOME/.config/tmux/themes/atom-one-dark.tmux"
+  else
+    tmux source-file "$HOME/.config/tmux/themes/atom-one-light.tmux"
+  fi
+fi
+
+# --- Mattermost Desktop via REST ---
+CONFIG_FILE="$HOME/Repos/github.com/johanhanses/dotfiles-private/mattermost/config"
+if [[ ! -f "$CONFIG_FILE" ]]; then
+  echo "mattermost: no $CONFIG_FILE, skipping desktop sync"
+  exit 0
+fi
+# shellcheck source=/dev/null
+source "$CONFIG_FILE"
+if [[ -z "${MATTERMOST_URL:-}" || -z "${MATTERMOST_TOKEN:-}" ]]; then
+  echo "mattermost: MATTERMOST_URL/MATTERMOST_TOKEN unset in $CONFIG_FILE, skipping"
+  exit 0
+fi
+
+ATOM_DARK='{"sidebarBg":"#21252b","sidebarText":"#abb2bf","sidebarUnreadText":"#e5c07b","sidebarTextHoverBg":"#2c313a","sidebarTextActiveBorder":"#61afef","sidebarTextActiveColor":"#ffffff","sidebarHeaderBg":"#21252b","sidebarHeaderTextColor":"#abb2bf","onlineIndicator":"#98c379","awayIndicator":"#e5c07b","dndIndicator":"#e06c75","mentionBg":"#61afef","mentionColor":"#282c34","centerChannelBg":"#282c34","centerChannelColor":"#abb2bf","newMessageSeparator":"#e06c75","linkColor":"#61afef","buttonBg":"#61afef","buttonColor":"#ffffff","errorTextColor":"#e06c75","mentionHighlightBg":"#3e4451","mentionHighlightLink":"#61afef","codeTheme":"monokai","sidebarTeamBarBg":"#1d2025"}'
+
+ATOM_LIGHT='{"sidebarBg":"#fafafa","sidebarText":"#383a42","sidebarUnreadText":"#c18401","sidebarTextHoverBg":"#e5e5e6","sidebarTextActiveBorder":"#4078f2","sidebarTextActiveColor":"#383a42","sidebarHeaderBg":"#fafafa","sidebarHeaderTextColor":"#383a42","onlineIndicator":"#50a14f","awayIndicator":"#c18401","dndIndicator":"#e45649","mentionBg":"#4078f2","mentionColor":"#fafafa","centerChannelBg":"#ffffff","centerChannelColor":"#383a42","newMessageSeparator":"#e45649","linkColor":"#4078f2","buttonBg":"#4078f2","buttonColor":"#ffffff","errorTextColor":"#e45649","mentionHighlightBg":"#e5e5e6","mentionHighlightLink":"#4078f2","codeTheme":"github","sidebarTeamBarBg":"#f0f0f1"}'
+
+if is_dark; then THEME="$ATOM_DARK"; else THEME="$ATOM_LIGHT"; fi
+
+USER_ID=$(curl -sf -H "Authorization: Bearer $MATTERMOST_TOKEN" "$MATTERMOST_URL/api/v4/users/me" | jq -r '.id')
+[[ -z "$USER_ID" || "$USER_ID" == "null" ]] && { echo "mattermost: failed to fetch user id"; exit 1; }
+
+TEAM_IDS=$(curl -sf -H "Authorization: Bearer $MATTERMOST_TOKEN" "$MATTERMOST_URL/api/v4/users/$USER_ID/teams" | jq -r '.[].id')
+
+PAYLOAD=$(jq -n --arg uid "$USER_ID" --arg theme "$THEME" \
+  '[{"user_id":$uid,"category":"theme","name":"","value":$theme}]')
+for TEAM_ID in $TEAM_IDS; do
+  PAYLOAD=$(echo "$PAYLOAD" | jq --arg uid "$USER_ID" --arg tid "$TEAM_ID" --arg theme "$THEME" \
+    '. + [{"user_id":$uid,"category":"theme","name":$tid,"value":$theme}]')
+done
+
+curl -sf -X PUT \
+  -H "Authorization: Bearer $MATTERMOST_TOKEN" \
+  -H "Content-Type: application/json" \
+  --data "$PAYLOAD" \
+  "$MATTERMOST_URL/api/v4/users/$USER_ID/preferences" >/dev/null
+
+if is_dark; then echo "mattermost: theme synced (dark)"; else echo "mattermost: theme synced (light)"; fi

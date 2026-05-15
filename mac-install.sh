@@ -42,6 +42,12 @@ ln -sf $DOTFILES/matterhorn $HOME/.config/matterhorn
 
 echo "dotfiles2026 symlinks installed"
 
+# Tmux plugin manager (tpm)
+if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
+  echo "Installing tpm..."
+  git clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"
+fi
+
 if command -v brew >/dev/null 2>&1; then
   UNWANTED_CASKS="aerospace raycast hiddenbar firefox@nightly ungoogled-chromium vivaldi arc spotify orbstack zoom"
   for c in $UNWANTED_CASKS; do
@@ -62,7 +68,7 @@ if command -v brew >/dev/null 2>&1; then
   rm -rf $HOME/.config/aerospace $HOME/.config/sketchybar $HOME/.config/yazi
   rm -f  $HOME/.config/starship.toml $HOME/.config/theme-family
 
-  for app in Moom.app Cyberduck.app Chromium.app; do
+  for app in Cyberduck.app Chromium.app; do
     if [ -d "/Applications/$app" ]; then
       echo "Trashing /Applications/$app"
       osascript -e "tell application \"Finder\" to delete POSIX file \"/Applications/$app\"" >/dev/null 2>&1 || true

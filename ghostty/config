@@ -1,9 +1,9 @@
-font-family = GeistMono Nerd Font
+font-family = BlexMono Nerd Font
 font-size = 14
 font-thicken = true
 adjust-cell-height = 2
 
-theme = light:Builtin Light,dark:Builtin Dark
+theme = light:Atom One Light,dark:Atom One Dark
 
 cursor-style = block
 cursor-style-blink = true

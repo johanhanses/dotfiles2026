@@ -8,6 +8,7 @@ setopt append_history
 setopt inc_append_history
 
 # Enable completions
+fpath=(~/.zfunc $fpath)
 autoload -Uz compinit && compinit
 
 # Zsh plugins (install with brew)
@@ -47,14 +48,15 @@ export AWS_PROFILE=saml
 
 KUBECONFIG=~/.kube/config
 
-# Prompt: apple logo + folder + full path + git branch (bold green); $ on next line
-# Requires a Nerd Font in Terminal.app (e.g. MesloLGS Nerd Font, GeistMono Nerd Font)
+# Prompt: apple logo + folder + full path + git branch, Atom One accents.
+# Uses named ANSI colors so it follows the terminal palette (light/dark auto).
+# Requires a Nerd Font (e.g. BlexMono Nerd Font).
 autoload -Uz vcs_info
 update_terminal_cwd() {}
 precmd() { vcs_info; printf '\e[2 q'; print -Pn '\e]2;%1~\a' }
-zstyle ':vcs_info:git:*' formats ' (%b)'
+zstyle ':vcs_info:git:*' formats ' %F{magenta}(%b)%f'
 setopt PROMPT_SUBST
-PROMPT=$'%B%F{green}\uF179  \uF07B  %~${vcs_info_msg_0_}%f%b\n$ '
+PROMPT=$'%B%F{red}\uF179  %F{yellow}\uF07B  %F{blue}%~%f${vcs_info_msg_0_}%b\n%F{cyan}$%f '
 
 # mise (runtime version manager)
 if command -v mise >/dev/null 2>&1; then
@@ -75,6 +77,46 @@ alias xl='xlaude list'
 alias xc='xlaude create'
 alias xo='xlaude open'
 alias xd='xlaude delete'
+
+# Conductor-style task workflow (built on xlaude)
+task() {
+  local name="${1:?usage: task <name> [base-ref]}"
+  shift
+  xlaude create "$name" "$@" || return 1
+  xlaude open "$name"
+}
+alias tasks='xlaude list'
+alias tdash='xlaude dashboard'
+tcd() {
+  local target
+  target=$(xlaude dir "${1:?usage: tcd <name>}") || return 1
+  cd "$target"
+}
+treview() {
+  [[ -z "$TMUX" ]] && { echo "treview needs to run inside tmux"; return 1; }
+  local base="${1:-main}"
+  tmux split-window -h -p 40 "git diff $base...HEAD; \$SHELL"
+  tmux split-window -v -p 50 "\$SHELL"
+}
+tship() {
+  git status --short
+  read "ok?Open PR with 'gh pr create --fill'? [y/N] "
+  [[ "$ok" =~ ^[Yy] ]] || return 1
+  gh pr create --fill || return 1
+  echo "PR open. When merged, run: xlaude delete"
+}
+tsetup() {
+  local script
+  for script in .conductor/setup .xlaude/setup; do
+    if [[ -x "$script" ]]; then
+      echo "running $script…"
+      "$script"
+      return $?
+    fi
+  done
+  echo "no .conductor/setup or .xlaude/setup in $(pwd)"
+  return 1
+}
 
 # Directory aliases
 alias repos="cd $REPOS"
