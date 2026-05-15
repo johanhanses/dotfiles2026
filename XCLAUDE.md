@@ -36,7 +36,7 @@ Shell completions for `xlaude` are loaded from `~/.zfunc/_xlaude` (generated onc
 | `tcd <name>` | jump-to-workspace | `cd` into the worktree without launching Claude |
 | `treview [base]` | right-pane diff | inside tmux, splits the current window into `diff <base>...HEAD` + a shell pane (default base: `main`) |
 | `tship` | "ship it" | shows `git status -s`, prompts, then `gh pr create --fill`. Doesn't delete the worktree — that's manual via `xlaude delete` after merge. |
-| `tsetup` | per-repo setup script | runs `.conductor/setup` or `.xlaude/setup` if executable. Convention only — you ship the script per repo. |
+| `tsetup` | per-repo setup script | runs `conductor.json` (`scripts.setup`, conductor.build format) if present, otherwise an executable `.conductor/setup` or `.xlaude/setup`. Sets `$CONDUCTOR_ROOT_PATH` to the main worktree path. |
 | `tdash` | dashboard | `xlaude dashboard` — interactive TUI for managing sessions across all worktrees (see keys below) |
 
 ### Raw xlaude shortcuts (lower-level)
@@ -158,7 +158,12 @@ If `xlaude list` shows phantom worktrees (paths that don't exist), run `xlaude c
 
 - **Worktree path format:** `../<repo-name>-<task-name>`. xlaude enforces this — don't override it.
 - **Branch names match task names.** `task foo` creates branch `foo` (off the current HEAD by default).
-- **Per-repo setup scripts.** Drop an executable `.conductor/setup` (or `.xlaude/setup`) at the repo root. `tsetup` runs it. Use this for `npm install` / DB seeding / `.env` symlinking after a fresh worktree.
+- **Per-repo setup scripts.** Three formats supported (first match wins):
+  1. `conductor.json` at the repo root with `{"scripts": {"setup": "<cmd>"}}` — conductor.build format. The command runs with `$CONDUCTOR_ROOT_PATH` set to the main worktree path (useful for `ln -sf "$CONDUCTOR_ROOT_PATH/apps/foo/.env" apps/foo/.env`).
+  2. Executable `.conductor/setup`.
+  3. Executable `.xlaude/setup`.
+
+  Use these for `npm install` / DB seeding / `.env` symlinking after a fresh worktree.
 - **Don't `rm -rf` worktrees.** Use `xlaude delete <name>` so the state file and the branch get cleaned together. If you already did, `xlaude clean` recovers.
 
 ## Troubleshooting

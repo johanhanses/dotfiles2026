@@ -119,6 +119,20 @@ tship() {
   echo "PR open. When merged, run: xlaude delete"
 }
 tsetup() {
+  # 1) conductor.json (conductor.build format) — runs scripts.setup with CONDUCTOR_ROOT_PATH
+  if [[ -f conductor.json ]] && command -v jq >/dev/null; then
+    local setup_cmd
+    setup_cmd=$(jq -r '.scripts.setup // empty' conductor.json)
+    if [[ -n "$setup_cmd" ]]; then
+      local main_wt
+      main_wt=$(git worktree list --porcelain 2>/dev/null | awk '/^worktree / { print $2; exit }')
+      [[ -z "$main_wt" ]] && main_wt="$(pwd)"
+      echo "running conductor.json setup (CONDUCTOR_ROOT_PATH=$main_wt)…"
+      CONDUCTOR_ROOT_PATH="$main_wt" eval "$setup_cmd"
+      return $?
+    fi
+  fi
+  # 2) executable hook fallback
   local script
   for script in .conductor/setup .xlaude/setup; do
     if [[ -x "$script" ]]; then
@@ -127,7 +141,7 @@ tsetup() {
       return $?
     fi
   done
-  echo "no .conductor/setup or .xlaude/setup in $(pwd)"
+  echo "no conductor.json, .conductor/setup, or .xlaude/setup in $(pwd)"
   return 1
 }
 
