@@ -15,11 +15,13 @@ show-read-feeds yes
 feed-sort-order unreadarticlecount-asc
 
 # Colors — Atom One (via terminal ANSI palette; auto-follows Ghostty light/dark)
+# `reverse` inverts fg/bg using the terminal's current pair, so the focused row
+# stays high-contrast in both light and dark mode without picking a specific bg color.
 color background       default default
 color listnormal       default default
 color listnormal_unread default default bold
-color listfocus        default blue    bold
-color listfocus_unread default cyan    bold
+color listfocus        default default reverse
+color listfocus_unread default default reverse bold
 color info             default blue    bold
 color article          default default
 color title            blue    default bold
