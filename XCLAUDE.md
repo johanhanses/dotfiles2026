@@ -37,7 +37,7 @@ Shell completions for `xlaude` are loaded from `~/.zfunc/_xlaude` (generated onc
 | `treview [base]` | right-pane diff | inside tmux, splits the current window into `diff <base>...HEAD` + a shell pane (default base: `main`) |
 | `tship` | "ship it" | shows `git status -s`, prompts, then `gh pr create --fill`. Doesn't delete the worktree — that's manual via `xlaude delete` after merge. |
 | `tsetup` | per-repo setup script | runs `.conductor/setup` or `.xlaude/setup` if executable. Convention only — you ship the script per repo. |
-| `tdash` | dashboard | `xlaude dashboard` — interactive TUI for managing sessions across all worktrees |
+| `tdash` | dashboard | `xlaude dashboard` — interactive TUI for managing sessions across all worktrees (see keys below) |
 
 ### Raw xlaude shortcuts (lower-level)
 
@@ -103,6 +103,23 @@ task add-pagination
 task investigate-flaky-test
 tdash                # interactive TUI; pick which one to focus
 ```
+
+### `tdash` keybindings (the interactive TUI)
+
+Two-pane layout: project list on the left, session details on the right. The status footer always shows the current bindings; this table is just for reference.
+
+| Key       | Action                                                       |
+|-----------|--------------------------------------------------------------|
+| `↑` / `↓` | Navigate projects / sessions                                 |
+| `Enter`   | Open the focused worktree (launches Claude in it)            |
+| `n`       | New worktree — prompts for a name, creates it, opens Claude  |
+| `d`       | Stop the running session in this worktree                    |
+| `c`       | Open xlaude config (`state.json`) in `$EDITOR`               |
+| `r`       | Refresh the view                                             |
+| `?`       | Help overlay                                                 |
+| `q`       | Quit the dashboard                                           |
+
+So **yes, you can create a new worktree from inside `tdash`** — press `n`. Same effect as running `task <name>` from a shell, but you stay inside the dashboard for follow-up actions.
 
 ## Testing — sanity checks
 
