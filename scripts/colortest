@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+# Print ANSI + truecolor swatches so you can see what your terminal palette
+# (via Ghostty's atom-one theme) maps each ANSI slot to, side-by-side with
+# the canonical Atom One Light / Dark hex values.
+
+printf '\n  --- ANSI 8-color (uses your Ghostty palette) ---\n'
+for i in 30 31 32 33 34 35 36 37; do
+  printf "  \e[${i}m█████ %s\e[0m\n" "code $i"
+done
+
+printf '\n  --- ANSI bright ---\n'
+for i in 90 91 92 93 94 95 96 97; do
+  printf "  \e[${i}m█████ %s\e[0m\n" "code $i"
+done
+
+swatch() {
+  local hex="$1" name="$2"
+  local r=$((16#${hex:0:2}))
+  local g=$((16#${hex:2:2}))
+  local b=$((16#${hex:4:2}))
+  printf "  \e[38;2;%d;%d;%dm█████ #%s %s\e[0m\n" "$r" "$g" "$b" "$hex" "$name"
+}
+
+printf '\n  --- Truecolor: Atom One Light accents ---\n'
+swatch 383a42 fg
+swatch e45649 red
+swatch 50a14f green
+swatch c18401 yellow
+swatch 4078f2 blue
+swatch a626a4 magenta
+swatch 0184bc cyan
+swatch 696c77 comment
+
+printf '\n  --- Truecolor: Atom One Dark accents ---\n'
+swatch abb2bf fg
+swatch e06c75 red
+swatch 98c379 green
+swatch e5c07b yellow
+swatch 61afef blue
+swatch c678dd magenta
+swatch 56b6c2 cyan
+swatch 5c6370 comment
+
+echo
