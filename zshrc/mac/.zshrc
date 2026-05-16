@@ -74,45 +74,47 @@ if command -v fd >/dev/null 2>&1; then
   export FZF_ALT_C_COMMAND='fd --type d --hidden --follow --exclude .git'
 fi
 
-# xlaude worktree helpers
-xcd() { cd "$(xlaude dir "$@")"; }
-xv() { nvim "$(xlaude dir "$@")"; }
-alias xl='xlaude list'
-alias xc='xlaude create'
-alias xo='xlaude open'
-alias xd='xlaude delete'
+# Claude-native worktree workflow (built on `claude --worktree`)
+# Convention: claude creates worktrees at <repo>/.claude/worktrees/<name>
+# with branch worktree-<name>. See WORKTREES.md for the full handbook.
 
-# Conductor-style task workflow (built on xlaude)
-task() {
-  local name="${1:?usage: task <name> [base-ref]}"
+# wt <name> — create a fresh worktree + launch claude in it.
+# Inside tmux: spawns a new window so the original session stays put.
+wt() {
+  local name="${1:?usage: wt <name>}"
   shift
-  xlaude create "$name" "$@" || return 1
-  xlaude open "$name"
-}
-alias tasks='xlaude list'
-# `tdash` — xlaude v0.7's dashboard uses `tmux attach-session` for Enter, which
-# tmux refuses when $TMUX is set. Unsetting $TMUX lets the inner attach take
-# over the current terminal; the outer tmux is restored on detach (Ctrl+Q).
-# xlaude also pollutes the tmux server with `bind-key -n C-q/C-t/C-o` (no
-# session target), so those keys silently take over your outer sessions too —
-# clean them up after the dashboard exits.
-tdash() {
   if [[ -n "$TMUX" ]]; then
-    env -u TMUX xlaude dashboard
+    tmux new-window -n "$name" "exec claude --worktree '$name' --permission-mode auto $*"
   else
-    xlaude dashboard
-  fi
-  if command -v tmux >/dev/null && tmux list-clients 2>/dev/null | grep -q .; then
-    tmux unbind-key -n C-q 2>/dev/null
-    tmux unbind-key -n C-t 2>/dev/null
-    tmux unbind-key -n C-o 2>/dev/null
+    claude --worktree "$name" --permission-mode auto "$@"
   fi
 }
-tcd() {
+
+# wtl — list git worktrees (git is the source of truth)
+alias wtl='git worktree list'
+
+# wtd <name> — remove the worktree at .claude/worktrees/<name> + delete its branch.
+wtd() {
+  local name="${1:?usage: wtd <name>}"
+  local repo_root
+  repo_root=$(git rev-parse --show-toplevel) || return 1
+  git -C "$repo_root" worktree remove "$repo_root/.claude/worktrees/$name" || return 1
+  git -C "$repo_root" branch -d "worktree-$name" 2>/dev/null
+}
+
+# wtc — fzf-pick an existing worktree; opens in new tmux window or cd.
+wtc() {
   local target
-  target=$(xlaude dir "${1:?usage: tcd <name>}") || return 1
-  cd "$target"
+  target=$(git worktree list | fzf --height=40% --prompt='worktree> ') || return
+  target=${target%% *}
+  [[ -z "$target" ]] && return
+  if [[ -n "$TMUX" ]]; then
+    tmux new-window -c "$target" -n "${target:t}"
+  else
+    cd "$target"
+  fi
 }
+
 treview() {
   [[ -z "$TMUX" ]] && { echo "treview needs to run inside tmux"; return 1; }
   local base="${1:-main}"
@@ -124,7 +126,7 @@ tship() {
   read "ok?Open PR with 'gh pr create --fill'? [y/N] "
   [[ "$ok" =~ ^[Yy] ]] || return 1
   gh pr create --fill || return 1
-  echo "PR open. When merged, run: xlaude delete"
+  echo "PR open. When merged, run: wtd <name>"
 }
 tsetup() {
   # 1) conductor.json (conductor.build format) — runs scripts.setup with CONDUCTOR_ROOT_PATH

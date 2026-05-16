@@ -225,25 +225,19 @@ Leader: `␣`. Custom `lazy.nvim` setup (not LazyVim). Atom One via `onedarkpro.
 | `gm`   | `git checkout main && git pull`         |
 | `wip`  | `git commit -m "wip" --no-verify`       |
 
-### xlaude / conductor-style task aliases
+### Worktree aliases (Claude-native)
 
-See [XCLAUDE.md](XCLAUDE.md) for the full workflow.
+See [WORKTREES.md](WORKTREES.md) for the full handbook.
 
-| Alias / fn    | Action                                                        |
-|---------------|---------------------------------------------------------------|
-| `task <name>` | `xlaude create <name>` then `xlaude open <name>`              |
-| `tasks`       | `xlaude list`                                                 |
-| `tcd <name>`  | `cd` into worktree                                            |
-| `treview`     | tmux split with `git diff main...HEAD` + shell                |
-| `tship`       | `git status -s` + prompt + `gh pr create --fill`              |
-| `tsetup`      | run `.conductor/setup` or `.xlaude/setup` if executable       |
-| `tdash`       | `xlaude dashboard`                                            |
-| `xl`          | `xlaude list`                                                 |
-| `xc`          | `xlaude create`                                               |
-| `xo`          | `xlaude open`                                                 |
-| `xd`          | `xlaude delete`                                               |
-| `xcd <name>`  | `cd` into worktree                                            |
-| `xv <name>`   | `nvim` worktree root                                          |
+| Alias / fn    | Action                                                                       |
+|---------------|------------------------------------------------------------------------------|
+| `wt <name>`   | `claude --worktree <name> --permission-mode auto` (new tmux window if in tmux) |
+| `wtl`         | `git worktree list`                                                          |
+| `wtd <name>`  | `git worktree remove` + delete `worktree-<name>` branch                      |
+| `wtc`         | fzf-pick a worktree; open in new tmux window or `cd`                         |
+| `treview`     | tmux split with `git diff main...HEAD` + shell                               |
+| `tship`       | `git status -s` + prompt + `gh pr create --fill`                             |
+| `tsetup`      | run `conductor.json` (`scripts.setup`) or `.conductor/setup` / `.xlaude/setup` hook |
 
 ### Misc aliases
 
