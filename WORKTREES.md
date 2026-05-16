@@ -1,112 +1,137 @@
 # Worktrees handbook
 
-Running multiple Claude Code sessions in parallel — one per feature branch — using Claude Code's **built-in** `--worktree` flag plus a thin layer of zsh + tmux. No external tooling, no state file, no nested-tmux workarounds.
+Two clear entry points, automatic setup, two-tier cleanup. Built on plain `git worktree` + `gh` + a small zsh layer. No external state, no daemons.
 
-(Supersedes the prior xlaude-based setup. `XCLAUDE.md` was deleted; this is its replacement.)
+## Why this shape
 
-## Why this over xlaude
+The two workflows that come up over and over:
 
-`claude --worktree <name>` is shipped with Claude Code itself and handles:
+1. **Start a new feature** → `wt <name>`
+2. **Pull down an existing remote PR to play with / review / iterate** → `wtp <pr>`
 
-- Creating the git worktree (at `<repo>/.claude/worktrees/<name>`)
-- Creating the branch (`worktree-<name>`)
-- cd'ing into it and starting Claude
+Both create a worktree at `<repo>/.claude/worktrees/<name>`, run `tsetup` to wire `.env` files + install dependencies, then launch Claude inside it. The new worktree opens in its own tmux window so the source session stays put.
 
-No separate state file to drift, no `xlaude clean`, no global tmux binding pollution, no "tdash Enter dies in nested tmux" gotcha. The `git worktree list` output is the single source of truth.
+When done, two cleanup levels: **archive** keeps the branch (you might come back), **delete** removes the branch too (PR merged, branch dead).
 
-## Prerequisites
+## Prerequisites (already installed)
 
-Already on this machine:
-
-- `claude` (Claude Code CLI 2.x) — `cl` alias in `.zshrc`
+- `claude` (Claude Code CLI 2.x)
 - `git` ≥ 2.36
-- `gh` — used by `tship` for PR creation
-- `jq` — used by `tsetup` for `conductor.json` parsing
-- `fzf` — used by `wtc`
+- `gh` (for `wtp`)
+- `jq` (for `wtp` + `tsetup` conductor.json parsing)
+- `fzf` (for `wtc`)
 - `tmux`
 
 ## Command reference
 
-| Alias / fn      | Action                                                                                  |
-|-----------------|-----------------------------------------------------------------------------------------|
-| `wt <name>`     | `claude --worktree <name> --permission-mode auto`. Inside tmux → new window in current session. |
-| `wtl`           | `git worktree list`                                                                     |
-| `wtd <name>`    | `git worktree remove <repo>/.claude/worktrees/<name>` + `git branch -d worktree-<name>` |
-| `wtc`           | `fzf`-pick from `git worktree list`; open in new tmux window or `cd`                    |
-| `treview [base]`| Inside tmux, split current window into `git diff <base>...HEAD` + shell (default `main`)|
-| `tship`         | `git status -s`, prompt, then `gh pr create --fill`                                     |
-| `tsetup`        | Run `conductor.json` (`scripts.setup`) or `.conductor/setup` / `.xlaude/setup` hook. Sets `$CONDUCTOR_ROOT_PATH` to the main worktree. |
+| Alias / fn          | What it does                                                                        |
+|---------------------|-------------------------------------------------------------------------------------|
+| `wt <name> [base]`  | New worktree on branch `<name>` off `[base]` (default `main`). Runs `tsetup`. Launches Claude. |
+| `wtp <pr>`          | Fetches PR (number or URL) into a worktree on the PR's head branch. Runs `tsetup`. Launches Claude. |
+| `wtl`               | `git worktree list`                                                                 |
+| `wtc`               | fzf-pick an existing worktree, open it (new tmux window / `cd`)                     |
+| `wta <name>`        | **Archive** — remove the worktree dir, **keep** the branch                          |
+| `wtd <name>`        | **Delete** — remove the worktree dir **and** the branch (post-merge cleanup)        |
+| `treview [base]`    | Inside tmux, split into `git diff <base>...HEAD` + shell (default base `main`)      |
+| `tship`             | `git status -s` + prompt + `gh pr create --fill`                                    |
+| `tsetup`            | Run repo bootstrap (see below). Auto-invoked by `wt` / `wtp`; safe to re-run manually. |
 
-## Conventions (decided by Claude Code, not us)
+## Setup: how `tsetup` decides what to run
 
-- **Worktree path**: `<repo>/.claude/worktrees/<name>` — siblings of one another, inside the repo root. Not at `../<repo>-<name>` like xlaude/conductor did.
-- **Branch name**: `worktree-<name>` — prefixed. So `wt foo` creates branch `worktree-foo`.
-- **`.claude/` in the repo**: most repos that use Claude Code already have `.claude/` either gitignored or treated as untracked. Worktrees live inside it; `git worktree remove` cleans them up. Add `.claude/worktrees/` to `.gitignore` if your repo is strict about untracked files.
+In order of precedence:
 
-## Typical workflow
+1. **`conductor.json`** (conductor.build format) at the repo root with `scripts.setup`. Runs it with `$CONDUCTOR_ROOT_PATH` set to the main worktree's path. Best for monorepos that need precise control (e.g. dt-apps symlinking six `.env` files).
+2. **Executable hook** at `.conductor/setup`, `.xlaude/setup`, or `.wt/setup`. Whatever you want.
+3. **Smart fallback** (no config needed):
+   - Symlinks every `.env`, `.env.local`, `.env.development` found in the main worktree (skipping `node_modules` / `.git`) into the same relative path in the new worktree.
+   - Detects the package manager via lockfile and runs install:
+     - `pnpm-lock.yaml` → `pnpm install`
+     - `yarn.lock` → `yarn install`
+     - else → `npm install`
+
+So a plain Node repo with a `.env` at the root needs no extra config — `wt foo` will land you in a worktree with `.env` symlinked and `node_modules` installed.
+
+## Conventions
+
+- **Worktree path**: `<repo>/.claude/worktrees/<name>` (siblings under `.claude/worktrees/`)
+- **Branch name**: plain `<name>` — no prefix. For `wtp`, the branch name is the PR's head ref name.
+- **`.claude/worktrees/`**: if your repo cares, add it to `.gitignore`. `git worktree` itself doesn't list these dirs in `git status`.
+
+## Typical workflows
+
+### Start a new feature
 
 ```sh
-cd ~/Repos/github.com/Digital-Tvilling/dt-apps
-wt auth-rewrite               # new tmux window, claude launches in worktree
-# … work in that window …
-treview                       # tmux split with diff against main + shell
-tship                         # gh pr create --fill (after committing)
-# after merge:
-wtd auth-rewrite              # cleans worktree + deletes branch
+cd ~/Repos/.../dt-apps
+wt fix-stripe-webhook         # tmux opens a new window; tsetup runs; Claude launches
+# … code, commit, push …
+tship                         # gh pr create --fill
+# … PR merges …
+wtd fix-stripe-webhook        # cleanup: worktree + branch gone
 ```
 
-### Switching between in-flight worktrees
+### Look at a colleague's PR
+
+```sh
+cd ~/Repos/.../dt-apps
+wtp 1640                      # fetches PR #1640 head; tsetup runs; Claude launches in worktree
+# … review, run tests, comment on the PR …
+wta calcifer-attachments      # archive the worktree dir but keep the branch around
+```
+
+### Switch between in-flight worktrees
 
 ```sh
 wtl                           # see what's open
-wtc                           # fzf-pick, jumps you into a new tmux window
+wtc                           # fzf-pick, jumps to a new tmux window
 ```
 
-### Per-repo setup (e.g. dt-apps)
+## Cleanup choice: archive vs delete
 
-If the repo has a `conductor.json` (conductor.build format) at the root:
+| You want to…                                  | Use      |
+|-----------------------------------------------|----------|
+| Free disk, but keep the branch (resume later) | `wta`    |
+| PR merged, branch can die                     | `wtd`    |
 
-```json
-{
-  "scripts": {
-    "setup": "npm install && ln -sf \"$CONDUCTOR_ROOT_PATH/apps/foo/.env\" apps/foo/.env"
-  }
-}
-```
+`wtd` uses `git branch -d` (refuses to delete unmerged branches). If you're sure, the hint message tells you to follow up with `git branch -D <name>`.
 
-then in a freshly-created worktree, run `tsetup` — it picks up the script, exports `$CONDUCTOR_ROOT_PATH` (the main worktree path via `git worktree list`), and executes it. Alternatives: executable `.conductor/setup` or `.xlaude/setup` at the repo root.
-
-## Testing
-
-Drop into a throwaway repo to confirm the wiring:
+## Test the wiring
 
 ```sh
 cd /tmp && rm -rf wt-test && mkdir wt-test && cd wt-test
 git init -q && git checkout -q -b main
-git commit --allow-empty -q -m init
+echo "FOO=bar" > .env
+echo '{"name":"test","scripts":{}}' > package.json
+git add . && git commit -q -m init
 
-type wt wtl wtd wtc                # all defined
-wt scratch &                       # creates .claude/worktrees/scratch (& only for test)
-sleep 1; jobs %1 >/dev/null && kill %1
-git worktree list                  # shows .claude/worktrees/scratch on branch worktree-scratch
-wtd scratch                        # removes worktree + branch
-git worktree list                  # back to just main
+type wt wtp wtl wtc wta wtd tsetup    # all defined
+
+wt scratch &                          # new feature worktree
+sleep 2
+git worktree list                     # shows .claude/worktrees/scratch on branch 'scratch'
+ls -la .claude/worktrees/scratch/.env # .env should be a symlink to ../../../.env
+
+kill %1 2>/dev/null
+wta scratch                           # archive: branch kept
+git branch | grep scratch             # 'scratch' still listed
+wtd scratch                           # delete: branch gone
+git branch | grep scratch || echo gone
+
 cd / && rm -rf /tmp/wt-test
 ```
 
-In normal use you'd never use `&` — just `wt scratch` and a new tmux window opens with Claude inside.
-
 ## Troubleshooting
 
-| Symptom                                    | Fix                                                                                       |
-|--------------------------------------------|-------------------------------------------------------------------------------------------|
-| `wt` says "branch already exists"          | Either delete the old branch (`git branch -D worktree-<name>`) or pick a different name. |
-| `wtd` says worktree has uncommitted changes | Commit, stash, or `git worktree remove --force` manually. The function intentionally fails loud. |
-| `git worktree list` shows a stale entry    | `git worktree prune` — git's built-in cleanup, no separate state to reconcile.            |
-| Claude Code launched in the wrong dir      | Run `wt` from the repo root, not a subdir.                                                |
+| Symptom | Fix |
+|---|---|
+| `wt foo` says "branch already exists" | Either pick a new name or use `wt foo foo` to attach a worktree to that existing branch. |
+| `wtp <pr>` fails on a fork PR | The `refs/pull/N/head` fetch handles forks too. If it doesn't, check `gh auth status`. |
+| `wtd` won't delete branch | `git branch -d` refuses unmerged branches. Follow up with `git branch -D <name>` if you're sure. |
+| `tsetup` ran but `npm install` was slow | That's `npm install` doing its thing in the new worktree. To skip, drop a `.wt/setup` executable that does the lighter setup you want. |
+| Stale entry in `git worktree list` | `git worktree prune` |
 
 ## When NOT to use this
 
-- **One-line edits / quick scripts.** Just edit on `main`.
-- **Refactors that span the whole repo concurrently.** A single Claude session with good context usually beats N split sessions that have to merge later.
-- **Repos with monolithic build state** (heavy CMake, per-checkout machine setup). Per-worktree setup cost negates the parallelism. Make `tsetup` cheap or skip the pattern.
+- **One-line edits.** Just edit on `main`.
+- **Refactors touching the whole repo.** A single Claude session with full context usually beats N split sessions.
+- **Repos where `npm install` is enormous and `.env` is fine in-place.** The smart fallback is convenient; if it's not in your case, drop a `.wt/setup` that does the minimum or set `scripts.setup` in `conductor.json` to `:` (no-op).

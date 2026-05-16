@@ -74,32 +74,78 @@ if command -v fd >/dev/null 2>&1; then
   export FZF_ALT_C_COMMAND='fd --type d --hidden --follow --exclude .git'
 fi
 
-# Claude-native worktree workflow (built on `claude --worktree`)
-# Convention: claude creates worktrees at <repo>/.claude/worktrees/<name>
-# with branch worktree-<name>. See WORKTREES.md for the full handbook.
+# Claude-native worktree workflow.
+# Worktrees land at <repo>/.claude/worktrees/<name>, branch = <name>.
+# tsetup is invoked automatically after creation. See WORKTREES.md.
 
-# wt <name> — create a fresh worktree + launch claude in it.
-# Inside tmux: spawns a new window so the original session stays put.
-wt() {
-  local name="${1:?usage: wt <name>}"
-  shift
+# _wt_open <name> [base] — internal: create-or-attach, run tsetup, launch claude.
+_wt_open() {
+  local name="$1" base="${2:-main}"
+  local repo_root wt_path
+  repo_root=$(git rev-parse --show-toplevel) || return 1
+  wt_path="$repo_root/.claude/worktrees/$name"
+
+  if [[ ! -d "$wt_path" ]]; then
+    if git -C "$repo_root" show-ref --verify --quiet "refs/heads/$name"; then
+      git -C "$repo_root" worktree add "$wt_path" "$name" || return 1
+    else
+      git -C "$repo_root" worktree add -b "$name" "$wt_path" "$base" || return 1
+    fi
+  fi
+
+  ( cd "$wt_path" && tsetup ) || echo "wt: tsetup returned non-zero (continuing)"
+
   if [[ -n "$TMUX" ]]; then
-    tmux new-window -n "$name" "exec claude --worktree '$name' --permission-mode auto $*"
+    tmux new-window -n "$name" -c "$wt_path" "exec claude --permission-mode auto"
   else
-    claude --worktree "$name" --permission-mode auto "$@"
+    ( cd "$wt_path" && claude --permission-mode auto )
   fi
 }
 
-# wtl — list git worktrees (git is the source of truth)
+# wt <name> [base] — new feature worktree from <base> (default main).
+wt() {
+  local name="${1:?usage: wt <name> [base-ref]}"
+  local base="${2:-main}"
+  _wt_open "$name" "$base"
+}
+
+# wtp <pr> — new worktree from an existing remote PR (number or URL).
+wtp() {
+  local pr="${1:?usage: wtp <pr-number-or-url>}"
+  local repo_root pr_num head_ref
+  repo_root=$(git rev-parse --show-toplevel) || return 1
+  if ! command -v gh >/dev/null || ! command -v jq >/dev/null; then
+    echo "wtp: needs gh + jq"; return 1
+  fi
+  pr_num=$(gh pr view "$pr" --json number -q .number 2>/dev/null)
+  head_ref=$(gh pr view "$pr" --json headRefName -q .headRefName 2>/dev/null)
+  if [[ -z "$pr_num" || -z "$head_ref" ]]; then
+    echo "wtp: failed to resolve PR '$pr'"; return 1
+  fi
+  echo "wtp: fetching PR #$pr_num ($head_ref)…"
+  git -C "$repo_root" fetch origin "refs/pull/$pr_num/head:$head_ref" 2>&1 | tail -3
+  _wt_open "$head_ref" "$head_ref"
+}
+
+# wtl — list git worktrees (source of truth)
 alias wtl='git worktree list'
 
-# wtd <name> — remove the worktree at .claude/worktrees/<name> + delete its branch.
+# wta <name> — archive: remove worktree dir, keep branch (resumable later).
+wta() {
+  local name="${1:?usage: wta <name>}"
+  local repo_root
+  repo_root=$(git rev-parse --show-toplevel) || return 1
+  git -C "$repo_root" worktree remove "$repo_root/.claude/worktrees/$name"
+}
+
+# wtd <name> — delete: remove worktree dir + branch (post-merge cleanup).
 wtd() {
   local name="${1:?usage: wtd <name>}"
   local repo_root
   repo_root=$(git rev-parse --show-toplevel) || return 1
   git -C "$repo_root" worktree remove "$repo_root/.claude/worktrees/$name" || return 1
-  git -C "$repo_root" branch -d "worktree-$name" 2>/dev/null
+  git -C "$repo_root" branch -d "$name" 2>/dev/null || \
+    echo "wtd: branch '$name' has unmerged commits; run 'git branch -D $name' if you're sure"
 }
 
 # wtc — fzf-pick an existing worktree; opens in new tmux window or cd.
@@ -128,8 +174,11 @@ tship() {
   gh pr create --fill || return 1
   echo "PR open. When merged, run: wtd <name>"
 }
+# tsetup — bootstrap a fresh worktree.
+#   1) conductor.json scripts.setup with CONDUCTOR_ROOT_PATH=main worktree
+#   2) executable .conductor/setup, .xlaude/setup, or .wt/setup
+#   3) smart fallback: symlink .env files from main worktree + run package install
 tsetup() {
-  # 1) conductor.json (conductor.build format) — runs scripts.setup with CONDUCTOR_ROOT_PATH
   if [[ -f conductor.json ]] && command -v jq >/dev/null; then
     local setup_cmd
     setup_cmd=$(jq -r '.scripts.setup // empty' conductor.json)
@@ -137,22 +186,43 @@ tsetup() {
       local main_wt
       main_wt=$(git worktree list --porcelain 2>/dev/null | awk '/^worktree / { print $2; exit }')
       [[ -z "$main_wt" ]] && main_wt="$(pwd)"
-      echo "running conductor.json setup (CONDUCTOR_ROOT_PATH=$main_wt)…"
+      echo "tsetup: conductor.json scripts.setup (CONDUCTOR_ROOT_PATH=$main_wt)"
       CONDUCTOR_ROOT_PATH="$main_wt" eval "$setup_cmd"
       return $?
     fi
   fi
-  # 2) executable hook fallback
   local script
-  for script in .conductor/setup .xlaude/setup; do
+  for script in .conductor/setup .xlaude/setup .wt/setup; do
     if [[ -x "$script" ]]; then
-      echo "running $script…"
+      echo "tsetup: $script"
       "$script"
       return $?
     fi
   done
-  echo "no conductor.json, .conductor/setup, or .xlaude/setup in $(pwd)"
-  return 1
+  # Smart fallback: symlink .env files + run package install.
+  local main_wt cwd env_count=0
+  main_wt=$(git worktree list --porcelain 2>/dev/null | awk '/^worktree / { print $2; exit }')
+  cwd=$(pwd)
+  if [[ -n "$main_wt" && "$main_wt" != "$cwd" ]]; then
+    while IFS= read -r env_file; do
+      local rel="${env_file#$main_wt/}"
+      local dest="$cwd/$rel"
+      [[ -e "$dest" ]] && continue
+      mkdir -p "$(dirname "$dest")"
+      ln -sf "$env_file" "$dest" && env_count=$((env_count+1))
+    done < <(find "$main_wt" -maxdepth 5 \( -name '.env' -o -name '.env.local' -o -name '.env.development' \) \
+             -not -path '*/node_modules/*' -not -path '*/.git/*' 2>/dev/null)
+    [[ $env_count -gt 0 ]] && echo "tsetup: linked $env_count .env file(s) from main worktree"
+  fi
+  if [[ -f package.json ]]; then
+    if [[ -f pnpm-lock.yaml ]] && command -v pnpm >/dev/null; then
+      echo "tsetup: pnpm install"; pnpm install
+    elif [[ -f yarn.lock ]] && command -v yarn >/dev/null; then
+      echo "tsetup: yarn install"; yarn install
+    elif command -v npm >/dev/null; then
+      echo "tsetup: npm install"; npm install
+    fi
+  fi
 }
 
 # Directory aliases

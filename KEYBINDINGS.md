@@ -225,19 +225,21 @@ Leader: `␣`. Custom `lazy.nvim` setup (not LazyVim). Atom One via `onedarkpro.
 | `gm`   | `git checkout main && git pull`         |
 | `wip`  | `git commit -m "wip" --no-verify`       |
 
-### Worktree aliases (Claude-native)
+### Worktree aliases
 
 See [WORKTREES.md](WORKTREES.md) for the full handbook.
 
-| Alias / fn    | Action                                                                       |
-|---------------|------------------------------------------------------------------------------|
-| `wt <name>`   | `claude --worktree <name> --permission-mode auto` (new tmux window if in tmux) |
-| `wtl`         | `git worktree list`                                                          |
-| `wtd <name>`  | `git worktree remove` + delete `worktree-<name>` branch                      |
-| `wtc`         | fzf-pick a worktree; open in new tmux window or `cd`                         |
-| `treview`     | tmux split with `git diff main...HEAD` + shell                               |
-| `tship`       | `git status -s` + prompt + `gh pr create --fill`                             |
-| `tsetup`      | run `conductor.json` (`scripts.setup`) or `.conductor/setup` / `.xlaude/setup` hook |
+| Alias / fn         | Action                                                                      |
+|--------------------|-----------------------------------------------------------------------------|
+| `wt <name> [base]` | New feature worktree from `[base]` (default `main`). Auto-runs `tsetup`, launches Claude. |
+| `wtp <pr>`         | New worktree from a remote PR (number or URL). Auto-runs `tsetup`, launches Claude. |
+| `wtl`              | `git worktree list`                                                         |
+| `wtc`              | fzf-pick a worktree; open in new tmux window or `cd`                        |
+| `wta <name>`       | Archive: remove worktree dir, keep branch                                   |
+| `wtd <name>`       | Delete: remove worktree dir AND branch (post-merge cleanup)                 |
+| `treview`          | tmux split with `git diff main...HEAD` + shell                              |
+| `tship`            | `git status -s` + prompt + `gh pr create --fill`                            |
+| `tsetup`           | bootstrap: conductor.json → `.conductor/.xlaude/.wt/setup` hook → smart fallback (symlink `.env*` from main + `pnpm/yarn/npm install`) |
 
 ### Misc aliases
 
