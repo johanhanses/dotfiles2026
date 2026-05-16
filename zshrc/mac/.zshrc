@@ -93,11 +93,19 @@ alias tasks='xlaude list'
 # `tdash` — xlaude v0.7's dashboard uses `tmux attach-session` for Enter, which
 # tmux refuses when $TMUX is set. Unsetting $TMUX lets the inner attach take
 # over the current terminal; the outer tmux is restored on detach (Ctrl+Q).
+# xlaude also pollutes the tmux server with `bind-key -n C-q/C-t/C-o` (no
+# session target), so those keys silently take over your outer sessions too —
+# clean them up after the dashboard exits.
 tdash() {
   if [[ -n "$TMUX" ]]; then
     env -u TMUX xlaude dashboard
   else
     xlaude dashboard
+  fi
+  if command -v tmux >/dev/null && tmux list-clients 2>/dev/null | grep -q .; then
+    tmux unbind-key -n C-q 2>/dev/null
+    tmux unbind-key -n C-t 2>/dev/null
+    tmux unbind-key -n C-o 2>/dev/null
   fi
 }
 tcd() {

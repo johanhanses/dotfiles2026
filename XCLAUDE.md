@@ -108,7 +108,11 @@ tdash                # interactive TUI; pick which one to focus
 
 Two-pane layout: project list on the left, session details on the right. The status footer always shows the current bindings; this table is just for reference.
 
-> **Nested-tmux gotcha**: xlaude v0.7's `Enter` action calls `tmux attach-session`, which tmux refuses inside an existing session — you see a flash (the "sessions should be nested with care" warning) and nothing happens. The `tdash` shell function in `.zshrc` works around this by invoking xlaude with `$TMUX` unset (`env -u TMUX xlaude dashboard`) so the inner `tmux attach` can take over the current terminal. When you detach (`Ctrl+Q`), you return to your outer tmux session. If you call `xlaude dashboard` directly instead of `tdash`, you'll hit the original bug.
+> **Nested-tmux gotcha**: xlaude v0.7's `Enter` action calls `tmux attach-session`, which tmux refuses inside an existing session — you see a flash (the "sessions should be nested with care" warning) and nothing happens. The `tdash` shell function in `.zshrc` works around this by invoking xlaude with `$TMUX` unset (`env -u TMUX xlaude dashboard`) so the inner `tmux attach` can take over the current terminal.
+>
+> **Ctrl+Q does NOT return you to the dashboard.** Despite the status bar saying "Ctrl+Q: Dashboard", xlaude just calls `detach-client` and exits — there is no return-to-dashboard flow. You'll land back at the shell prompt outside any tmux session. Re-attach with `ta`/`tmux a` or simply run `tdash` again.
+>
+> **Server-wide binding pollution**: xlaude binds `C-q`, `C-t`, and `C-o` globally on the tmux server (no session target), so they take over **every** session, not just the xlaude one. The `tdash` wrapper unbinds them after the dashboard exits to restore normal behavior. If you call `xlaude dashboard` directly instead of `tdash`, those bindings will persist across all your tmux work until you manually `tmux unbind-key -n C-q/C-t/C-o`.
 
 | Key       | Action                                                       |
 |-----------|--------------------------------------------------------------|
