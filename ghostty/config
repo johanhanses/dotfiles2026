@@ -4,7 +4,7 @@ font-style = Medium
 font-thicken = true
 adjust-cell-height = 2
 
-theme = light:Atom One Light,dark:Atom One Dark
+theme = light:atom-one-light,dark:atom-one-dark
 
 cursor-style = block
 cursor-style-blink = true
