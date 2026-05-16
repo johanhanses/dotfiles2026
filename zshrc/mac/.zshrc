@@ -78,25 +78,31 @@ fi
 # Worktrees land at <repo>/.claude/worktrees/<name>, branch = <name>.
 # tsetup is invoked automatically after creation. See WORKTREES.md.
 
+# _wt_main — print the main worktree's path (works from inside any worktree).
+_wt_main() {
+  git worktree list --porcelain 2>/dev/null | awk '/^worktree / { print $2; exit }'
+}
+
 # _wt_open <name> [base] — internal: create-or-attach, run tsetup, launch claude.
 _wt_open() {
   local name="$1" base="${2:-main}"
-  local repo_root wt_path
-  repo_root=$(git rev-parse --show-toplevel) || return 1
-  wt_path="$repo_root/.claude/worktrees/$name"
+  local main_root wt_path
+  main_root=$(_wt_main)
+  [[ -z "$main_root" ]] && { echo "wt: not inside a git repo"; return 1; }
+  wt_path="$main_root/.claude/worktrees/$name"
 
   if [[ ! -d "$wt_path" ]]; then
-    if git -C "$repo_root" show-ref --verify --quiet "refs/heads/$name"; then
-      git -C "$repo_root" worktree add "$wt_path" "$name" || return 1
+    if git -C "$main_root" show-ref --verify --quiet "refs/heads/$name"; then
+      git -C "$main_root" worktree add "$wt_path" "$name" || return 1
     else
-      git -C "$repo_root" worktree add -b "$name" "$wt_path" "$base" || return 1
+      git -C "$main_root" worktree add -b "$name" "$wt_path" "$base" || return 1
     fi
   fi
 
   ( cd "$wt_path" && tsetup ) || echo "wt: tsetup returned non-zero (continuing)"
 
   if [[ -n "$TMUX" ]]; then
-    tmux new-window -n "$name" -c "$wt_path" "exec claude --permission-mode auto"
+    tmux new-window -n "${name:t}" -c "$wt_path" "exec claude --permission-mode auto"
   else
     ( cd "$wt_path" && claude --permission-mode auto )
   fi
@@ -112,8 +118,9 @@ wt() {
 # wtp <pr> — new worktree from an existing remote PR (number or URL).
 wtp() {
   local pr="${1:?usage: wtp <pr-number-or-url>}"
-  local repo_root pr_num head_ref
-  repo_root=$(git rev-parse --show-toplevel) || return 1
+  local main_root pr_num head_ref
+  main_root=$(_wt_main)
+  [[ -z "$main_root" ]] && { echo "wtp: not inside a git repo"; return 1; }
   if ! command -v gh >/dev/null || ! command -v jq >/dev/null; then
     echo "wtp: needs gh + jq"; return 1
   fi
@@ -123,7 +130,7 @@ wtp() {
     echo "wtp: failed to resolve PR '$pr'"; return 1
   fi
   echo "wtp: fetching PR #$pr_num ($head_ref)…"
-  git -C "$repo_root" fetch origin "refs/pull/$pr_num/head:$head_ref" 2>&1 | tail -3
+  git -C "$main_root" fetch origin "refs/pull/$pr_num/head:$head_ref" 2>&1 | tail -3
   _wt_open "$head_ref" "$head_ref"
 }
 
@@ -133,18 +140,25 @@ alias wtl='git worktree list'
 # wta <name> — archive: remove worktree dir, keep branch (resumable later).
 wta() {
   local name="${1:?usage: wta <name>}"
-  local repo_root
-  repo_root=$(git rev-parse --show-toplevel) || return 1
-  git -C "$repo_root" worktree remove "$repo_root/.claude/worktrees/$name"
+  local main_root wt_path
+  main_root=$(_wt_main)
+  [[ -z "$main_root" ]] && { echo "wta: not inside a git repo"; return 1; }
+  wt_path="$main_root/.claude/worktrees/$name"
+  # If we're sitting inside the worktree we're about to remove, step out.
+  case "$(pwd)/" in "$wt_path"/*) cd "$main_root" ;; esac
+  git -C "$main_root" worktree remove "$wt_path"
 }
 
 # wtd <name> — delete: remove worktree dir + branch (post-merge cleanup).
 wtd() {
   local name="${1:?usage: wtd <name>}"
-  local repo_root
-  repo_root=$(git rev-parse --show-toplevel) || return 1
-  git -C "$repo_root" worktree remove "$repo_root/.claude/worktrees/$name" || return 1
-  git -C "$repo_root" branch -d "$name" 2>/dev/null || \
+  local main_root wt_path
+  main_root=$(_wt_main)
+  [[ -z "$main_root" ]] && { echo "wtd: not inside a git repo"; return 1; }
+  wt_path="$main_root/.claude/worktrees/$name"
+  case "$(pwd)/" in "$wt_path"/*) cd "$main_root" ;; esac
+  git -C "$main_root" worktree remove "$wt_path" || return 1
+  git -C "$main_root" branch -d "$name" 2>/dev/null || \
     echo "wtd: branch '$name' has unmerged commits; run 'git branch -D $name' if you're sure"
 }
 
