@@ -137,29 +137,44 @@ wtp() {
 # wtl — list git worktrees (source of truth)
 alias wtl='git worktree list'
 
-# wta <name> — archive: remove worktree dir, keep branch (resumable later).
+# wta [-f] <name> — archive: remove worktree dir, keep branch.
+# -f/--force: pass through to git worktree remove (drops untracked/modified files).
 wta() {
-  local name="${1:?usage: wta <name>}"
+  local force=""
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      -f|--force) force="--force"; shift ;;
+      *) break ;;
+    esac
+  done
+  local name="${1:?usage: wta [-f] <name>}"
   local main_root wt_path
   main_root=$(_wt_main)
   [[ -z "$main_root" ]] && { echo "wta: not inside a git repo"; return 1; }
   wt_path="$main_root/.claude/worktrees/$name"
-  # If we're sitting inside the worktree we're about to remove, step out.
   case "$(pwd)/" in "$wt_path"/*) cd "$main_root" ;; esac
-  git -C "$main_root" worktree remove "$wt_path"
+  git -C "$main_root" worktree remove ${force:+$force} "$wt_path"
 }
 
-# wtd <name> — delete: remove worktree dir + branch (post-merge cleanup).
+# wtd [-f] <name> — delete: remove worktree dir + branch (post-merge cleanup).
+# -f/--force: pass through to git worktree remove AND use git branch -D.
 wtd() {
-  local name="${1:?usage: wtd <name>}"
+  local force="" branch_flag="-d"
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      -f|--force) force="--force"; branch_flag="-D"; shift ;;
+      *) break ;;
+    esac
+  done
+  local name="${1:?usage: wtd [-f] <name>}"
   local main_root wt_path
   main_root=$(_wt_main)
   [[ -z "$main_root" ]] && { echo "wtd: not inside a git repo"; return 1; }
   wt_path="$main_root/.claude/worktrees/$name"
   case "$(pwd)/" in "$wt_path"/*) cd "$main_root" ;; esac
-  git -C "$main_root" worktree remove "$wt_path" || return 1
-  git -C "$main_root" branch -d "$name" 2>/dev/null || \
-    echo "wtd: branch '$name' has unmerged commits; run 'git branch -D $name' if you're sure"
+  git -C "$main_root" worktree remove ${force:+$force} "$wt_path" || return 1
+  git -C "$main_root" branch "$branch_flag" "$name" 2>/dev/null || \
+    echo "wtd: branch '$name' had unmerged commits; rerun 'wtd -f $name' to force-delete it"
 }
 
 # wtc — fzf-pick an existing worktree; opens in new tmux window or cd.
