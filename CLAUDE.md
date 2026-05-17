@@ -17,6 +17,7 @@ Only these directories ship configs:
 - `btop/` — btop with `tokyo-night` theme
 - `newsboat/` — RSS reader
 - `matterhorn/` — Mattermost TUI client
+- `claude/` — Claude Code `settings.json` only (symlinked to `~/.claude/settings.json`). The rest of `~/.claude/` is runtime state (sessions, plans, image cache) and intentionally not tracked.
 
 ## Install & Setup
 

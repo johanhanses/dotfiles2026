@@ -1,0 +1,36 @@
+{
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
+  "permissions": {
+    "defaultMode": "auto"
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "bash $HOME/.claude/statusline-command.sh"
+  },
+  "enabledPlugins": {
+    "typescript-lsp@claude-plugins-official": true,
+    "lua-lsp@claude-plugins-official": true
+  },
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "printf 'display notification \"\" with title \"Claude finished\" subtitle \"%s\" sound name \"Glass\"' \"$(basename \"$PWD\")\" | osascript"
+          }
+        ]
+      }
+    ]
+  },
+  "alwaysThinkingEnabled": true,
+  "effortLevel": "high",
+  "promptSuggestionEnabled": false,
+  "skipDangerousModePermissionPrompt": true,
+  "theme": "auto",
+  "verbose": true,
+  "skipAutoPermissionPrompt": true
+}

@@ -40,6 +40,12 @@ ln -sf $DOTFILES/newsboat $HOME/.config/newsboat
 rm -rf $HOME/.config/matterhorn
 ln -sf $DOTFILES/matterhorn $HOME/.config/matterhorn
 
+# Claude Code (~/.claude/ contains runtime state like projects/,
+# image-cache/, plans/ that we don't track — just symlink the config bits.)
+mkdir -p $HOME/.claude
+ln -sf $DOTFILES/claude/settings.json $HOME/.claude/settings.json
+ln -sf $DOTFILES/claude/statusline-command.sh $HOME/.claude/statusline-command.sh
+
 echo "dotfiles2026 symlinks installed"
 
 # Tmux plugin manager (tpm)
