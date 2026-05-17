@@ -102,9 +102,9 @@ _wt_open() {
   ( cd "$wt_path" && tsetup ) || echo "wt: tsetup returned non-zero (continuing)"
 
   if [[ -n "$TMUX" ]]; then
-    tmux new-window -n "${name:t}" -c "$wt_path" "exec claude --permission-mode auto"
+    tmux new-window -n "${name:t}" -c "$wt_path" "exec claude --permission-mode plan"
   else
-    ( cd "$wt_path" && claude --permission-mode auto )
+    ( cd "$wt_path" && claude --permission-mode plan )
   fi
 }
 
