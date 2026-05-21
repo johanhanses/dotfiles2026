@@ -62,7 +62,7 @@ Prefix `⌃a`. tpm plugins: `tmux-sensible`, `tmux-yank`. Atom One Dark/Light th
 |-----------------------|-----------------------------------------------------------------|
 | `⌃a`                  | Prefix                                                          |
 | `<prefix>+r`          | Reload config + sync theme (tmux + Mattermost)                  |
-| `<prefix>+T`          | Sesh popup — fuzzy session picker (cross-repo jump)             |
+| `<prefix>+t`          | Sesh popup — fuzzy session picker (cross-repo jump)             |
 | `<prefix>+s`          | Built-in `choose-tree` session picker                           |
 | `<prefix>+\|`         | Split horizontally                                              |
 | `<prefix>+-`          | Split vertically                                                |

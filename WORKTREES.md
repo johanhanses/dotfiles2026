@@ -9,7 +9,7 @@ The two workflows that come up over and over:
 1. **Start a new feature** → `wt <name>`
 2. **Pull down an existing remote PR to play with / review / iterate** → `wtp <pr>`
 
-Both create a worktree at `<repo>/.claude/worktrees/<name>`, run `tsetup` to wire `.env` files + install dependencies, then launch Claude inside it. The worktree opens as a **window inside the per-repo tmux session** (session name = repo basename). Cross-repo jumping is `<prefix>+T` (sesh popup) or `wts` from any shell.
+Both create a worktree at `<repo>/.claude/worktrees/<name>`, run `tsetup` to wire `.env` files + install dependencies, then launch Claude inside it. The worktree opens as a **window inside the per-repo tmux session** (session name = repo basename). Cross-repo jumping is `<prefix>+t` (sesh popup) or `wts` from any shell.
 
 When done, two cleanup levels: **archive** keeps the branch (you might come back), **delete** removes the branch too (PR merged, branch dead).
 
@@ -52,7 +52,7 @@ Each session stays well under tmux's 1–9 quick-jump range. Cross-repo travel g
 
 | Tmux keybind        | Action                                                                              |
 |---------------------|-------------------------------------------------------------------------------------|
-| `<prefix>+T`        | Sesh popup picker (same as `wts`)                                                  |
+| `<prefix>+t`        | Sesh popup picker (same as `wts`)                                                  |
 | `<prefix>+s`        | Built-in `choose-tree` session picker (fallback)                                    |
 | `<prefix>+<` / `>`  | Swap current window left / right                                                    |
 
@@ -128,7 +128,7 @@ wtc                           # fzf-pick → switches focus to that worktree's w
 
 ### Jump to a different repo (cross-session)
 
-From inside tmux: `<prefix>+T` → fuzzy-pick a session.
+From inside tmux: `<prefix>+t` → fuzzy-pick a session.
 From any shell: `wts` → same picker.
 
 `sesh` shows existing tmux sessions, your `sesh.toml` entries, and (if installed) zoxide dirs. Selecting one attaches/switches to its session — creating a fresh one from a path if necessary.
