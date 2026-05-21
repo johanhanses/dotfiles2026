@@ -229,7 +229,7 @@ wtc() {
 
 # wts — sesh popup from any shell (cross-repo session switcher). Same picker as
 # tmux's <prefix>+T binding.
-alias wts='sesh connect "$(sesh list -tc | fzf --height=40% --reverse --no-sort --prompt "sesh> ")"'
+alias wts='sesh connect "$(sesh list -tcd | sort | fzf --height=40% --reverse --no-sort --prompt "sesh> ")"'
 
 treview() {
   [[ -z "$TMUX" ]] && { echo "treview needs to run inside tmux"; return 1; }
