@@ -83,13 +83,32 @@ _wt_main() {
   git worktree list --porcelain 2>/dev/null | awk '/^worktree / { print $2; exit }'
 }
 
-# _wt_open <name> [base] — internal: create-or-attach, run tsetup, launch claude.
+# _wt_session — tmux session name = basename of the repo's main worktree path.
+# Sanitized: tmux session names can't contain '.' or ':'.
+_wt_session() {
+  local main_root="${1:-$(_wt_main)}"
+  [[ -z "$main_root" ]] && return 1
+  printf '%s' "${main_root:t}" | tr '.:' '__'
+}
+
+# _wt_ensure_session <session> <main_root>
+# Make sure the per-repo session exists; first window is the main worktree.
+_wt_ensure_session() {
+  local sess="$1" main_root="$2"
+  tmux has-session -t="$sess" 2>/dev/null && return 0
+  tmux new-session -d -s "$sess" -n main -c "$main_root"
+}
+
+# _wt_open <name> [base] — internal: create-or-attach worktree, run tsetup,
+# launch claude in a window of the per-repo session, switch focus to it.
 _wt_open() {
   local name="$1" base="${2:-main}"
-  local main_root wt_path
+  local main_root wt_path sess win
   main_root=$(_wt_main)
   [[ -z "$main_root" ]] && { echo "wt: not inside a git repo"; return 1; }
   wt_path="$main_root/.claude/worktrees/$name"
+  sess=$(_wt_session "$main_root")
+  win="${name:t}"
 
   if [[ ! -d "$wt_path" ]]; then
     if git -C "$main_root" show-ref --verify --quiet "refs/heads/$name"; then
@@ -101,10 +120,18 @@ _wt_open() {
 
   ( cd "$wt_path" && tsetup ) || echo "wt: tsetup returned non-zero (continuing)"
 
+  _wt_ensure_session "$sess" "$main_root"
+  if ! tmux list-windows -t "$sess" -F '#W' 2>/dev/null | grep -Fxq "$win"; then
+    tmux new-window -t "$sess" -n "$win" -c "$wt_path" "exec claude --permission-mode plan"
+  fi
+
   if [[ -n "$TMUX" ]]; then
-    tmux new-window -n "${name:t}" -c "$wt_path" "exec claude --permission-mode plan"
+    tmux switch-client -t "${sess}:${win}"
   else
-    ( cd "$wt_path" && claude --permission-mode plan )
+    # Bare shell (no tmux attached): attach to the per-repo session, landing on
+    # the worktree window. `exec` so the shell is replaced — detaching exits clean.
+    tmux select-window -t "${sess}:${win}"
+    exec tmux attach -t "$sess"
   fi
 }
 
@@ -177,18 +204,32 @@ wtd() {
     echo "wtd: branch '$name' had unmerged commits; rerun 'wtd -f $name' to force-delete it"
 }
 
-# wtc — fzf-pick an existing worktree; opens in new tmux window or cd.
+# wtc — fzf-pick an existing worktree; switches to its window in the per-repo
+# session (creating the session/window/tmux server if needed).
 wtc() {
   local target
   target=$(git worktree list | fzf --height=40% --prompt='worktree> ') || return
   target=${target%% *}
   [[ -z "$target" ]] && return
+  local main_root sess win
+  main_root=$(_wt_main)
+  sess=$(_wt_session "$main_root")
+  win="${target:t}"
+  _wt_ensure_session "$sess" "$main_root"
+  if ! tmux list-windows -t "$sess" -F '#W' 2>/dev/null | grep -Fxq "$win"; then
+    tmux new-window -t "$sess" -n "$win" -c "$target"
+  fi
   if [[ -n "$TMUX" ]]; then
-    tmux new-window -c "$target" -n "${target:t}"
+    tmux switch-client -t "${sess}:${win}"
   else
-    cd "$target"
+    tmux select-window -t "${sess}:${win}"
+    exec tmux attach -t "$sess"
   fi
 }
+
+# wts — sesh popup from any shell (cross-repo session switcher). Same picker as
+# tmux's <prefix>+T binding.
+alias wts='sesh connect "$(sesh list -tcz | fzf --height=40% --reverse --no-sort --prompt "sesh> ")"'
 
 treview() {
   [[ -z "$TMUX" ]] && { echo "treview needs to run inside tmux"; return 1; }

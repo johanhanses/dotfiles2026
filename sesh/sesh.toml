@@ -1,0 +1,23 @@
+# sesh — smart tmux session manager
+# https://github.com/joshmedeski/sesh
+#
+# Sesh auto-discovers existing tmux sessions out of the box, so once `wt` /
+# `wtp` have spun up per-repo sessions they show up in the picker without
+# any config. Static sessions below surface common repo roots in the picker
+# even before they've been opened.
+#
+# Picker keybind: <prefix>+T in tmux (see tmux/tmux.conf). From any shell:
+# `wts` opens the same picker without needing the prefix key.
+
+[[session]]
+name = "dotfiles2026"
+path = "~/Repos/github.com/johanhanses/dotfiles2026"
+
+[[session]]
+name = "dt-apps"
+path = "~/Repos/github.com/Digital-Tvilling/dt-apps"
+
+# Add more as needed:
+# [[session]]
+# name = "<repo-basename>"
+# path = "<absolute-or-tilde-path>"

@@ -18,6 +18,7 @@ Only these directories ship configs:
 - `newsboat/` — RSS reader
 - `matterhorn/` — Mattermost TUI client
 - `claude/` — Claude Code `settings.json` only (symlinked to `~/.claude/settings.json`). The rest of `~/.claude/` is runtime state (sessions, plans, image cache) and intentionally not tracked.
+- `sesh/` — `sesh.toml` for the smart tmux session manager. Static session entries for common repo roots; existing tmux sessions are auto-discovered.
 
 ## Install & Setup
 

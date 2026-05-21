@@ -62,11 +62,15 @@ Prefix `⌃a`. tpm plugins: `tmux-sensible`, `tmux-yank`. Atom One Dark/Light th
 |-----------------------|-----------------------------------------------------------------|
 | `⌃a`                  | Prefix                                                          |
 | `<prefix>+r`          | Reload config + sync theme (tmux + Mattermost)                  |
+| `<prefix>+T`          | Sesh popup — fuzzy session picker (cross-repo jump)             |
+| `<prefix>+s`          | Built-in `choose-tree` session picker                           |
 | `<prefix>+\|`         | Split horizontally                                              |
 | `<prefix>+-`          | Split vertically                                                |
 | `<prefix>+c`          | New window in current dir                                       |
 | `<prefix>+n` / `p`    | Next / previous window (repeatable)                             |
 | `<prefix>+⌃n` / `⌃p`  | Alternate next / previous window                                |
+| `<prefix>+<` / `>`    | Swap current window left / right (repeatable)                   |
+| `<prefix>+.`          | Move current window to a specific index                         |
 | `<prefix>+h/j/k/l`    | Select pane (repeatable)                                        |
 | `<prefix>+⌃h` / `⌃l`  | Previous / next window                                          |
 | `<prefix>+b`          | Toggle status bar                                               |
@@ -231,12 +235,13 @@ See [WORKTREES.md](WORKTREES.md) for the full handbook.
 
 | Alias / fn         | Action                                                                      |
 |--------------------|-----------------------------------------------------------------------------|
-| `wt <name> [base]` | New feature worktree from `[base]` (default `main`). Auto-runs `tsetup`, launches Claude. |
-| `wtp <pr>`         | New worktree from a remote PR (number or URL). Auto-runs `tsetup`, launches Claude. |
+| `wt <name> [base]` | New feature worktree from `[base]` (default `main`). Auto-runs `tsetup`, launches Claude as a window in the per-repo tmux session. |
+| `wtp <pr>`         | New worktree from a remote PR (number or URL). Same session routing as `wt`. |
 | `wtl`              | `git worktree list`                                                         |
-| `wtc`              | fzf-pick a worktree; open in new tmux window or `cd`                        |
-| `wta <name>`       | Archive: remove worktree dir, keep branch                                   |
-| `wtd <name>`       | Delete: remove worktree dir AND branch (post-merge cleanup)                 |
+| `wtc`              | fzf-pick a worktree of the current repo; switches to (or creates) its window in the per-repo session |
+| `wts`              | sesh popup — cross-repo session picker from any shell                       |
+| `wta <name>`       | Archive: remove worktree dir, keep branch (`-f`/`--force` to drop modified/untracked) |
+| `wtd <name>`       | Delete: remove worktree dir AND branch (`-f`/`--force` also force-deletes unmerged branch) |
 | `treview`          | tmux split with `git diff main...HEAD` + shell                              |
 | `tship`            | `git status -s` + prompt + `gh pr create --fill`                            |
 | `tsetup`           | bootstrap: conductor.json → `.conductor/.xlaude/.wt/setup` hook → smart fallback (symlink `.env*` from main + `pnpm/yarn/npm install`) |

@@ -46,6 +46,10 @@ mkdir -p $HOME/.claude
 ln -sf $DOTFILES/claude/settings.json $HOME/.claude/settings.json
 ln -sf $DOTFILES/claude/statusline-command.sh $HOME/.claude/statusline-command.sh
 
+# sesh
+mkdir -p $HOME/.config/sesh
+ln -sf $DOTFILES/sesh/sesh.toml $HOME/.config/sesh/sesh.toml
+
 echo "dotfiles2026 symlinks installed"
 
 # Tmux plugin manager (tpm)
