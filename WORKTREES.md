@@ -43,6 +43,7 @@ Each session stays well under tmux's 1–9 quick-jump range. Cross-repo travel g
 | `wtp <pr>`          | Fetches PR (number or URL) into a worktree on the PR's head branch. Runs `tsetup`. Launches Claude. Same session routing as `wt`. |
 | `wtl`               | `git worktree list`                                                                 |
 | `wtc`               | fzf-pick a worktree of the current repo; switches to its window in the per-repo session (creates the window if it doesn't exist) |
+| `wtg`               | **Global** worktree picker — fzf across `git worktree list` for every repo in `$WT_REPOS`, routes to the right per-repo session+window. Works from any shell. |
 | `wts`               | sesh popup from any shell — fuzzy-jump to any tmux session, sesh config entry, or zoxide dir (cross-repo) |
 | `wta <name>`        | **Archive** — remove the worktree dir, **keep** the branch (`-f`/`--force` to drop modified/untracked files) |
 | `wtd <name>`        | **Delete** — remove the worktree dir **and** the branch (`-f`/`--force` also force-deletes unmerged branches) |
@@ -151,7 +152,7 @@ echo "FOO=bar" > .env
 echo '{"name":"test","scripts":{}}' > package.json
 git add . && git commit -q -m init
 
-type wt wtp wtl wtc wta wtd wts tsetup    # all defined
+type wt wtp wtl wtc wtg wta wtd wts tsetup    # all defined
 
 tmux new-session -d -s wt-test            # need a tmux server for session routing
 TMUX=$(tmux display -p '#S') wt scratch & # creates worktree, new window 'scratch'

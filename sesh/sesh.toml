@@ -17,6 +17,25 @@ path = "~/Repos/github.com/johanhanses/dotfiles2026"
 name = "dt-apps"
 path = "~/Repos/github.com/Digital-Tvilling/dt-apps"
 
+# Names match `basename` of the repo path so they collide with sessions
+# created by `wt` / `wtc` / `wtg` (which derive the session name from the
+# main worktree's basename). Don't rename without updating _wt_session.
+[[session]]
+name = "digital-tvilling-dev"
+path = "~/Repos/github.com/Digital-Tvilling/digital-tvilling-dev"
+
+[[session]]
+name = "digital-tvilling-prod"
+path = "~/Repos/github.com/Digital-Tvilling/digital-tvilling-prod"
+
+[[session]]
+name = "obsidian"
+path = "~/Repos/github.com/Digital-Tvilling/obsidian"
+
+[[session]]
+name = "zettelkasten"
+path = "~/Repos/github.com/johanhanses/zettelkasten"
+
 # Add more as needed:
 # [[session]]
 # name = "<repo-basename>"

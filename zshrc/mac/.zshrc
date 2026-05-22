@@ -50,7 +50,7 @@ export CPPFLAGS="-I/opt/homebrew/opt/node@22/include"
 
 export AWS_PROFILE=saml
 
-KUBECONFIG=~/.kube/config
+export KUBECONFIG=~/.kube/config
 
 # Prompt: apple logo + folder + full path + git branch, Atom One accents.
 # Uses named ANSI colors so it follows the terminal palette (light/dark auto).
@@ -122,7 +122,7 @@ _wt_open() {
 
   _wt_ensure_session "$sess" "$main_root"
   if ! tmux list-windows -t "$sess" -F '#W' 2>/dev/null | grep -Fxq "$win"; then
-    tmux new-window -t "$sess" -n "$win" -c "$wt_path" "exec claude --permission-mode plan"
+    tmux new-window -t "${sess}:" -n "$win" -c "$wt_path" "exec claude --permission-mode plan"
   fi
 
   if [[ -n "$TMUX" ]]; then
@@ -217,7 +217,7 @@ wtc() {
   win="${target:t}"
   _wt_ensure_session "$sess" "$main_root"
   if ! tmux list-windows -t "$sess" -F '#W' 2>/dev/null | grep -Fxq "$win"; then
-    tmux new-window -t "$sess" -n "$win" -c "$target"
+    tmux new-window -t "${sess}:" -n "$win" -c "$target"
   fi
   if [[ -n "$TMUX" ]]; then
     tmux switch-client -t "${sess}:${win}"
@@ -230,6 +230,47 @@ wtc() {
 # wts — sesh popup from any shell (cross-repo session switcher). Same picker as
 # tmux's <prefix>+T binding.
 alias wts='sesh connect "$(sesh list -tcd | sort | fzf --height=40% --reverse --no-sort --prompt "sesh> ")"'
+
+# wtg — global worktree picker. Aggregates `git worktree list` across WT_REPOS
+# into one fzf picker, then opens (or switches to) the right per-repo tmux
+# session+window. Works from any shell, doesn't need to be inside a repo.
+# Override WT_REPOS (colon-separated paths) to point at different roots.
+wtg() {
+  local repos="${WT_REPOS:-$HOME/Repos/github.com/johanhanses/dotfiles2026:$HOME/Repos/github.com/johanhanses/zettelkasten:$HOME/Repos/github.com/Digital-Tvilling/dt-apps:$HOME/Repos/github.com/Digital-Tvilling/digital-tvilling-dev:$HOME/Repos/github.com/Digital-Tvilling/digital-tvilling-prod:$HOME/Repos/github.com/Digital-Tvilling/obsidian}"
+  local root sess path entries=() line
+  for root in ${(s/:/)repos}; do
+    [[ -e "$root/.git" ]] || continue
+    sess="${root:t}"
+    while IFS= read -r line; do
+      [[ -z "$line" ]] && continue
+      entries+=("${(r:22:)sess}  ${line}")
+    done < <(git -C "$root" worktree list 2>/dev/null)
+  done
+  [[ ${#entries[@]} -eq 0 ]] && { echo "wtg: no worktrees in WT_REPOS"; return 1; }
+
+  local pick
+  pick=$(printf '%s\n' "${entries[@]}" | fzf --height=60% --reverse --prompt='wtg> ') || return
+  # Row is "<sess-padded>  <path>  <sha>  [<branch>]" — field 2 = path.
+  path=$(awk '{print $2}' <<< "$pick")
+  [[ -z "$path" || ! -d "$path" ]] && { echo "wtg: bad pick: $pick"; return 1; }
+
+  local main_root sess_real win
+  main_root=$(git -C "$path" worktree list --porcelain 2>/dev/null | awk '/^worktree / { print $2; exit }')
+  [[ -z "$main_root" ]] && main_root="$path"
+  sess_real=$(_wt_session "$main_root")
+  win="${path:t}"
+
+  _wt_ensure_session "$sess_real" "$main_root"
+  if ! tmux list-windows -t "$sess_real" -F '#W' 2>/dev/null | grep -Fxq "$win"; then
+    tmux new-window -t "${sess_real}:" -n "$win" -c "$path"
+  fi
+  if [[ -n "$TMUX" ]]; then
+    tmux switch-client -t "${sess_real}:${win}"
+  else
+    tmux select-window -t "${sess_real}:${win}"
+    exec tmux attach -t "$sess_real"
+  fi
+}
 
 treview() {
   [[ -z "$TMUX" ]] && { echo "treview needs to run inside tmux"; return 1; }
@@ -357,7 +398,7 @@ alias k="kubectl"
 alias kc="kubectx"
 
 # tmux aliases
-alias t="tmux"
+alias t="tmux new -A -s default"
 alias tk="tmux kill-server"
 alias tl="tmux ls"
 alias ta="tmux a"
