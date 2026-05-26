@@ -4,6 +4,10 @@ opt.clipboard = "unnamedplus"
 opt.completeopt = "menu,menuone,noselect"
 opt.confirm = true
 opt.cursorline = true
+-- Bind the block cursor to the Cursor highlight group so Neovim renders its
+-- own (visible) cursor color instead of falling through to the terminal's
+-- cursor color, which doesn't reliably switch with the theme (esp. via tmux).
+opt.guicursor = "n-v-c-sm:block-Cursor,i-ci-ve:ver25-Cursor,r-cr-o:hor20-Cursor"
 opt.expandtab = true
 opt.fillchars = { eob = " ", fold = " " }
 opt.foldlevel = 99
