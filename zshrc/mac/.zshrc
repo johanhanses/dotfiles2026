@@ -289,6 +289,7 @@ tship() {
 #   1) conductor.json scripts.setup with CONDUCTOR_ROOT_PATH=main worktree
 #   2) executable .conductor/setup, .xlaude/setup, or .wt/setup
 #   3) smart fallback: symlink .env files from main worktree + run package install
+#      + init git submodules (if .gitmodules present)
 tsetup() {
   if [[ -f conductor.json ]] && command -v jq >/dev/null; then
     local setup_cmd
@@ -333,6 +334,10 @@ tsetup() {
     elif command -v npm >/dev/null; then
       echo "tsetup: npm install"; npm install
     fi
+  fi
+  if [[ -f .gitmodules ]]; then
+    echo "tsetup: git submodule update --init --recursive"
+    git submodule update --init --recursive
   fi
 }
 

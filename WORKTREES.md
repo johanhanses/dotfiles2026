@@ -69,6 +69,7 @@ In order of precedence:
      - `pnpm-lock.yaml` → `pnpm install`
      - `yarn.lock` → `yarn install`
      - else → `npm install`
+   - If `.gitmodules` exists, runs `git submodule update --init --recursive`.
 
 So a plain Node repo with a `.env` at the root needs no extra config — `wt foo` will land you in a worktree with `.env` symlinked and `node_modules` installed.
 
