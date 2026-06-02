@@ -29,6 +29,10 @@ name = "digital-tvilling-prod"
 path = "~/Repos/github.com/Digital-Tvilling/digital-tvilling-prod"
 
 [[session]]
+name = "digital-tvilling-lkab"
+path = "~/Repos/github.com/Digital-Tvilling/digital-tvilling-lkab"
+
+[[session]]
 name = "obsidian"
 path = "~/Repos/github.com/Digital-Tvilling/obsidian"
 

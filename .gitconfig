@@ -38,3 +38,10 @@
 [credential "https://gist.github.com"]
 	helper = 
 	helper = !/opt/homebrew/bin/gh auth git-credential
+[http "https://github.lkab.com/"]
+	sslVerify = true
+	sslCert = /Users/johanhanses/Repos/github.com/Digital-Tvilling/.lkab/on-prem/cert/certificate.pem
+	sslKey = /Users/johanhanses/Repos/github.com/Digital-Tvilling/.lkab/on-prem/cert/private_key.pem
+[credential "https://github.lkab.com"]
+	helper = 
+	helper = osxkeychain
