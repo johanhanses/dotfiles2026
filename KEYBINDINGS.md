@@ -244,7 +244,7 @@ See [WORKTREES.md](WORKTREES.md) for the full handbook.
 | `wtd <name>`       | Delete: remove worktree dir AND branch (`-f`/`--force` also force-deletes unmerged branch) |
 | `treview`          | tmux split with `git diff main...HEAD` + shell                              |
 | `tship`            | `git status -s` + prompt + `gh pr create --fill`                            |
-| `tsetup`           | bootstrap: conductor.json → `.conductor/.xlaude/.wt/setup` hook → smart fallback (symlink `.env*` from main + `pnpm/yarn/npm install`) |
+| `tsetup`           | bootstrap: conductor.json → `.conductor/.wt/setup` hook → smart fallback (symlink `.env*` from main + `pnpm/yarn/npm install`) |
 
 ### Misc aliases
 

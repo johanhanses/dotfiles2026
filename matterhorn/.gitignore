@@ -1,0 +1,3 @@
+# Runtime state written by matterhorn into its config dir — not config.
+history.txt
+last_run_state_*.json

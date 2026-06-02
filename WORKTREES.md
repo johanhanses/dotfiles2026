@@ -62,7 +62,7 @@ Each session stays well under tmux's 1–9 quick-jump range. Cross-repo travel g
 In order of precedence:
 
 1. **`conductor.json`** (conductor.build format) at the repo root with `scripts.setup`. Runs it with `$CONDUCTOR_ROOT_PATH` set to the main worktree's path. Best for monorepos that need precise control (e.g. dt-apps symlinking six `.env` files).
-2. **Executable hook** at `.conductor/setup`, `.xlaude/setup`, or `.wt/setup`. Whatever you want.
+2. **Executable hook** at `.conductor/setup` or `.wt/setup`. Whatever you want.
 3. **Smart fallback** (no config needed):
    - Symlinks every `.env`, `.env.local`, `.env.development` found in the main worktree (skipping `node_modules` / `.git`) into the same relative path in the new worktree.
    - Detects the package manager via lockfile and runs install:

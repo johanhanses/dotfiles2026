@@ -13,7 +13,7 @@ Only these directories ship configs:
 - `nvim/` — Neovim, custom `lazy.nvim` setup (not LazyVim), plugins in `lua/plugins/`, Atom One Dark/Light via `onedarkpro.nvim` (auto-switches with macOS via `auto-dark-mode.nvim`)
 - `tmux/` — tmux with `C-a` prefix, vi-mode, vim-aware pane navigation, macOS clipboard integration; tpm with `tmux-sensible` + `tmux-yank`; Atom One Dark/Light themes in `tmux/themes/`
 - `ghostty/` — Ghostty terminal, GeistMono Nerd Font, Atom One Light/Dark that auto-switches with macOS
-- `zshrc/mac/` — zsh config: history, completions, autosuggestions + syntax-highlighting, custom `vcs_info` prompt, mise, fzf+fd, aliases
+- `zshrc/mac/` — zsh config: history, completions, autosuggestions + syntax-highlighting, custom `vcs_info` prompt, fzf+fd, aliases
 - `btop/` — btop with `tokyo-night` theme
 - `newsboat/` — RSS reader
 - `matterhorn/` — Mattermost TUI client
@@ -55,10 +55,9 @@ Light/Dark switching is handled by a native macOS Spotlight workflow shortcut (o
 
 - `nvim/init.lua` bootstraps `lazy.nvim` directly; LazyVim is not used.
 - `nvim.lazyvim/` is a leftover/reference directory and is not symlinked by `mac-install.sh`.
-- `OMARCHY-COMPARISON.md` documents how this setup compares to an Omarchy-inspired plan.
 - `KEYBINDINGS.md` is the keybindings reference.
 - Private configs (e.g. `.kube`) live in a separate `dotfiles-private` repo and are symlinked in if present.
 - Launcher: native Spotlight (Cmd+Space). No Raycast.
 - Window manager: **Moom 3 (classic)** — installed manually from manytricks.com, **not** via the `moom` Homebrew cask (which is Moom 4.x and intentionally avoided). Configured via the Moom GUI; preferences live in `~/Library/Preferences/com.manytricks.Moom.plist` and are not currently versioned in this repo. The `mac-install.sh` cleanup list deliberately excludes Moom.app.
-- **Worktrees** — plain `git worktree` + `gh` for per-feature Claude sessions. Worktrees land at `<repo>/.claude/worktrees/<name>` on branch `<name>`. Aliases (`wt`, `wtp`, `wtl`, `wtc`, `wta`, `wtd`, `treview`, `tship`, `tsetup`) live in `zshrc/mac/.zshrc`. `wt` / `wtp` auto-run `tsetup` (conductor.json → hook → `.env` symlink + `pnpm/yarn/npm install` fallback) before launching Claude. See `WORKTREES.md` for the handbook. xlaude was used previously but uninstalled.
+- **Worktrees** — plain `git worktree` + `gh` for per-feature Claude sessions. Worktrees land at `<repo>/.claude/worktrees/<name>` on branch `<name>`. Aliases (`wt`, `wtp`, `wtl`, `wtc`, `wta`, `wtd`, `treview`, `tship`, `tsetup`) live in `zshrc/mac/.zshrc`. `wt` / `wtp` auto-run `tsetup` (conductor.json → hook → `.env` symlink + `pnpm/yarn/npm install` fallback) before launching Claude. See `WORKTREES.md` for the handbook.
 - **tpm** — `mac-install.sh` clones `tmux-plugins/tpm` into `~/.tmux/plugins/tpm` on first run. After install, run `prefix + I` inside tmux to fetch plugins (`tmux-sensible`, `tmux-yank`).

@@ -62,11 +62,6 @@ zstyle ':vcs_info:git:*' formats ' %F{magenta}(%b)%f'
 setopt PROMPT_SUBST
 PROMPT=$'%B%F{red}\uF179  %F{yellow}\uF07B  %F{blue}%~%f${vcs_info_msg_0_}%b\n%F{cyan}$%f '
 
-# mise (runtime version manager)
-if command -v mise >/dev/null 2>&1; then
-  eval "$(mise activate zsh)"
-fi
-
 # fzf + fd
 if command -v fd >/dev/null 2>&1; then
   export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
@@ -287,7 +282,7 @@ tship() {
 }
 # tsetup — bootstrap a fresh worktree.
 #   1) conductor.json scripts.setup with CONDUCTOR_ROOT_PATH=main worktree
-#   2) executable .conductor/setup, .xlaude/setup, or .wt/setup
+#   2) executable .conductor/setup or .wt/setup
 #   3) smart fallback: symlink .env files from main worktree + run package install
 #      + init git submodules (if .gitmodules present)
 tsetup() {
@@ -304,7 +299,7 @@ tsetup() {
     fi
   fi
   local script
-  for script in .conductor/setup .xlaude/setup .wt/setup; do
+  for script in .conductor/setup .wt/setup; do
     if [[ -x "$script" ]]; then
       echo "tsetup: $script"
       "$script"
