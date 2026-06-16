@@ -54,13 +54,13 @@ export KUBECONFIG=~/.kube/config
 
 # Prompt: apple logo + folder + full path + git branch, Atom One accents.
 # Uses named ANSI colors so it follows the terminal palette (light/dark auto).
-# Requires a Nerd Font (e.g. BlexMono Nerd Font).
+# Requires a Nerd Font (e.g. JetBrainsMono Nerd Font).
 autoload -Uz vcs_info
 update_terminal_cwd() {}
 precmd() { vcs_info; printf '\e[2 q'; print -Pn '\e]2;%1~\a' }
 zstyle ':vcs_info:git:*' formats ' %F{magenta}(%b)%f'
 setopt PROMPT_SUBST
-PROMPT=$'%B%F{red}\uF179  %F{yellow}\uF07B  %F{blue}%~%f${vcs_info_msg_0_}%b\n%F{cyan}$%f '
+PROMPT=$'%B%F{red}\uF179  %F{yellow}\uF07B  %F{blue}%1~%f${vcs_info_msg_0_}%b\n%F{cyan}$%f '
 
 # fzf + fd
 if command -v fd >/dev/null 2>&1; then
