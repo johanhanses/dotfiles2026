@@ -117,7 +117,7 @@ _wt_open() {
 
   _wt_ensure_session "$sess" "$main_root"
   if ! tmux list-windows -t "$sess" -F '#W' 2>/dev/null | grep -Fxq "$win"; then
-    tmux new-window -t "${sess}:" -n "$win" -c "$wt_path" "exec claude --permission-mode plan"
+    tmux new-window -t "${sess}:" -n "$win" -c "$wt_path" "exec claude --permission-mode plan --dangerously-skip-permissions"
   fi
 
   if [[ -n "$TMUX" ]]; then
